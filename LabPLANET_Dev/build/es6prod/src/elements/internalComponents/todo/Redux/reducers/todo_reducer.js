@@ -1,0 +1,5 @@
+define(["exports","../../../../../../node_modules/redux/es/redux.js","../actions/todo_actions.js"],function(_exports,_redux,_todo_actions){"use strict";Object.defineProperty(_exports,"__esModule",{value:!0});_exports.todo=void 0;/*
+* Reducer para las TODO
+*/function todos(state=[],action){switch(action.type){case _todo_actions.ADD_TODO:return[...state,{text:action.text,completed:!1,id:state?state.length+1:1}];case _todo_actions.TOGGLE_TODO:return state.map(todo=>{if(todo.id===action.id){return Object.assign({},todo,{completed:!todo.completed})}return todo});default:return state;}}/*
+* Reducer para el filtro de visibilidad
+*/function visibilityFilter(state="SHOW_ALL",action){switch(action.type){case _todo_actions.SET_VISIBILITY_FILTER:return action.filter;default:return state;}}const todo=(0,_redux.combineReducers)({visibilityFilter,todos});_exports.todo=todo});

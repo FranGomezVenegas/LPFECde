@@ -1,0 +1,65 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src\\elements\\labplanet-main.js",
+  "fragments": [],
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "index.html",
+    "src/elements/labplanet-main.js"
+  ],
+  "extraDependencies": [
+    "bower_components/webcomponentsjs/*.js",
+    "manifest.json",
+    "node_modules/@webcomponents/webcomponentsjs/**",
+    "node_modules/axios/dist/**"
+  ],
+  "builds": [
+    {
+      "name": "es6prod",
+      "browserCapabilities": [
+        "es2015",
+        "push"
+      ],
+      "js": {
+        "minify": true,
+        "compile": "es2015",
+        "transformModulesToAmd": true
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      },
+      "bundle": false,
+      "addServiceWorker": true,
+      "addPushManifest": true,
+      "preset": "es6-unbundled"
+    },
+    {
+      "name": "uncomp",
+      "browserCapabilities": [
+        "es2018",
+        "modules",
+        "push"
+      ],
+      "js": {
+        "minify": true
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      },
+      "bundle": false,
+      "addServiceWorker": true,
+      "addPushManifest": true,
+      "preset": "uncompiled-unbundled"
+    }
+  ],
+  "npm": true,
+  "componentDir": "node_modules/",
+  "moduleResolution": "node"
+}
