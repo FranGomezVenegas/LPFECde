@@ -1,0 +1,29 @@
+{
+  "root": "./",
+  "entrypoint": "index.html",
+  "shell": "src/elements/labplanet-main.js",
+  "sources":[
+    "src/**/*",
+    "images/**/*"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "node_modules/@webcomponents/webcomponentsjs/**",
+    "node_modules/axios/dist/**"
+  ],
+  "moduleResolution": "node",
+  "npm": true,
+  "builds": [
+    { 
+      "name": "es6prod",
+      "preset": "es6-unbundled",
+      "addServiceWorker": true
+    },
+    { 
+      "name": "uncomp",
+      "preset": "uncompiled-unbundled",
+      "addServiceWorker": true
+    }
+    
+  ]
+}
