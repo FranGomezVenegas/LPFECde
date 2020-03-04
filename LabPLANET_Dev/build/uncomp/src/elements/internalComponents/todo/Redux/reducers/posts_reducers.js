@@ -1,2 +1,0 @@
-import{DO_LOADING,SAVE_POST_LIST}from"../actions/posts_actions.js";const INITIAL_STATE={posts:[],loading:!1},postsReducer=(state=INITIAL_STATE,action)=>{// console.log('postReducer', state, action);
-switch(action.type){case SAVE_POST_LIST:return{posts:[...action.posts],loading:!1};case DO_LOADING:return{posts:[...state.posts],loading:!0};default:return state;}};export default postsReducer;

@@ -1,2 +1,0 @@
-define(["exports","../actions/posts_actions.js"],function(_exports,_posts_actions){"use strict";Object.defineProperty(_exports,"__esModule",{value:!0});_exports.default=void 0;const INITIAL_STATE={posts:[],loading:!1},postsReducer=(state=INITIAL_STATE,action)=>{// console.log('postReducer', state, action);
-switch(action.type){case _posts_actions.SAVE_POST_LIST:return{posts:[...action.posts],loading:!1};case _posts_actions.DO_LOADING:return{posts:[...state.posts],loading:!0};default:return state;}};var _default=postsReducer;_exports.default=_default});
