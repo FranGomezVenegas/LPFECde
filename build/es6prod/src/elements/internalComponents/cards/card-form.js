@@ -1,4 +1,4 @@
-define(["../../../../node_modules/@polymer/polymer/polymer-element.js","../../../../node_modules/@polymer/paper-button/paper-button.js","../dialogs/shared-styles.js","../form-fields/field-button.js","../../modules/process-us/01moduleFunctionality/api-sample.js","../../../config/styles/div-style.js"],function(_polymerElement,_paperButton,_sharedStyles,_fieldButton,_apiSample,_divStyle){"use strict";/**
+define(["../../../../node_modules/@polymer/polymer/polymer-element.js","../../../../node_modules/@polymer/paper-button/paper-button.js","../dialogs/shared-styles.js","../form-fields/field-button.js","../../modules/process-us/01moduleFunctionality/api-sample.js","../../../config/styles/div-style.js","../dialogs/modalwindow-buttons.js"],function(_polymerElement,_paperButton,_sharedStyles,_fieldButton,_apiSample,_divStyle,_modalwindowButtons){"use strict";/**
  * `card-form` Description
  *
  * @customElement
@@ -9,10 +9,8 @@ define(["../../../../node_modules/@polymer/polymer/polymer-element.js","../../..
 buttonCancel:{type:Object,value:{name:"Cancel",label_en:"Cancel",label_es:"Cancelar",type:"button",confirmuser_required:!1,read_only:!1}}}}static get template(){return _polymerElement.html`  
         <style include="div-style"></style>
         <div class="internalComponentCardFormMainDiv internalComponentCardFormMainDivBgimg">
-            <div>
-                <field-button name="cancel" field="[[buttonCancel]]" dialog-dismiss on-click="dialogCanceled">Cancel</field-button>
-                <paper-button name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
-            </div>
+            <modalwindow-buttons display-close-button
+                on-dialog-cancelbutton-clicked="dialogCanceled" on-dialog-confirmedbutton-clicked="dialogConfirmed"> </modalwindow-buttons>             
             <div name="Buttons1" class="buttonGroup">
                 <template is="dom-repeat" items="{{buttons}}" as="currentfield">                       
                     <field-controller id="{{currentfield.name}}"  field="{{currentfield}}"
@@ -20,9 +18,8 @@ buttonCancel:{type:Object,value:{name:"Cancel",label_en:"Cancel",label_es:"Cance
                     </field-controller>
                 </template>  
             </div>    
-            Form Num Fields:{{formFields.length}}
             <template is="dom-repeat" items="{{formFields}}" as="currentfield">      
-                <p> Curr Fld={{currentfield.name}} / {{currentfield.type}} </p> 
+                 <!-- <p> Curr Fld={{currentfield.name}} / {{currentfield.type}} </p>  -->
                  <field-controller on-keydown="keyPressed" on-field-button-clicked="cardFormdButtonClicked" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}">
                 </field-controller> 
             </template>       

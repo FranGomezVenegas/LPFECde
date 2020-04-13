@@ -9,18 +9,22 @@ import {openEsignDialog} from '../../app/Redux/actions/esign-actions.js';
 import {openConfirmUserDialog} from '../../app/Redux/actions/confirmuser-actions.js';
 import {AuthenticationApi} from '../../app/mixin/authentication-api.js';
 import {Appapi} from '../../app/mixin/api-app';
+import {appConfirmUserOrEsign_notCorrectMessage} from '../../../config/app-config';
 
 class AppElements extends Appapi(AuthenticationApi(connect(store)(PolymerElement))) {
     stateChanged(state) {        
         this.finalToken = state.app.user.finalToken; 
         this.currTabEsignRequired=state.tabs.currTabEsignRequired;
-        this.currTabConfirmUserRequired=state.tabs.currTabConfirmUserRequired;        
+        this.currTabConfirmUserRequired=state.tabs.currTabConfirmUserRequired; 
+        this.selectedLanguage = state.app.user.appLanguage;            
     }    
     static get properties() {
         return {
             finalToken: String,
             currTabConfirmUserRequired: Boolean, 
             currTabEsignRequired: Boolean,
+            validationNotCorrectMessage: {type: Object, value: appConfirmUserOrEsign_notCorrectMessage},
+            selectedLanguage:{ type: String},
         }
     }
     static get template() {
@@ -53,9 +57,14 @@ appActionTrigger(buttonName, backEndData, buttonDefinition){
     this.appActionTriggerNext();
 }    
 appActionTriggerAbort(){
-    this.dispatchEvent(new CustomEvent('toast-message', {
+    var message=''; 
+    switch(this.selectedLanguage){
+        case 'es': message=this.validationNotCorrectMessage.message_es; break; //message=response.data.message_es; break;            
+        default: message=this.validationNotCorrectMessage.message_en; break; //message=response.data.message_en; break;
+    }     
+    this.dispatchEvent(new CustomEvent('toast-error', {
         bubbles: true,        composed: true,
-        detail: 'Va a ser que por mis loginCancelar no continuas! :)'
+        detail: message
     }));    
     this.loading=false;  
 }
@@ -67,7 +76,7 @@ appActionTriggerNext(){
     var actionName= buttonName.toUpperCase();
     console.log('app-elements >> appActionTriggerNext >> backEndData', backEndData, 'this.backEndData', this.backEndData, 'buttonName', buttonName);                    
     switch (buttonName.toUpperCase()) {
-    case 'USER_CHANGE_PASSWORD':
+    case 'USER_CHANGE_PSWD':
         datas.newPassword=backEndData.newPassword;
         this.appActionTriggerAPI(null, this.finalToken, actionName, datas, datas.tabInfo, this.callBackFunctionEnvMonitElem);
         break;    

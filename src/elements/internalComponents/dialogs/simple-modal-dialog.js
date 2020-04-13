@@ -13,6 +13,7 @@ import './../../../config/styles/div-style.js';
 class SimpleModalDialog extends PolymerElement {
     static get properties() {
         return {
+            adhocFormFields: {type: Array},
         }
     }
     static get template() {
@@ -48,13 +49,13 @@ class SimpleModalDialog extends PolymerElement {
         /* The Close Button */
 
         .bgimg {
-            background-image: url('./images/app-login/login-hexagon-background.png');   
-            width: 320px;       
+            background-image: url('./images/hexagon-white-blue-light.jpg');   
+            width: 420px;       
         }          
         </style>
         <div class="modal-content bgimg">
-        <template is="dom-repeat" items="{{dialogElements}}" as="currentfield">       
-            <field-controller on-field-button-clicked="fieldButtonClicked" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
+        <template is="dom-repeat" items="{{adhocFormFields}}" as="currentfield">       
+            <field-controller on-keydown="keyPressed" on-field-button-clicked="fieldButtonClicked" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
         </template>      
         <paper-button name="cancel" dialog-dismiss on-click="dialogCanceled">Cancel</paper-button>
         <paper-button name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
@@ -62,6 +63,13 @@ class SimpleModalDialog extends PolymerElement {
       
         `;
     }    
+    keyPressed(e){
+        //console.log('key pressed');
+        if(e.key=="Enter") {
+          this.dialogConfirmed();
+          return;
+        }   
+    }  
     dialogConfirmed(){
         //console.log('clicked', this.value);
         this.value='confirmed';

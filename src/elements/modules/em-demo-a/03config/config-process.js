@@ -80,12 +80,6 @@ export const progProintsCardFormButtons=[
     "type": "button",
     "read_only": false,
   },  
-  {
-    "name": "logSample",
-    "label_en": "new Sampl22e", "label_es": "Nueva Muestra",
-    "type": "button",
-    "read_only": true,
-  },     
 ]
 export const progProintsMapCardFormButtons=[
   {
@@ -362,14 +356,13 @@ export const sampleCustodian_buttonsCandidate=[
 
 export const sampleSampling_sampleFieldToRetrieve='sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name';
 export const sampleSampling_sampleFieldToDisplay=[
-    {name: 'status', label_en:'status', label_es: 'Estado', sort:false, filter:true}
-  , {name: 'sample_id', label_en:'Sample ID', label_es: 'ID Muestra', sort:true, filter:false}
-  , {name: 'program_name', label_en:'Project', label_es: 'Programa', sort:false, filter:true}
-  , {name: 'location_name', label_en:'Location', label_es: 'Ubicación', sort:false, filter:true}
-  , {name: 'sampling_date', label_en:'sampling Date', label_es: 'ID Fecha de Muestreo', sort:false, filter:true}
-  , {name: 'sampling_comment', label_en:'sampling Comment', label_es: 'Comentario Muestreo', sort:false, filter:true}
-  , {name: 'spec_code', label_en:'Spec', label_es: 'Especificación', sort:false, filter:true}
-  , {name: 'spec_variation_name', label_en:'Variation', label_es: 'Variación', sort:false, filter:true}]
+  , {name: 'sample_id', label_en:'Sample ID', label_es: 'ID Muestra', sort:true, filter:false, width:'20%'}
+  , {name: 'program_name', label_en:'Project', label_es: 'Programa', sort:false, filter:true, width:'30%'}
+  , {name: 'location_name', label_en:'Location', label_es: 'Ubicación', sort:false, filter:true, width:'30%'}
+  , {name: 'sampling_date', label_en:'sampling Date', label_es: 'ID Fecha de Muestreo', sort:false, filter:true, width:'30%'}
+  , {name: 'sampling_comment', label_en:'sampling Comment', label_es: 'Comentario Muestreo', sort:false, filter:true, width:'40%'}
+  , {name: 'spec_code', label_en:'Spec', label_es: 'Especificación', sort:false, filter:true, width:'30%'}
+  , {name: 'spec_variation_name', label_en:'Variation', label_es: 'Variación', sort:false, filter:true, width:'40%'}];
 export const sampleSampling_samplesWhereFieldsName='current_stage|sample_config_code not in*';
 export const sampleSampling_samplesWhereFieldsValue='Sampling|'+personal_smp_template;
 export const sampleSampling_sampleFieldToSort='sample_id desc';
@@ -413,8 +406,9 @@ export const sampleSampling_buttons=[
 	},
   {
     "name": "SAMPLINGCOMMENTREMOVE",
-    "label_en": "Remove Sampling Comment", "label_es": "Borrar observacio durante el Muestreo",
-    "type": "button",
+    "label_en": "Remove Sampling Comment", "label_es": "Borrar observación durante el Muestreo",
+    "type": "icon-button",
+    "icon_name": "icons:speaker-notes-off",    
     "read_only": false,
   },     
 ]
@@ -534,13 +528,13 @@ export const sampleIncubation1_incubBatch_buttons=[
 ];
 export const sampleIncubation2_incubBatch_sampleFieldToRetrieve='sample_id|current_stage|status|incubation2_batch|incubation2_start|incubation_start|incubation_end|sampling_date|sampling_comment|sample_config_code';
 export const sampleIncubation2_incubBatch_sampleFieldToDisplay=[
-  {name: 'sample_id', label_en:'Sample ID', label_es: 'ID Muestra', sort:true, filter:false}
-  , {name: 'incubation2_batch', label_en:'Batch', label_es: 'Tanda', sort:false, filter:false}
-  , {name: 'incubation2_start', label_en:'incubation 2 start', label_es: 'Inicio 2a Incubacion', sort:false, filter:true}
-  , {name: 'status', label_en:'status', label_es: 'Estado', sort:false, filter:true}
-, {name: 'sampling_date', label_en:'sampling Date', label_es: 'ID Fecha de Muestreo', sort:false, filter:true}
-, {name: 'incubation_start', label_en:'incubation 1 start', label_es: 'Inicio 1a Incubacion', sort:false, filter:true}
-, {name: 'incubation_end', label_en:'incubation 1 end', label_es: 'Fin 1a Incubacion', sort:false, filter:true}];
+  {name: 'sample_id', label_en:'Sample ID', label_es: 'ID Muestra', sort:true, filter:false, width:'20%'}
+  , {name: 'incubation2_batch', label_en:'Batch', label_es: 'Tanda', sort:false, filter:false, width:'30%'}
+  , {name: 'incubation2_start', label_en:'incubation 2 start', label_es: 'Inicio 2a Incubacion', sort:false, filter:true, width:'20%'}
+, {name: 'sampling_date', label_en:'sampling Date', label_es: 'ID Fecha de Muestreo', sort:false, filter:true, width:'30%'}
+, {name: 'incubation_incubator', label_en:'Incubator incub 1', label_es: 'Incubadora 1a Incubacion', sort:false, filter:true, width:'30%'}
+, {name: 'incubation_start', label_en:'incubation 1 start', label_es: 'Inicio 1a Incubacion', sort:false, filter:true, width:'30%'}
+, {name: 'incubation_end', label_en:'incubation 1 end', label_es: 'Fin 1a Incubacion', sort:false, filter:true, width:'30%'}];
 export const sampleIncubation2_incubBatch_samplesWhereFieldsName='current_stage|incubation_passed';
 export const sampleIncubation2_incubBatch_samplesWhereFieldsValue='Incubation|true';
 export const sampleIncubation2_incubBatch_sampleFieldToSort='sample_id desc';
@@ -580,11 +574,11 @@ export const sampleIncubation2_incubBatch_buttons=[
   },             
 ];
 export const sampleIncubation_incubBatch_activeBatchFieldToDisplay=[
-  {name: 'name', label_en:'Name', label_es: 'Nombre', sort:true, filter:false}
-, {name: 'type', label_en:'Type', label_es: 'Tipo', sort:false, filter:true}
-, {name: 'incubation_incubator', label_en:'Incubator', label_es: 'Incubadora', sort:false, filter:true}
-, {name: 'NUM_SAMPLES', label_en:'Num Samples', label_es: 'Nº Muestras', sort:false, filter:true}
-, {name: 'incubation_start', label_en:'Start Date', label_es: 'Fecha Inicio', sort:false, filter:true}];
+  {name: 'name', label_en:'Name', label_es: 'Nombre', sort:true, filter:false, width:'30%'}
+, {name: 'incubation_incubator', label_en:'Incubator', label_es: 'Incubadora', sort:false, filter:true, width:'30%'}
+, {name: 'NUM_SAMPLES', label_en:'Num Samples', label_es: 'Nº Muestras', sort:false, filter:true, width:'20%'}
+, {name: 'incubation_start', label_en:'Start Date', label_es: 'Fecha Inicio', sort:false, filter:true, width:'30%'}
+, {name: 'type', label_en:'Type', label_es: 'Tipo', sort:false, filter:true, width:'30%'}];
 export const sampleIncubation_incubBatch_activeBatchButtons=[
   {
     "name": "EM_BATCH_INCUB_CREATE",
@@ -619,16 +613,33 @@ export const sampleIncubation_incubBatch_incubatorsFieldToDisplay=[
   {name: 'name', label_en:'Name', label_es: 'Nombre', sort:true, filter:false}
 , {name: 'description', label_en:'description', label_es: 'descripción', sort:false, filter:true}
 ];
-
-export const samplePlateReading_sampleFieldToRetrieve='sample_id|current_stage|status|sampling_date|sampling_comment|sample_config_code';
+export const sampleIncubation_incubBatch_newBatchFormFields=[
+  {
+    "name": "migroorganism_freetext",
+    "label_en": "New", "label_es": "Nuevo",
+    "type": "text",
+    "password": "false",
+    "value": "",
+    "read_only": false
+  }, 
+];
+export const samplePlateReading_sampleFieldToRetrieve='sample_id|program_name|location_name|current_stage|status|sampling_date|sampling_comment|incubation_batch|incubation_incubator|incubation_start|incubation_end|incubation2_batch|incubation2_incubator|incubation2_start|incubation2_end|sample_config_code';
 export const samplePlateReading_sampleFieldToDisplay=[
-  {name: 'sample_id', label_en:'Sample ID', label_es: 'ID Muestra', sort:true, filter:false}
-, {name: 'status', label_en:'status', label_es: 'Estado', sort:false, filter:true}
-, {name: 'sampling_date', label_en:'sampling Date', label_es: 'ID Fecha de Muestreo', sort:false, filter:true}
-, {name: 'sampling_comment', label_en:'sampling Comment', label_es: 'Comentario Muestreo', sort:false, filter:true}
-, {name: 'sample_config_code', label_en:'Configuration', label_es: 'Configuración', sort:false, filter:true}];
- export const samplePlateReading_samplesWhereFieldsName='current_stage|sample_config_code not in*';
- export const samplePlateReading_samplesWhereFieldsValue='PlateReading|'+personal_smp_template;
+  {name: 'sample_id', label_en:'Sample ID', label_es: 'ID Muestra', sort:true, filter:false, width:'5%'},
+  , {name: 'program_name', label_en:'Project', label_es: 'Programa', width:'20px', sort:false, filter:true, width:'6%'}
+  , {name: 'location_name', label_en:'Location', label_es: 'Ubicación', width:'30px', sort:false, filter:true, width:'6%'}
+, {name: 'sampling_date', label_en:'sampling Date', label_es: 'ID Fecha de Muestreo', sort:false, filter:true, width:'6%' }
+, {name: 'incubation_batch', label_en:'Batch incub 1', label_es: 'Tanda 1a Incubacion', sort:false, filter:true, width:'6%'}
+, {name: 'incubation_incubator', label_en:'Incubator incub 1', label_es: 'Incubadora 1a Incubacion', sort:false, filter:true, width:'6%'}
+, {name: 'incubation_start', label_en:'incubation 1 start', label_es: 'Inicio 1a Incubacion', sort:false, filter:true, width:'6%'}
+, {name: 'incubation_end', label_en:'incubation 1 end', label_es: 'Fin 1a Incubacion', sort:false, filter:true, width:'6%'}
+, {name: 'incubation2_batch', label_en:'Batch incub 2', label_es: 'Tanda 2a Incubacion', sort:false, filter:true, width:'6%'}
+, {name: 'incubation2_incubator', label_en:'Incubator incub 2', label_es: 'Incubadora 2a Incubacion', sort:false, filter:true, width:'6%'}
+, {name: 'incubation2_start', label_en:'incubation 2 start', label_es: 'Inicio 2a Incubacion', sort:false, filter:true, width:'6%'}
+, {name: 'incubation2_end', label_en:'incubation 2 end', label_es: 'Fin 2a Incubacion', sort:false, filter:true, width:'6%'}];
+
+export const samplePlateReading_samplesWhereFieldsName='current_stage|sample_config_code not in*';
+export const samplePlateReading_samplesWhereFieldsValue='PlateReading|'+personal_smp_template;
 export const samplePlateReading_sampleFieldToSort='sample_id desc';
 export const samplePlateReading_buttons=[          
   {
@@ -652,14 +663,14 @@ export const samplePlateReading_buttons=[
     "icon_name": "icons:next-week",
     "read_only": false,
   },   
-  {
-	  "name": "givenSampleAnalysisList",
-	  "label_en": "Sample Analysis", "label_es": "Análisis de la Muestra",
-	  "type": "icon-button",
-	  "icon_name": "icons:description",
-	  "esign_required": false,
-	  "read_only": false,
-	},  
+  // {
+	//   "name": "givenSampleAnalysisList",
+	//   "label_en": "Sample Analysis", "label_es": "Análisis de la Muestra",
+	//   "type": "icon-button",
+	//   "icon_name": "icons:description",
+	//   "esign_required": false,
+	//   "read_only": false,
+	// },  
 	{
 	  "name": "addSampleAnalysis",
 	  "label_en": "Add Analysis", "label_es": "Añadir Análisis",
@@ -708,14 +719,13 @@ export const microorganismList_fieldsToDisplay=[
 ]
 export const sampleMicroorganism_sampleFieldToRetrieve='sample_id|current_stage|status|status_previous|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name';
 export const sampleMicroorganism_sampleFieldToDisplay=[
-    {name: 'status', label_en:'status', label_es: 'Estado', width:'20px', sort:false, filter:true}
-  , {name: 'sample_id', label_en:'Sample ID', label_es: 'ID Muestra', width:'12px', sort:true, filter:false}
-  , {name: 'program_name', label_en:'Project', label_es: 'Programa', width:'20px', sort:false, filter:true}
-  , {name: 'location_name', label_en:'Location', label_es: 'Ubicación', width:'30px', sort:false, filter:true}
-  , {name: 'sampling_date', label_en:'sampling Date', label_es: 'ID Fecha de Muestreo', width:'20px', sort:false, filter:true}
-  , {name: 'raw_value', label_en:'Reading Result', label_es: 'Recuento', width:'20px', sort:false, filter:true}
-  , {name: 'microorganism_count', label_en:'# Organism Ident.', label_es: 'Num. MicroOrg. Detectados', width:'20px', sort:false, filter:true}
-  , {name: 'microorganism_list', label_en:'Microorganisms', label_es: 'Microorganismos', width:'20px', sort:false, filter:true}
+  , {name: 'sample_id', label_en:'Sample ID', label_es: 'ID Muestra', width:'12px', sort:true, filter:false, width:'20%'}
+  , {name: 'program_name', label_en:'Project', label_es: 'Programa', width:'20px', sort:false, filter:true, width:'30%'}
+  , {name: 'location_name', label_en:'Location', label_es: 'Ubicación', width:'30px', sort:false, filter:true, width:'30%'}
+  , {name: 'sampling_date', label_en:'sampling Date', label_es: 'ID Fecha de Muestreo', width:'20px', sort:false, filter:true, width:'30%'}
+  , {name: 'raw_value', label_en:'Reading Result', label_es: 'Recuento', width:'20px', sort:false, filter:true, width:'20%'}
+  , {name: 'microorganism_count', label_en:'# Organism Ident.', label_es: 'Num. MicroOrg. Detectados', width:'20px', sort:false, filter:true, width:'20%'}
+  , {name: 'microorganism_list', label_en:'Microorganisms', label_es: 'Microorganismos', width:'20px', sort:false, filter:true, width:'40%'}
 ]
 export const sampleMicroorganism_samplesWhereFieldsName='current_stage|sample_config_code not in*';
 export const sampleMicroorganism_samplesWhereFieldsValue='MicroorganismIdentification|'+personal_smp_template;
@@ -1011,26 +1021,26 @@ export const programHome_lastResults_infoGrouped={
 }
 
 export const programProgConfigCalendar_progConfigCalendarTableHeaderFields=[
-  {name: 'area', label_en:'Area', label_es: 'Area', sort:false, filter:true, is_icon:true}
-, {name: 'location_name', label_en:'Location', label_es: 'Ubicación', sort:false, filter:true}
-, {name: 'spec_code', label_en:'Spec', label_es: 'Especificación', sort:false, filter:true}
-, {name: 'spec_variation_name', label_en:'Variation', label_es: 'Variación', sort:false, filter:true}
-, {name: 'spec_analysis_variation', label_en:'Analysis Variation', label_es: 'Análisis de Variación', sort:false, filter:true}
+  {name: 'area', label_en:'Area', label_es: 'Area', sort:false, filter:true, is_icon:true, width:"20%"}
+, {name: 'location_name', label_en:'Location', label_es: 'Ubicación', sort:false, filter:true, width:"20%"}
+, {name: 'spec_code', label_en:'Spec', label_es: 'Especificación', sort:false, filter:true, width:"20%"}
+, {name: 'spec_variation_name', label_en:'Variation', label_es: 'Variación', sort:false, filter:true, width:"20%"}
+, {name: 'spec_analysis_variation', label_en:'Analysis Variation', label_es: 'Análisis de Variación', sort:false, filter:true, width:"20%"}
 ];
 
 
 export const programProgPoints_samplePointsTableHeaderFields=[
-  {name: 'area', label_en:'Area', label_es: 'Area', sort:false, filter:true, is_icon:true}
-, {name: 'location_name', label_en:'Location', label_es: 'Ubicación', sort:false, filter:true}
-, {name: 'spec_code', label_en:'Spec', label_es: 'Especificación', sort:false, filter:true}
-, {name: 'spec_variation_name', label_en:'Variation', label_es: 'Variación', sort:false, filter:true}
-, {name: 'spec_analysis_variation', label_en:'Analysis Variation', label_es: 'Análisis de Variación', sort:false, filter:true}
+  {name: 'area', label_en:'Area', label_es: 'Area', sort:false, filter:true, is_icon:true, width:"20%"}
+, {name: 'location_name', label_en:'Location', label_es: 'Ubicación', sort:false, filter:true, width:"20%"}
+, {name: 'spec_code', label_en:'Spec', label_es: 'Especificación', sort:false, filter:true, width:"20%"}
+, {name: 'spec_variation_name', label_en:'Variation', label_es: 'Variación', sort:false, filter:true, width:"20%"}
+, {name: 'spec_analysis_variation', label_en:'Analysis Variation', label_es: 'Análisis de Variación', sort:false, filter:true, width:"20%"}
 ];
 
 export const programProgPoints_samplePointsMapTableHeaderFields=[
-    {name: 'program_name', label_en:'Project', label_es: 'Programa', sort:false, filter:true, is_icon:true}
-  , {name: 'location_name', label_en:'Location', label_es: 'Ubicación', sort:false, filter:true}
-  , {name: 'description_en', label_en:'description_en', label_es: 'description_en', sort:false, filter:true}
+    {name: 'program_name', label_en:'Project', label_es: 'Programa', sort:false, filter:true, is_icon:true, width:"30%"}
+  , {name: 'location_name', label_en:'Location', label_es: 'Ubicación', sort:false, filter:true, width:"30%"}
+  , {name: 'description_en', label_en:'description_en', label_es: 'description_en', sort:false, filter:true, width:"40%"}
 ];
 
 export const progCorrectiveActionButtons=[
@@ -1042,14 +1052,12 @@ export const progCorrectiveActionButtons=[
   },  
 ];
 export const progCorrectiveActionTableHeaderFields=[
-, {name: 'status', label_en:'Status', label_es: 'Estado', sort:false, filter:true}
-, {name: 'result_id', label_en:'Result', label_es: 'Resultado', sort:false, filter:true}
-, {name: 'created_on', label_en:'Creation', label_es: 'Creada', sort:true, filter:false}
-, {name: 'program_name', label_en:'Program', label_es: 'Programa', sort:false, filter:true}
-, {name: 'location_name', label_en:'Location', label_es: 'Ubicación', sort:false, filter:true}
-, {name: 'method_name', label_en:'Method', label_es: 'Método', sort:false, filter:true}
-, {name: 'spec_eval_detail', label_en:'Problem Detail', label_es: 'Detalle del Problema', sort:false, filter:true}
-, {name: 'spec_rule_with_detail', label_en:'Spec Rule', label_es: 'Especificación', sort:false, filter:true}
+, {name: 'result_id', label_en:'Result', label_es: 'Resultado', sort:false, filter:true, width:"10%"}
+, {name: 'created_on', label_en:'Creation', label_es: 'Creada', sort:true, filter:false, width:"15%"}
+, {name: 'location_name', label_en:'Location', label_es: 'Ubicación', sort:false, filter:true, width:"15%"}
+, {name: 'method_name', label_en:'Method', label_es: 'Método', sort:false, filter:true, width:"10%"}
+, {name: 'spec_eval_detail', label_en:'Problem Detail', label_es: 'Detalle del Problema', sort:false, filter:true, width:"30%"}
+, {name: 'spec_rule_with_detail', label_en:'Spec Rule', label_es: 'Especificación', sort:false, filter:true, width:"10%"}
 ];
 
 export const sampleAudit_fieldsToRetrieve='';
@@ -1086,7 +1094,7 @@ export const productionLot_buttons=[
     "name": "EM_NEW_PRODUCTION_LOT",
     "label_en": "New", "label_es": "Nuevo",
     "type": "icon-button",
-    "icon_name": "newspaper-plus",
+    "icon_name": "icons:create-new-folder",
     "read_only": false,
   }, 
   {
@@ -1098,12 +1106,24 @@ export const productionLot_buttons=[
   }, 
   {
     "name": "EM_ACTIVATE_PRODUCTION_LOT",
-    "label_en": "Deactivate", "label_es": "Desactivar",
+    "label_en": "Activate", "label_es": "Activar",
     "type": "icon-button",
-    "icon_name": "alarm-plus",
+    "icon_name": "icons:alarm-add",
     "read_only": false,
   }, 
 ];
+export const productionLot_newLot_formFields=[
+  {
+    "name": "migroorganism_freetext",
+    "label_en": "New", "label_es": "Nuevo",
+    "type": "text",
+    "password": "false",
+    "value": "",
+    "read_only": false
+  },      
+];
+
+
 export const browserSampleFieldToRetrieve='ALL';
 export const browserSampleFieldsToDisplay='current_stage|program_name|location_name|product_lot|shift';
 
@@ -1163,3 +1183,25 @@ export const em_browser_tabs=[
     ,tabIndex:1
   } ,    
 ]
+
+export const cancelDialogButton={
+    "name": "CANCEL_DIALOG_BUTTON",
+    "label_en": "Cancel", "label_es": "Cancelar",
+    "type": "button",
+    "icon_name": "icons:next-week",
+    "read_only": false,
+}
+export const confirmDialogButton={
+  "name": "ACCEPT_DIALOG_BUTTON",
+  "label_en": "Accept", "label_es": "Aceptar",
+  "type": "button",
+  "icon_name": "icons:next-week",
+  "read_only": false,
+}
+export const closeDialogButton={
+  "name": "CLOSE_DIALOG_BUTTON",
+  "label_en": "Close", "label_es": "Cerrar",
+  "type": "button",
+  "icon_name": "icons:next-week",
+  "read_only": false,
+}

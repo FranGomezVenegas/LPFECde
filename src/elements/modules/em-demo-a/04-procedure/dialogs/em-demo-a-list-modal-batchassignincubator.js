@@ -16,6 +16,9 @@ import '../../../../internalComponents/form-fields/field-icon-button.js';
 //import '../../01moduleFunctionality/env-monit-elements.js';
 import {dialog_buttons} from '../../../../../config/app-config.js';
 import {schema_name} from '../../../process-us/03config/config-process.js';
+import '../../../../internalComponents/dialogs/modalwindow-buttons.js';
+
+
 /**
  * `em-demo-a-list-modal-batchassignincubator` Description
  *
@@ -37,7 +40,6 @@ class emDemoAListModalBatchassignincubator extends ((PolymerElement)) {
     }
     static get template() {
         return html`
-  
         <style include="modal-dialogs">
             .modal-content {
                 width: 550px;
@@ -46,21 +48,18 @@ class emDemoAListModalBatchassignincubator extends ((PolymerElement)) {
             display: flex;
             }
         </style>        
-
         <div class="modal-content bgimg">
-        <div> 
-            <paper-button name="cancel" dialog-dismiss on-click="dialogCanceled">Cancel</paper-button>
-            <paper-button name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
-        </div>
-        
-        <div>
-        <vaadin-grid id="mygridid" items="{{listRows}}">  
-            <vaadin-grid-selection-column  auto-select></vaadin-grid-selection-column>
-            <template is="dom-repeat" items="{{listHeader}}" as="fld">        
-                <vaadin-grid-column resizable path="{{fld.name}}" header="{{fld.label_en}}"></vaadin-grid-column>
-            </template>
-        </vaadin-grid>      
-        </div>    
+            <modalwindow-buttons display-close-button display-confirm-button 
+                on-dialog-confirmedbutton-clicked="dialogConfirmed"> </modalwindow-buttons>        
+            <div>
+                <vaadin-grid id="mygridid" items="{{listRows}}">  
+                    <vaadin-grid-selection-column  auto-select></vaadin-grid-selection-column>
+                    <template is="dom-repeat" items="{{listHeader}}" as="fld">        
+                        <vaadin-grid-column resizable path="{{fld.name}}" header="{{fld.label_en}}"></vaadin-grid-column>
+                    </template>
+                </vaadin-grid>      
+            </div>    
+        </div>                
         `;
     }  
     dialogConfirmed(){

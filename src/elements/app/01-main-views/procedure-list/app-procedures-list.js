@@ -8,8 +8,11 @@ import { store } from '../../../../store';
 import {isTabOpenable} from '../../../../config/app-config';
 import {ProcedureList} from '../../mixin/app-procedurelist-api';
 import {addTab,setCurrentTab} from '../../Redux/actions/tabs_actions';
+import {proceduresListPaneTitle} from '../../../../config/app-config';
+import {FieldsMethods} from '../../../app/app-functions/fields-methods';
 
-class AppProceduresList extends ProcedureList(connect(store)(PolymerElement)) {
+
+class AppProceduresList extends FieldsMethods(ProcedureList(connect(store)(PolymerElement))) {
     static get properties() {
         return {
             finalToken: {type: String, observer: 'onFinalTokenFilled'},
@@ -17,12 +20,14 @@ class AppProceduresList extends ProcedureList(connect(store)(PolymerElement)) {
             horizontal: {type: Boolean},
             opened: {type: Boolean, value: true, reflectToAttribute: true},
             noAnimation: {type: Boolean}, 
-            selectedLanguage: {type: String},         
+            selectedLanguage: {type: String},    
+            paneTitle: { type: Object, value: proceduresListPaneTitle}, 
+            titleValue: String, titleIcon: String,
         }
     }
     stateChanged(state) {
         this.selectedLanguage=state.app.user.appLanguage;
-
+        this.getText();
         //this.$.collapse.value=this.getText(this.opened);
 //        console.log('app-procedures-list.js >> stateChanged', 'Begin');
         if (this.finalToken != state.app.user.finalToken){ 
@@ -34,6 +39,7 @@ class AppProceduresList extends ProcedureList(connect(store)(PolymerElement)) {
 //        console.log('app-procedures-list.js >> stateChanged', 'End'
 //            , this.finalToken, this.selectedLanguage, this.procedureList);
     }   
+
     toggle() {
         //console.log('app-procedures-list >> toggle');
         if (!this.procedureList){
@@ -45,24 +51,52 @@ class AppProceduresList extends ProcedureList(connect(store)(PolymerElement)) {
             return;               
         }        
         this.$.collapse.toggle();
+        this.getText();
     }   
-
-    getText(opened) {
-        //console.log('getText', this.selectedLanguage);
-        if (this.selectedLanguage=="es"){return opened ? 'Procesos (Cerrar)' : 'Procesos (Abrir)';}
-        return opened ? 'Procedures (Close)' : 'Procedures (Open)';
+    getText() {
+        if (this.opened){
+            this.titleValue=this.labelValue(this.selectedLanguage, this.paneTitle.open);  
+            this.titleIcon=this.paneTitle.open.icon_name;          
+            return;
+        }
+        this.titleValue=this.labelValue(this.selectedLanguage, this.paneTitle.closed); 
+        this.titleIcon=this.paneTitle.closed.icon_name;                   
     }
     static get template() {
         return html`      
         <style include="shared-style-app-procedure-list"></style>
-        <vaadin-button id="triggerProcedures" hidden="{{opened}}" on-click="toggle" aria-expanded\$="[[opened]]" aria-controls="collapse">{{getText(opened)}}</vaadin-button>
+        <style>
+        iron-icon{
+            color:cornflowerblue;
+        }               
+        div.title{
+            display:flex;
+        }
+        </style>
+        <div id="title" class="title">
+            <iron-icon icon="[[titleIcon]]" on-click="toggle"></iron-icon>
+            <vaadin-button id="triggerProcedures" on-click="toggle" aria-expanded\$="[[opened]]" aria-controls="collapse">[[titleValue]]</vaadin-button>
+        </div>   
         <iron-collapse id="collapse" hidden="{{!opened}}" opened="{{opened}}" horizontal="[[horizontal]]" no-animation="[[noAnimation]]" tabindex="0">
-            <vaadin-button id="triggerProcedures" on-click="toggle" aria-expanded\$="[[opened]]" aria-controls="collapse">{{getText(opened)}}</vaadin-button>
-            <template is="dom-repeat" items="{{procedureList.procedures}}" as="currprocedure">                      
+            
+            <template is="dom-repeat" items="{{procedureList.procedures}}" as="currprocedure">   
+                <div class="title">
+                    <template is="dom-repeat"  items="{{currprocedure.icons_up}}" as="currentfield">                    
+                        <field-controller style="padding-top: 0px; padding-bottom: 0px;" id="{{currentfield.name}}" on-field-button-clicked="crearTab" tab-index="{{index}}" field="{{currentfield}}" procedure="{{currprocedure}}"></field-controller>            
+                    </template>            
+                </div>         
+
                 <template is="dom-repeat"  items="{{currprocedure.definition}}" as="currentfield">                    
                     <field-controller style="padding-top: 0px; padding-bottom: 0px;" id="{{currentfield.name}}" on-field-tree-list-clicked="crearTab" tab-index="{{index}}" field="{{currentfield}}" procedure="{{currprocedure}}"></field-controller>            
                 </template>            
+
+                <div class="title">
+                    <template is="dom-repeat"  items="{{currprocedure.icons_down}}" as="currentfield">                    
+                        <field-controller style="padding-top: 0px; padding-bottom: 0px;" id="{{currentfield.name}}" on-field-button-clicked="crearTab" tab-index="{{index}}" field="{{currentfield}}" procedure="{{currprocedure}}"></field-controller>            
+                    </template>            
+                </div>         
             </template> 
+
         </iron-collapse>   
         `;
     }

@@ -16,31 +16,31 @@ getAppHeader(data) {
     axios.get(apiUrl)        
     .then( response => {
         if(response.status == 200) {
+//            console.log(response.data);
             store.dispatch(userInfo(response.data));   
-            if (data.callBackFunction){data.callBackFunction();}
-            console.log(response.data);
+            //if (data.callBackFunction){data.callBackFunction();}
             return;
         }
-        if (data.callBackFunctionError){data.callBackFunctionError();}        
-        this.dispatchEvent(new CustomEvent('toast-message', {
-            bubbles: true,
-            composed: true,
-            detail: error.message
-        })); 
-        store.dispatch(addNotification({
-            notificationName: data.prefixName+'.'+data.actionName,
-            label_en: error.message, label_es:error.message,
-            new_sample:0,
-            diagnoses: 'ERROR'
-        }));
+        //if (data.callBackFunctionError){data.callBackFunctionError();}        
+        // this.dispatchEvent(new CustomEvent('toast-message', {
+        //     bubbles: true,
+        //     composed: true,
+        //     detail: error.message
+        // })); 
+        // store.dispatch(addNotification({
+        //     notificationName: data.prefixName+'.'+data.actionName,
+        //     label_en: error.message, label_es:error.message,
+        //     new_sample:0,
+        //     diagnoses: 'ERROR'
+        // }));
     })    
     .catch(function (error) {
-        console.log(error.message);
-        if (data.callBackFunctionError){data.callBackFunctionError();}
-        this.dispatchEvent(new CustomEvent('toast-message', {
-            bubbles: true,        composed: true,
-            detail: 'Error on authentication'+error.message
-          }));           
+//        console.log('api-usersession >> .catch(error)', error.message);
+        // if (data.callBackFunctionError){data.callBackFunctionError();}
+        // this.dispatchEvent(new CustomEvent('toast-message', {
+        //     bubbles: true,        composed: true,
+        //     detail: 'Error on authentication'+error.message
+        //   }));           
     })
     .then(function () {
     });

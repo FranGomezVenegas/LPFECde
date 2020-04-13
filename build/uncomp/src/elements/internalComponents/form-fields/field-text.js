@@ -27,10 +27,13 @@ import{PolymerElement,html}from"../../../../node_modules/@polymer/polymer/polyme
       }
       .x-field.myCustomFieldBlue input {
           color: Blue;
-      }        
+      }      
+      inputBlue {
+        color: Blue;}
+    }           
     </style>
     <template  is="dom-if" if="{{textType()}}">  
-      <paper-input type="{{field.type}}" id="{{field.name}}" name="{{field.name}}" readonly="{{field.read_only}}" required label="{{labelValue(selectedLanguage, field)}}" value="{{value}}" auto-validate="{{field.required}}" ></paper-input>
+      <paper-input class="inputBlue" type="{{field.type}}" id="{{field.name}}" name="{{field.name}}" readonly="{{field.read_only}}" required label="{{labelValue(selectedLanguage, field)}}" value="{{value}}" auto-validate="{{field.required}}" ></paper-input>
     </template>
     <template  is="dom-if" if="{{textTypePassword()}}">  
       <vaadin-password-field id="{{field.name}}" name="{{field.name}}" readonly="{{field.read_only}}" label="{{labelValue(selectedLanguage, field)}}" value="{{value}}">value="{{value}}"</vaadin-password-field>

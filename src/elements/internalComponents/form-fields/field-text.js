@@ -83,7 +83,7 @@ class FieldText extends FieldsMethods(connect(store)(PolymerElement)) {
       }      
       inputBlue {
         color: Blue;}
-    }           
+           
     </style>
     <template  is="dom-if" if="{{textType()}}">  
       <paper-input class="inputBlue" type="{{field.type}}" id="{{field.name}}" name="{{field.name}}" readonly="{{field.read_only}}" required label="{{labelValue(selectedLanguage, field)}}" value="{{value}}" auto-validate="{{field.required}}" ></paper-input>
@@ -92,7 +92,7 @@ class FieldText extends FieldsMethods(connect(store)(PolymerElement)) {
       <vaadin-password-field id="{{field.name}}" name="{{field.name}}" readonly="{{field.read_only}}" label="{{labelValue(selectedLanguage, field)}}" value="{{value}}">value="{{value}}"</vaadin-password-field>
     </template>
     <template  is="dom-if" if="{{textTypeConfidential()}}">  
-      <paper-input type="{{type}}" name="{{field.name}}" readonly label="{{labelValue(selectedLanguage, field)}}" value="{{confidentialMaskValue(selectedLanguage)}}" required="{{field.required}}" auto-validate tip="You are not authorized to see this information"></paper-input>
+      <paper-input type="{{type}}" id="{{field.name}}" name="{{field.name}}" readonly label="{{labelValue(selectedLanguage, field)}}" value="{{confidentialMaskValue(selectedLanguage)}}" required="{{field.required}}" auto-validate tip="You are not authorized to see this information"></paper-input>
     </template>    
     `;
   } 

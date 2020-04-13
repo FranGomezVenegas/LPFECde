@@ -12,6 +12,7 @@ import '@vaadin/vaadin-grid/vaadin-grid-filter';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column'; 
 
 import '../../../../internalComponents/form-fields/field-icon-button.js';
+import '../../../../internalComponents/dialogs/modalwindow-buttons.js';
 
 import {dialog_buttons} from '../../../../../config/app-config.js';
 import {schema_name, sampleCustodian_cocUsersListButtons} from '../../03config/config-process.js';
@@ -46,10 +47,9 @@ class emDemoAListModalCocUsers extends FrontendEnvMonitSample(PolymerElement) {
         </style>        
 
         <div class="modal-content bgimg">
-            <div>
-                <paper-button name="cancel" dialog-dismiss on-click="dialogCanceled">Cancel</paper-button>
-                <paper-button name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
-            </div>
+            <modalwindow-buttons 
+                display-cancel-button 							display-confirm-button 								
+                on-dialog-cancelbutton-clicked="dialogCanceled" on-dialog-confirmedbutton-clicked="dialogConfirmed"> </modalwindow-buttons> 
             <div name="Buttons1" class="buttonGroup">
                 <template is="dom-repeat" items="{{buttons}}" as="currentfield">       
                     <field-controller id="{{currentfield.name}}"  field="{{currentfield}}"

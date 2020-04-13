@@ -7,6 +7,7 @@ import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import '@vaadin/vaadin-grid/vaadin-grid-filter'; 
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column'; 
 import '../../../../internalComponents/form-fields/field-controller';
+import '../../../../internalComponents/dialogs/modalwindow-buttons.js';
 import {FrontendEnvMonitSample} from '../../01moduleFunctionality/frontend-env-monit-sample';
 import {EmDemoAapiEnvMonit} from '../../01moduleFunctionality/api-env-monit';
 import {schema_name, microorganism_allowAddNotOnTheList, microorganism_allowAddNotOnTheList_formFields} from '../../03config/config-process';
@@ -24,7 +25,8 @@ class emDemoAListModalMicroorganism extends EmDemoAapiEnvMonit(FrontendEnvMonitS
             adhocFormFields: {type: Array, value: microorganism_allowAddNotOnTheList_formFields},
             schemaPrefix:{type:String, value:schema_name},
             sampleId:{type: Number},
-            finalToken: {type: String}, selectedObject:{type: Object}
+            finalToken: {type: String}, selectedObject:{type: Object},  
+            callBackFunctionEnvMonitElem: Object,          
         }
     }
     static get template() {
@@ -36,11 +38,8 @@ class emDemoAListModalMicroorganism extends EmDemoAapiEnvMonit(FrontendEnvMonitS
         } 
         </style>        
         <div class="modal-content bgimg">
-            <div>
-                <paper-button name="cancel" dialog-dismiss on-click="dialogCanceled">Cancel</paper-button>
-                <paper-button name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
-            </div>
-        <div>
+            <modalwindow-buttons display-close-button></modalwindow-buttons> 
+            
             <template is="dom-if" if="{{displayFreeText}}">
                 <template is="dom-repeat" items="{{adhocFormFields}}" as="currentfield">       
                     <field-controller on-keydown="keyPressed" on-field-button-clicked="actionOnSel" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>

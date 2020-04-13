@@ -65,7 +65,7 @@ class LabplanetMain extends connect(store)(PolymerElement) {
       .left {
         top: 10%;
         left: 2px;
-        width: 12%;
+        width: 18%;
         height: 100%;        
         -- background: #032bbc; /* Old browsers */
         -- background: -moz-linear-gradient(top, #032bbc 0%, #2989d8 5%, #b3cfe5 15%, #ffffff 37%, #ffffff 54%, #032bbc 88%, #207cca 88%, #207cca 88%, #032bbc 88%, #207cca 91%, #032bbc 93%, #2989d8 96%, #b3cfe5 100%, #b3cfe5 101%); /* FF3.6-15 */
@@ -75,8 +75,8 @@ class LabplanetMain extends connect(store)(PolymerElement) {
       }
       .right {
         top: 14%;
-        left: 12%; 
-        width: 88%;
+        left: 18%; 
+        width: 82%;
         height: 80%;
         float: right;
       }      

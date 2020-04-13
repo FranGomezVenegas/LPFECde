@@ -1,4 +1,4 @@
-define(["../../../../../../node_modules/@polymer/polymer/polymer-element.js","../../../../../../node_modules/@polymer/paper-button/paper-button.js","../../03config/css/Theme01/modal-dialogs.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-selection-column.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-sort-column.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter-column.js","../../../../internalComponents/form-fields/field-icon-button.js","../../../../../config/app-config.js","../../03config/config-process.js","../../01moduleFunctionality/frontend-env-monit-sample.js"],function(_polymerElement,_paperButton,_modalDialogs,_vaadinGrid,_vaadinGridSelectionColumn,_vaadinGridSortColumn,_vaadinGridFilter,_vaadinGridFilterColumn,_fieldIconButton,_appConfig,_configProcess,_frontendEnvMonitSample){"use strict";//import '../../../../internalComponents/grid-components/vaadingrid-singleselectrunaction';
+define(["../../../../../../node_modules/@polymer/polymer/polymer-element.js","../../../../../../node_modules/@polymer/paper-button/paper-button.js","../../03config/css/Theme01/modal-dialogs.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-selection-column.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-sort-column.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter-column.js","../../../../internalComponents/form-fields/field-icon-button.js","../../../../internalComponents/dialogs/modalwindow-buttons.js","../../../../../config/app-config.js","../../03config/config-process.js","../../01moduleFunctionality/frontend-env-monit-sample.js"],function(_polymerElement,_paperButton,_modalDialogs,_vaadinGrid,_vaadinGridSelectionColumn,_vaadinGridSortColumn,_vaadinGridFilter,_vaadinGridFilterColumn,_fieldIconButton,_modalwindowButtons,_appConfig,_configProcess,_frontendEnvMonitSample){"use strict";//import '../../../../internalComponents/grid-components/vaadingrid-singleselectrunaction';
 //import '../../../../internalComponents/grid-components/vaadingrid-singleselect.js';
 //import '../../../../internalComponents/grid-components/vaadingrid-multiselect';
 //import '../../../../app/module-functionality/sample/sample-elements.js';
@@ -17,10 +17,9 @@ define(["../../../../../../node_modules/@polymer/polymer/polymer-element.js","..
         </style>        
 
         <div class="modal-content bgimg">
-            <div>
-                <paper-button name="cancel" dialog-dismiss on-click="dialogCanceled">Cancel</paper-button>
-                <paper-button name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
-            </div>
+            <modalwindow-buttons 
+                display-cancel-button 							display-confirm-button 								
+                on-dialog-cancelbutton-clicked="dialogCanceled" on-dialog-confirmedbutton-clicked="dialogConfirmed"> </modalwindow-buttons> 
             <div name="Buttons1" class="buttonGroup">
                 <template is="dom-repeat" items="{{buttons}}" as="currentfield">       
                     <field-controller id="{{currentfield.name}}"  field="{{currentfield}}"

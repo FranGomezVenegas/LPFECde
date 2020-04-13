@@ -9,6 +9,8 @@ import {AuthenticationApi} from '../../app/mixin/authentication-api.js';
 import {closeEsignDialog, resetAndCloseEsignDialog, esignSuccess, esignFailure} from '../../app/Redux/actions/esign-actions.js';
 import {appEsign_formFields} from '../../../config/app-config.js';
 import './../../../config/styles/div-style.js'; 
+import {dialog_buttons} from '../../../config/app-config.js';
+import './modalwindow-buttons.js';
 
 let acceptedHandler = null;
 let canceledHandler = null;
@@ -16,6 +18,7 @@ let canceledHandler = null;
 class EsignDialog extends AuthenticationApi(connect(store)(PolymerElement)) {
   static get properties() {
     return {
+      dialogButtons: { type: Array, value: dialog_buttons},
       finalToken: String,
       opened: {type: Boolean,},
       maximumFailures: Number,
@@ -51,8 +54,9 @@ class EsignDialog extends AuthenticationApi(connect(store)(PolymerElement)) {
         <div class="esignDialogModalDialog">
           <input type="password" id="esign" value="" on-keydown="keyPressed">
           <div>
-            <paper-button name="confirm" dialog-confirm autofocus on-click="acceptButton">Accept</paper-button>
-            <paper-button name="cancel" dialog-dismiss on-click="cancelButton">Cancel</paper-button>
+            <modalwindow-buttons 
+              display-cancel-button 							display-confirm-button 								
+              on-dialog-cancelbutton-clicked="dialogCanceled" on-dialog-confirmedbutton-clicked="dialogConfirmed"> </modalwindow-buttons>             
             <p>{{attemptsPhrase}}</p>
           </div> 
         </div>
@@ -62,11 +66,11 @@ class EsignDialog extends AuthenticationApi(connect(store)(PolymerElement)) {
   }
   keyPressed(e){
     if(e.code.includes("Enter")) {
-      this.acceptButton();
+      this.dialogConfirmed();
       return;
     }
     if(e.code == "Escape") {
-      this.cancelButton();
+      this.dialogCanceled();
       return;
     }    
   }
@@ -86,16 +90,16 @@ class EsignDialog extends AuthenticationApi(connect(store)(PolymerElement)) {
       store.dispatch(closeEsignDialog());
     }
   }
-  acceptButton() {           
-    var paramsUrl='myToken='+this.finalToken+'&esignPhraseToCheck='+this.$.esign.value;    
+  dialogConfirmed() {           
+    var paramsUrl='finalToken='+this.finalToken+'&esignPhraseToCheck='+this.$.esign.value;    
     var datas = [];
-    datas.myToken=this.finalToken; datas.esignPhraseToCheck=this.$.esign.value;  datas.paramsUrl=paramsUrl;
+    datas.finalToken=this.finalToken; datas.esignPhraseToCheck=this.$.esign.value;  datas.paramsUrl=paramsUrl;
     datas.callBackFunction=this.esignCorrect.bind(this);
     datas.callBackFunctionError=this.esignFailure.bind(this);
 //        console.log('process-us-sample-reception >> itemSelected >> this.SampleAPI', paramsUrl, datas);            
     this.ajaxTokenValidateEsignPhrase(datas);    
   }
-  cancelButton() {
+  dialogCanceled() {
     if(canceledHandler) {canceledHandler();}
     store.dispatch(closeEsignDialog());    
   }

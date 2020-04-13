@@ -1,4 +1,4 @@
-define(["../../../../../../node_modules/@polymer/polymer/polymer-element.js","../../../../../../node_modules/@polymer/paper-button/paper-button.js","../../03config/css/Theme01/modal-dialogs.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-selection-column.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-sort-column.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter-column.js"],function(_polymerElement,_paperButton,_modalDialogs,_vaadinGrid,_vaadinGridSelectionColumn,_vaadinGridSortColumn,_vaadinGridFilter,_vaadinGridFilterColumn){"use strict";class emDemoAListModalAddsampleanalysis extends _polymerElement.PolymerElement{static get properties(){return{listRows:{type:Array,value:[{code:"LOD",method_name:"LOD Method",method_version:1}]}}}static get template(){return _polymerElement.html`  
+define(["../../../../../../node_modules/@polymer/polymer/polymer-element.js","../../../../../../node_modules/@polymer/paper-button/paper-button.js","../../03config/css/Theme01/modal-dialogs.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-selection-column.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-sort-column.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter.js","../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter-column.js","../../../../internalComponents/dialogs/modalwindow-buttons.js"],function(_polymerElement,_paperButton,_modalDialogs,_vaadinGrid,_vaadinGridSelectionColumn,_vaadinGridSortColumn,_vaadinGridFilter,_vaadinGridFilterColumn,_modalwindowButtons){"use strict";class emDemoAListModalAddsampleanalysis extends _polymerElement.PolymerElement{static get properties(){return{listRows:{type:Array,value:[{code:"LOD",method_name:"LOD Method",method_version:1}]}}}static get template(){return _polymerElement.html`  
         <style include="modal-dialogs">
             .modal-content {
                 width: 450px;
@@ -6,10 +6,7 @@ define(["../../../../../../node_modules/@polymer/polymer/polymer-element.js","..
         </style>        
 
         <div class="modal-content bgimg">
-            <div>
-                <paper-button name="cancel" dialog-dismiss on-click="dialogCanceled">Cancel</paper-button>
-                <paper-button name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
-            </div>
+            <modalwindow-buttons display-cancel-button display-confirm-button display-close-button> </em-demo-a-modalwindow-buttons>
         <div>
             <vaadin-grid id="mygridid" items="{{listRows}}">  
                 <vaadin-grid-selection-column  auto-select></vaadin-grid-selection-column>

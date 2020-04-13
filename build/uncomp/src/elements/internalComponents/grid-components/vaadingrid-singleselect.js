@@ -1,6 +1,6 @@
 import{PolymerElement,html}from"../../../../node_modules/@polymer/polymer/polymer-element.js";import{connect}from"../../../../node_modules/pwa-helpers/connect-mixin.js";import{store}from"../../../store.js";import{FieldsMethods}from"../../app/app-functions/fields-methods.js";import"../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid.js";import"../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-selection-column.js";import"../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-sort-column.js";import"../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter.js";//import '@vaadin/vaadin-grid/vaadin-grid-tree-toggle'; 
 //import '@vaadin/vaadin-grid/vaadin-grid-tree-column'; 
-import"../../../../node_modules/@vaadin/vaadin-checkbox/vaadin-checkbox.js";import"../../../../node_modules/@polymer/paper-button/paper-button.js";import{SampleIcons}from"../../modules/process-us/03config/config-icons.js";class VaadingridSingleselect extends SampleIcons(FieldsMethods(connect(store)(PolymerElement))){stateChanged(state){this.selectedLanguage=state.app.user.appLanguage}static get properties(){return{selectedObject:{type:String,notify:!0},addSelectionColumn:{type:Boolean,value:!1},detailsOpened:{type:Boolean,value:!1},detailsOpenedTwo:{type:Boolean,value:!1},sampleAnalysisFieldsNames:{type:Array,value:["status","test_id","analysis","method_name","method_version"]},sampleAnalysisResultFieldsNames:{type:Array,value:["status","result_id","param_name","raw_value"]}}}static get template(){return html`
+import"../../../../node_modules/@vaadin/vaadin-checkbox/vaadin-checkbox.js";import"../../../../node_modules/@polymer/paper-button/paper-button.js";import{SampleIcons}from"../../modules/process-us/03config/config-icons.js";class VaadingridSingleselect extends SampleIcons(FieldsMethods(connect(store)(PolymerElement))){stateChanged(state){this.selectedLanguage=state.app.user.appLanguage}static get properties(){return{selectedObject:{type:Object,notify:!0},addSelectionColumn:{type:Boolean,value:!1},detailsOpened:{type:Boolean,value:!1},detailsOpenedTwo:{type:Boolean,value:!1},sampleAnalysisFieldsNames:{type:Array,value:["status","test_id","analysis","method_name","method_version"]},sampleAnalysisResultFieldsNames:{type:Array,value:["status","result_id","param_name","raw_value"]}}}static get template(){return html`
         <style>        
             vaadin-grid{
                     height: 360px;
@@ -13,7 +13,7 @@ import"../../../../node_modules/@vaadin/vaadin-checkbox/vaadin-checkbox.js";impo
         </style>
 
         <vaadin-grid id="gridLevel1" items="{{rowcontainer}}" on-active-item-changed="itemSelected"
-        selected-object="{{selectedObject}}" theme="column-borders" column-reordering-allowed multi-sort>  
+        selected-object="{{selectedObject}}"  column-reordering-allowed multi-sort>  
             <!-- <template is="dom-if" if="{{addSelectionColumn}}"> -->
                 <vaadin-grid-selection-column  auto-select></vaadin-grid-selection-column>
             <!-- </template> -->
@@ -72,11 +72,14 @@ import"../../../../node_modules/@vaadin/vaadin-checkbox/vaadin-checkbox.js";impo
                     </vaadin-grid-column>
                 </template>                    
                 <template is="dom-if" if="{{!isStatus(fld.name)}}">
-                    <template is="dom-if" if="{{fld.filter}}"> 
+                    <template is="dom-if" if="{{isFilter(fld)}}"> 
                         <vaadin-grid-filter-column width="{{fld.width}}" resizable style="color: blue;" path="{{fld.name}}" header="{{labelValue(selectedLanguage, fld)}}"></vaadin-grid-filter-column>
                     </template>
-                    <template is="dom-if" if="{{fld.sort}}"> 
-                        <vaadin-grid-sort-column path="{{fld.name}}" resizable  header="{{labelValue(selectedLanguage, fld)}}"></vaadin-grid-sort-column>
+                    <template is="dom-if" if="{{isSort(fld)}}"> 
+                        <vaadin-grid-sort-column path="{{fld.name}}" width="{{fld.width}}" resizable  header="{{labelValue(selectedLanguage, fld)}}"></vaadin-grid-sort-column>
+                    </template>
+                    <template is="dom-if" if="{{isNormal(fld)}}"> 
+                        <vaadin-grid-column path="{{fld.name}}" width="{{fld.width}}" resizable  header="{{labelValue(selectedLanguage, fld)}}"></vaadin-grid-column>
                     </template>
                 </template>                   
             </template>
@@ -93,26 +96,4 @@ import"../../../../node_modules/@vaadin/vaadin-checkbox/vaadin-checkbox.js";impo
         </vaadin-grid>       
 -->        
         `}isStatus(fldName){//console.log('isStatus', 'fldName', fldName);
-return"status"==fldName}// itemSelected(e) {  
-//     if (e.detail.value.length==0){return;}
-//     if (e.detail.value.indexSplices==null){return;}
-//     this.selectedObject=e.detail.value.indexSplices[0].object[e.detail.value.indexSplices[0].object.length-1].sample_id;
-//     this.selectedObjectLevel='SAMPLE';
-//     this.selectedRow=e.detail.value.indexSplices[0].object[e.detail.value.indexSplices[0].object.length-1];
-//     console.log('Object selected', this.selectedObject, this.selectedObjectLevel);    
-// }  
-itemSelected(e){this.selectedObject=e.detail.value;this.$.gridLevel1.selectedObject=this.selectedObject;if(null==this.selectedObject){return}//console.log('vaadingrid-singleselect >> itemSelected', this.selectedObject);
-if(null==e.detail.value){this.selectedSample=null;return}//if (this.selectedSample==e.detail.value.sample_id){this.selectedSample=null; return;}
-//this.selectedObject=e.detail.value.sample_id;         
-const item=e.detail.value;this.$.gridLevel1.selectedItems=item?[item]:[];this.selectedObject=item;this.$.gridLevel1.selectedObject=item;// this.dispatchEvent(new CustomEvent('field-list-value-changed', {
-//     bubbles: true,
-//     composed: true,
-//     detail: {
-//       'name': this.field.name,
-//       'value_no_index': newValNoIndex,
-//       'value': this.selectedObject,
-//       'index': newValInt, //index,
-//       //'thisindex': this.field.index
-//     }
-//   }));
-}}customElements.define("vaadingrid-singleselect",VaadingridSingleselect);
+return"status"==fldName}itemSelected(e){console.log("itemSelected",e.detail.value);this.selectedObject=e.detail.value;if(null==this.selectedObject){return}this.$.gridLevel1.selectedObject=this.selectedObject;this.$.gridLevel1.selectedItems=[]}isSort(item){if(item.sort)return!0;else return!1}isFilter(item){if(item.filter)return!0;else return!1}isNormal(item){if(item.sort)return!1;if(item.filter)return!1;return!0}}customElements.define("vaadingrid-singleselect",VaadingridSingleselect);

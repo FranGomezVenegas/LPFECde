@@ -37,7 +37,6 @@ export function closeTab(tabName, tabIndex) {
   }
 }
 export function setCurrentTab(currentTab) {
-  //console.log('setCurrentTab', currentTab);
   return {
     type: SET_CURRENT_TAB,
     currentTab

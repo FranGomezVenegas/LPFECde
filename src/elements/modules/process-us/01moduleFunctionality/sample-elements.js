@@ -14,7 +14,7 @@ import {ApiSample} from './api-sample';
 import {FrontendSample} from './frontend-sample.js';
 import {openEsignDialog} from '../../../app/Redux/actions/esign-actions.js';
 import {openConfirmUserDialog} from '../../../app/Redux/actions/confirmuser-actions.js';
-
+import {appConfirmUserOrEsign_notCorrectMessage} from '../../../../config/app-config';
 import {schema_name,
     sampleCustodian_cocUsersListFieldToRetrieve, sampleCustodian_cocUsersListFieldToDisplay, sampleCustodian_cocUsersListFieldToSort,
     sampleCustodian_cocSampleHistoryFieldToRetrieve, sampleCustodian_cocSampleHistoryFieldToDisplay, sampleCustodian_cocSampleHistoryFieldToSort,
@@ -57,7 +57,9 @@ class SampleElements extends ApiSample(AuthenticationApi(FrontendSample(connect(
                         "read_only": false,
                     }
                 ]
-            },            
+            }, 
+            validationNotCorrectMessage: {type: Object, value: appConfirmUserOrEsign_notCorrectMessage},
+            selectedLanguage:{ type: String},                       
         }
     }
     static get template() {
@@ -111,7 +113,8 @@ class SampleElements extends ApiSample(AuthenticationApi(FrontendSample(connect(
         `;
     }
     
-    stateChanged(state) {        
+    stateChanged(state) {      
+        this.selectedLanguage = state.app.user.appLanguage;       
         this.finalToken = state.app.user.finalToken; 
         if (state.processUs!=null){            
             this.forResultsSamples= state.processUs.forResultsSamples;
@@ -148,10 +151,15 @@ class SampleElements extends ApiSample(AuthenticationApi(FrontendSample(connect(
         this.actionTriggerNext();
     }    
     actionTriggerAbort(){
-        this.dispatchEvent(new CustomEvent('toast-message', {
+        var message=''; 
+        switch(this.selectedLanguage){
+            case 'es': message=this.validationNotCorrectMessage.message_es; break; //message=response.data.message_es; break;            
+            default: message=this.validationNotCorrectMessage.message_en; break; //message=response.data.message_en; break;
+        }     
+        this.dispatchEvent(new CustomEvent('toast-error', {
             bubbles: true,        composed: true,
-            detail: 'Va a ser que por mis loginCancelar no continuas! :)'
-        }));    
+            detail: message
+        }));   
         this.loading=false;  
     }
     actionTriggerNext(){

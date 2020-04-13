@@ -5,6 +5,19 @@
  * @polymer
  */
 
+function isTabOpn(tabsList, tabName){
+    var isOpen = tabsList.find(function(curTab) {
+      //console.log('tab reducer find in ', curTab.tabName, ' the value ', tabName);
+      return tabName == curTab.tabName;
+    });  
+    //console.log('is open='+isOpen, 'tabName=', tabName); 
+    if (!isOpen) return false;
+    //var isOpen= tabsList.indexOf(tabName);
+    //if (isOpen==-1) return false;
+    return true;}
+  
+  export  {isTabOpn}; 
+
 export const tabsMethods = (superClass) => class extends superClass {
     void(){
        return 0;}

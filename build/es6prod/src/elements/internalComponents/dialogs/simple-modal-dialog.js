@@ -6,7 +6,7 @@ define(["../../../../node_modules/@polymer/polymer/polymer-element.js","../../..
  * @polymer
  * @demo
  * 
- */class SimpleModalDialog extends _polymerElement.PolymerElement{static get properties(){return{}}static get template(){return _polymerElement.html`
+ */class SimpleModalDialog extends _polymerElement.PolymerElement{static get properties(){return{adhocFormFields:{type:Array}}}static get template(){return _polymerElement.html`
         <!-- <style include="modal-dialogs"></style> -->
         <style include="div-style"></style>
         
@@ -38,18 +38,19 @@ define(["../../../../node_modules/@polymer/polymer/polymer-element.js","../../..
         /* The Close Button */
 
         .bgimg {
-            background-image: url('./images/app-login/login-hexagon-background.png');   
-            width: 320px;       
+            background-image: url('./images/hexagon-white-blue-light.jpg');   
+            width: 420px;       
         }          
         </style>
         <div class="modal-content bgimg">
-        <template is="dom-repeat" items="{{dialogElements}}" as="currentfield">       
-            <field-controller on-field-button-clicked="fieldButtonClicked" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
+        <template is="dom-repeat" items="{{adhocFormFields}}" as="currentfield">       
+            <field-controller on-keydown="keyPressed" on-field-button-clicked="fieldButtonClicked" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
         </template>      
         <paper-button name="cancel" dialog-dismiss on-click="dialogCanceled">Cancel</paper-button>
         <paper-button name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
       </div>
       
-        `}dialogConfirmed(){//console.log('clicked', this.value);
+        `}keyPressed(e){//console.log('key pressed');
+if("Enter"==e.key){this.dialogConfirmed();return}}dialogConfirmed(){//console.log('clicked', this.value);
 this.value="confirmed";this.dispatchEvent(new CustomEvent("dialog-button-clicked",{bubbles:!0,composed:!0,detail:{buttonName:this.name,value:this.value,dialogState:"confirmed"}}))}dialogCanceled(){//console.log('clicked', this.value);
 this.value="confirmed";this.dispatchEvent(new CustomEvent("dialog-button-clicked",{bubbles:!0,composed:!0,detail:{buttonName:this.name,value:this.value,dialogState:"canceled"}}))}}customElements.define("simple-modal-dialog",SimpleModalDialog)});

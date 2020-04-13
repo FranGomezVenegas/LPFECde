@@ -14,6 +14,7 @@ import {EmDemoAapiEnvMonit} from './api-env-monit';
 import {FrontendEnvMonitSample} from './frontend-env-monit-sample.js';
 import {openEsignDialog} from '../../../app/Redux/actions/esign-actions.js';
 import {openConfirmUserDialog} from '../../../app/Redux/actions/confirmuser-actions.js';
+import {appConfirmUserOrEsign_notCorrectMessage} from '../../../../config/app-config';
 
 import {schema_name,
     sampleCustodian_cocUsersListFieldToRetrieve, sampleCustodian_cocUsersListFieldToDisplay, sampleCustodian_cocUsersListFieldToSort,
@@ -67,7 +68,9 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
             activeIncubatorsList:{type: Array},
             incubatorName:{type: String},
             selectedBatch:{type: Object},
-            callBackFunctionEnvMonitElem: Object,
+            callBackFunctionEnvMonitElem: Object,    
+            validationNotCorrectMessage: {type: Object, value: appConfirmUserOrEsign_notCorrectMessage},
+            selectedLanguage:{ type: String},                    
         }
     }
     static get template() {
@@ -107,7 +110,7 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
         </paper-dialog>    
         
         <paper-dialog id="givenSampleEnterResult">
-            <em-demo-a-list-modal-enterresults final-token="[[finalToken]]" schema-prefix="[[schemaPrefix]]" 
+            <em-demo-a-list-modal-enterresults final-token="[[finalToken]]" schema-prefix="[[schemaPrefix]]" call-back-function-env-monit-elem="{{callBackFunctionEnvMonitElem}}"
             list-header="{{givenSampleAnalysisEnterResultToDisplay}}" list-rows="{{givenSampleAnalysisResultEntryList}}" 
             dialog-elements="{{fieldsDialogEnterResult}}" 
             on-dialog-button-clicked="dialogClosedEnterResult"> </em-demo-a-list-modal-enterresults>
@@ -122,7 +125,7 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
         </paper-dialog>  
 
         <paper-dialog id="microorganismList">
-          <em-demo-a-list-modal-microorganism list-header="{{microorganismListToDisplay}}" 
+          <em-demo-a-list-modal-microorganism list-header="{{microorganismListToDisplay}} call-back-function-env-monit-elem="{{callBackFunctionEnvMonitElem}}" 
               list-rows="{{microorganismList}}" selected-object="[[backEndData.selectedObject]]" final-token="[[finalToken]]" 
               on-dialog-button-clicked="dialogClosedMicroorganismList"> 
           </em-demo-a-list-modal-microorganism>
@@ -138,7 +141,8 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
         `;
     }
     
-    stateChanged(state) {        
+    stateChanged(state) {      
+        this.selectedLanguage = state.app.user.appLanguage;              
         this.finalToken = state.app.user.finalToken; 
         if (state.emDemoA!=null){            
             this.forResultsSamples= state.emDemoA.forResultsSamples;
@@ -154,6 +158,8 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
                 this.incubatorName=state.emDemoA.selectedIncubator.name;}
             if (state.emDemoA.selectedBatch!=null){
                 this.selectedBatch=state.emDemoA.selectedBatch;}
+
+            console.log(this.callBackFunctionEnvMonitElem);
         }     
         this.currTabEsignRequired=state.tabs.currTabEsignRequired;
         this.currTabConfirmUserRequired=state.tabs.currTabConfirmUserRequired;        
@@ -182,9 +188,14 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
         this.sampleActionTriggerNext();
     }    
     sampleActionTriggerAbort(){
-        this.dispatchEvent(new CustomEvent('toast-message', {
+        var message=''; 
+        switch(this.selectedLanguage){
+            case 'es': message=this.validationNotCorrectMessage.message_es; break; //message=response.data.message_es; break;            
+            default: message=this.validationNotCorrectMessage.message_en; break; //message=response.data.message_en; break;
+        }     
+        this.dispatchEvent(new CustomEvent('toast-error', {
             bubbles: true,        composed: true,
-            detail: 'Va a ser que por mis loginCancelar no continuas! :)'
+            detail: message
         }));    
         this.loading=false;  
     }
@@ -367,11 +378,12 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
         datas.sample_id=this.backEndData.selectedObject.sample_id;
         datas.user_name=e.detail.selectedItems[e.detail.selectedItems.length-1].user_name;
         datas.person_name=e.detail.selectedItems[e.detail.selectedItems.length-1].person_name;
-        console.log('dialogClosedCoCUsersList', datas);
+        //console.log('dialogClosedCoCUsersList', datas);
         this.sampleActionTriggerAPI(this.schemaPrefix, this.finalToken, buttonName, datas, datas.tabInfo, this.callBackFunctionEnvMonitElem);
+        this.$.chainOfCustodyStartChange.close();
         return;                  
     }
-    dialogClosedAddComment(e){   
+    dialogClosedAddComment(e){           
         //console.log('dialogClosedAddComment >> this.$.addComment.actionName', this.$.addComment.actionName);    
         var buttonName = this.$.addComment.actionName;
 
@@ -401,9 +413,10 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
                     break;
             }    
         }
+        this.$.addComment.close();
     }
     dialogClosedChangeSamplingDate(e){
-        console.log("dialogClosedChangeSamplingDate", e.detail, this.fieldsDialogSetSamplingDate);
+        //console.log("dialogClosedChangeSamplingDate", e.detail, this.fieldsDialogSetSamplingDate);
         if (e.detail.dialogState=='confirmed'){
             var actionName='CHANGESAMPLINGDATE';
             var datas = [];
@@ -413,6 +426,7 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
             // datas.callBackFunction=this.refreshTable.bind(this);
             this.sampleActionTriggerAPI(this.schemaPrefix, this.finalToken, actionName, datas, datas.tabInfo, this.callBackFunctionEnvMonitElem);
         }
+        this.$.changeSamplingDate.close();
     }    
     dialogClosedAddSampleAnalysis(e){
         if (e.detail.dialogState=='confirmed'){
@@ -436,8 +450,10 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
                 //this.sampleActionTrigger(actionName, datas, datas.tabInfo);
             }            
         }
+        this.$.addSampleAnalysis.close();
     } 
     dialogClosedMicroorganismList(e){
+        this.$.microorganismList.close();
         return;
         if (e.detail.dialogState=='confirmed'){
             var microorganismName=""; 
@@ -460,7 +476,7 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
     } 
 
     dialogClosedTestAssignment(e){
-        console.log("dialogClosedTestAssignment", e.detail, this.fieldsDialogTestAssignment);
+        //console.log("dialogClosedTestAssignment", e.detail, this.fieldsDialogTestAssignment);
         if (e.detail.dialogState=='confirmed'){
             var actionName='TESTASSIGNMENT';
             var datas = [];
@@ -469,6 +485,7 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
             // datas.callBackFunction=this.refreshTable.bind(this);
             this.sampleActionTriggerAPI(this.schemaPrefix, this.finalToken, actionName, datas, datas.tabInfo, this.callBackFunctionEnvMonitElem);
         }
+        this.$.testAssignment.close();
     }  
 
 }

@@ -6,7 +6,7 @@ import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
 import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import '@vaadin/vaadin-grid/vaadin-grid-filter'; 
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column'; 
-
+import '../../../../internalComponents/dialogs/modalwindow-buttons.js';
 class emDemoAListModalAddsampleanalysis extends PolymerElement {
     static get properties() {
         return {
@@ -27,10 +27,7 @@ class emDemoAListModalAddsampleanalysis extends PolymerElement {
         </style>        
 
         <div class="modal-content bgimg">
-            <div>
-                <paper-button name="cancel" dialog-dismiss on-click="dialogCanceled">Cancel</paper-button>
-                <paper-button name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
-            </div>
+            <modalwindow-buttons display-cancel-button display-confirm-button display-close-button> </em-demo-a-modalwindow-buttons>
         <div>
             <vaadin-grid id="mygridid" items="{{listRows}}">  
                 <vaadin-grid-selection-column  auto-select></vaadin-grid-selection-column>

@@ -10,7 +10,7 @@ export const ApiSopUser = (superClass) => class extends superClass {
 
 sopUserEndPoint(data) {
     var apiUrl=backendUrl+ApiSopUserUrl+"?"+data.paramsUrl; 
-    console.log('process-us>api-sample>sopUserAPI', 'data', data);    
+    //console.log('process-us>api-sample>sopUserAPI', 'data', data);    
     
     //console.log('process-us>api-sample>sopUserAPI', data.schemaPrefix, data.actionName, apiUrl, data.paramsUrl); 
     
@@ -21,17 +21,24 @@ sopUserEndPoint(data) {
         notifObj.label_en=response.data.error_value_en;
         notifObj.label_es=response.data.error_value_es;
         notifObj.diagnostic=response.data.diagnostic;
-        console.log('process-us>api-sample>sopUserAPI.addNotification', 'notifObj', notifObj);
+        //console.log('process-us>api-sample>sopUserAPI.addNotification', 'notifObj', notifObj);
         store.dispatch(addNotification(notifObj));
+        var state=store.getState();
+        var language=state.app.user.appLanguage; 
+        var message=''; 
+        switch(language){
+            case 'es': message=response.data.message_es; break;            
+            default: message=response.data.message_en; break;
+        }            
         if (response.data.diagnostic=="LABPLANET_TRUE"){
             this.dispatchEvent(new CustomEvent('toast-message', {
                 bubbles: true,        composed: true,
-                detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                detail: message // response.data.error_value_es //ApiMessage.errorMessage(response.data)
               }));       
         }else{
             this.dispatchEvent(new CustomEvent('toast-error', {
                 bubbles: true,        composed: true,
-                detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                detail: message //response.data.error_value_es //ApiMessage.errorMessage(response.data)
               }));                   
         }
         if(response.status == 200) {

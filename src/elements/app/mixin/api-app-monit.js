@@ -151,15 +151,22 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
         var notifObj=diagnosticToNotification(response.data, data);
         console.log('process-us>api-sample>sampleBackEndCallAPI.addNotification', 'notifObj', notifObj);
         store.dispatch(addNotification(notifObj));
+        var state=store.getState();
+        var language=state.app.user.appLanguage; 
+        var message=''; 
+        switch(language){
+            case 'es': message=response.data.message_es; break;            
+            default: message=response.data.message_en; break;
+        }            
         if (response.data.diagnostic=="LABPLANET_TRUE"){
             this.dispatchEvent(new CustomEvent('toast-message', {
                 bubbles: true,        composed: true,
-                detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                detail: message //response.data.error_value_es //ApiMessage.errorMessage(response.data)
               }));       
         }else{
             this.dispatchEvent(new CustomEvent('toast-error', {
                 bubbles: true,        composed: true,
-                detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                detail: message //response.data.error_value_es //ApiMessage.errorMessage(response.data)
               }));                   
         }
         if(response.status == 200) {
@@ -236,18 +243,24 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
     //console.log('process-us>api-sample>sampleBackEndCallAPI', data.schemaPrefix, data.actionName, apiUrl, data.paramsUrl);    
     axios.get(apiUrl)        
     .then( response => {
+        var state=store.getState();
+        var language=state.app.user.appLanguage; 
+        var message=''; 
+        switch(language){
+            case 'es': message=response.data.message_es; break;            
+            default: message=response.data.message_en; break;
+        }
         var notifObj=diagnosticToNotification(response.data, data);
-        console.log('process-us>api-sample>sampleBackEndCallAPI.addNotification', 'notifObj', notifObj);
         store.dispatch(addNotification(notifObj));
         if (response.data.diagnostic=="LABPLANET_TRUE"){
             this.dispatchEvent(new CustomEvent('toast-message', {
                 bubbles: true,        composed: true,
-                detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                detail: message //response.data.error_value_es //ApiMessage.errorMessage(response.data)
               }));       
         }else{
             this.dispatchEvent(new CustomEvent('toast-error', {
                 bubbles: true,        composed: true,
-                detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                detail: message //response.data.error_value_es //ApiMessage.errorMessage(response.data)
               }));                   
         }
         if(response.status == 200) {
@@ -333,18 +346,25 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
         //console.log('process-us>api-sample>batchBackEndCallAPI', data.schemaPrefix, data.actionName, apiUrl, data.paramsUrl);    
         axios.get(apiUrl)        
         .then( response => {
+            var state=store.getState();
+            var language=state.app.user.appLanguage; 
+            var message=''; 
+            switch(language){
+                case 'es': message=response.data.message_es; break;            
+                default: message=response.data.message_en; break;
+            }                
             var notifObj=diagnosticToNotification(response.data, data);
             //console.log('process-us>api-sample>batchBackEndCallAPI.addNotification', 'notifObj', notifObj);
             store.dispatch(addNotification(notifObj));
             if (response.data.diagnostic=="LABPLANET_TRUE"){
                 this.dispatchEvent(new CustomEvent('toast-message', {
                     bubbles: true,        composed: true,
-                    detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                    detail: message //response.data.error_value_es //ApiMessage.errorMessage(response.data)
                     }));       
             }else{
                 this.dispatchEvent(new CustomEvent('toast-error', {
                     bubbles: true,        composed: true,
-                    detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                    detail: message //response.data.error_value_es //ApiMessage.errorMessage(response.data)
                     }));                   
             }
             if(response.status == 200) {
@@ -422,18 +442,25 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
         //console.log('process-us>api-sample>sampleBackEndCallAPI', data.schemaPrefix, data.actionName, apiUrl, data.paramsUrl);    
         axios.get(apiUrl)        
         .then( response => {
+            var state=store.getState();
+            var language=state.app.user.appLanguage; 
+            var message=''; 
+            switch(language){
+                case 'es': message=response.data.message_es; break;            
+                default: message=response.data.message_en; break;
+            }                
             var notifObj=diagnosticToNotification(response.data, data);
             //console.log('process-us>api-sample>sampleBackEndCallAPI.addNotification', 'notifObj', notifObj);
             store.dispatch(addNotification(notifObj));
             if (response.data.diagnostic=="LABPLANET_TRUE"){
                 this.dispatchEvent(new CustomEvent('toast-message', {
                     bubbles: true,        composed: true,
-                    detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                    detail: message //response.data.error_value_es //ApiMessage.errorMessage(response.data)
                     }));       
             }else{
                 this.dispatchEvent(new CustomEvent('toast-error', {
                     bubbles: true,        composed: true,
-                    detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                    detail: message //response.data.error_value_es //ApiMessage.errorMessage(response.data)
                     }));                   
             }
             if(response.status == 200) {
@@ -513,18 +540,25 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
         //console.log('process-us>api-sample>incubationBackEndCallAPI', data.schemaPrefix, data.actionName, apiUrl, data.paramsUrl);    
         axios.get(apiUrl)        
         .then( response => {
+            var state=store.getState();
+            var language=state.app.user.appLanguage; 
+            var message=''; 
+            switch(language){
+                case 'es': message=response.data.message_es; break;            
+                default: message=response.data.message_en; break;
+            }                
             var notifObj=diagnosticToNotification(response.data, data);
             //console.log('process-us>api-sample>incubationBackEndCallAPI.addNotification', 'notifObj', notifObj);
             store.dispatch(addNotification(notifObj));
             if (response.data.diagnostic=="LABPLANET_TRUE"){
                 this.dispatchEvent(new CustomEvent('toast-message', {
                     bubbles: true,        composed: true,
-                    detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                    detail: message //response.data.error_value_es //ApiMessage.errorMessage(response.data)
                     }));       
             }else{
                 this.dispatchEvent(new CustomEvent('toast-error', {
                     bubbles: true,        composed: true,
-                    detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                    detail: message //response.data.error_value_es //ApiMessage.errorMessage(response.data)
                     }));                   
             }
             if(response.status == 200) {

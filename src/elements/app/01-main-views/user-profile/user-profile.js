@@ -77,12 +77,12 @@ class UserProfile extends Appapi(AuthenticationApi(connect(store)(PolymerElement
                 <div class="card">
                     <div id="changePw" style="display:flex;">
                     <template is="dom-repeat" items="{{changeUserPasswordForm}}" as="currentfield">       
-                        <field-controller on-keydown="keyPressed" on-field-button-clicked="changePassword" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
+                        <field-controller on-keydown="keyPressedChangePassword" on-field-button-clicked="changePassword" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
                     </template>       
                     </div>
                     <div id="changeEsign" style="display:flex;">
                     <template is="dom-repeat" items="{{changeUserEsignForm}}" as="currentfield">       
-                        <field-controller on-keydown="keyPressed" on-field-button-clicked="changeEsign" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
+                        <field-controller on-keydown="keyPressedChangeEsign" on-field-button-clicked="changeEsign" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
                     </template>                                
                     </div>
                     <div id="changeEsign" style="display:flex;">
@@ -95,6 +95,20 @@ class UserProfile extends Appapi(AuthenticationApi(connect(store)(PolymerElement
         </div>
         `;
     }
+    keyPressedChangePassword(e){
+        //console.log('key pressed');
+        if(e.key=="Enter") {
+          this.changePassword();
+          return;
+        }   
+    }      
+    keyPressedChangeEsign(e){
+        //console.log('key pressed');
+        if(e.key=="Enter") {
+          this.changeEsign();
+          return;
+        }   
+    }  
     changePassword(e){
         var selectedRow=[];
         selectedRow.newPassword=changeUserPasswordForm[0].value;

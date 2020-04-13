@@ -17,10 +17,10 @@ export const USER_INFO = 'USER_INFO';
 * Action creators
 */
 export function userInfo(data) {
-  //  console.log('process-us_actions.sampleTemplates', data);
+//    console.log('app_actions >> userInfo', data);
     return {
       type: USER_INFO,
-      DATA: data
+      data: data
     }
 }
 export function navigate(path) {

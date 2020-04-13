@@ -2,7 +2,7 @@ import{PolymerElement,html}from"../../../../../../node_modules/@polymer/polymer/
 //import '../../../../internalComponents/grid-components/vaadingrid-singleselect.js';
 //import '../../../../internalComponents/grid-components/vaadingrid-multiselect';
 //import '../../../../app/module-functionality/sample/sample-elements.js';
-import"../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid.js";import"../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-selection-column.js";import"../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-sort-column.js";import"../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter.js";import"../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter-column.js";import"../../../../internalComponents/form-fields/field-icon-button.js";import{dialog_buttons}from"../../../../../config/app-config.js";import{schema_name,sampleCustodian_cocUsersListButtons}from"../../03config/config-process.js";import{FrontendEnvMonitSample}from"../../01moduleFunctionality/frontend-env-monit-sample.js";/**
+import"../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid.js";import"../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-selection-column.js";import"../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-sort-column.js";import"../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter.js";import"../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter-column.js";import"../../../../internalComponents/form-fields/field-icon-button.js";import"../../../../internalComponents/dialogs/modalwindow-buttons.js";import{dialog_buttons}from"../../../../../config/app-config.js";import{schema_name,sampleCustodian_cocUsersListButtons}from"../../03config/config-process.js";import{FrontendEnvMonitSample}from"../../01moduleFunctionality/frontend-env-monit-sample.js";/**
  * `em-demo-a-list-modal-coc-users` Description
  *
  * @customElement
@@ -17,10 +17,9 @@ import"../../../../../../node_modules/@vaadin/vaadin-grid/vaadin-grid.js";import
         </style>        
 
         <div class="modal-content bgimg">
-            <div>
-                <paper-button name="cancel" dialog-dismiss on-click="dialogCanceled">Cancel</paper-button>
-                <paper-button name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
-            </div>
+            <modalwindow-buttons 
+                display-cancel-button 							display-confirm-button 								
+                on-dialog-cancelbutton-clicked="dialogCanceled" on-dialog-confirmedbutton-clicked="dialogConfirmed"> </modalwindow-buttons> 
             <div name="Buttons1" class="buttonGroup">
                 <template is="dom-repeat" items="{{buttons}}" as="currentfield">       
                     <field-controller id="{{currentfield.name}}"  field="{{currentfield}}"

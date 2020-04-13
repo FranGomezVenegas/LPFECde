@@ -88,7 +88,7 @@ class FieldController extends PolymerElement {
         <field-textconfirmuser type="{{field.type}}" field="{{field}}" value="{{field.value}}" ></field-textconfirmuser>
       </template>
       <template is="dom-if" if="{{iAm.iconButton}}">
-        <field-icon-button type="{{field.type}}" field="{{field}}" value="{{field.value}}" ></field-icon-button>
+        <field-icon-button procedure="[[procedure]]" type="{{field.type}}" field="{{field}}" value="{{field.value}}" ></field-icon-button>
       </template>
       </div>
     `;

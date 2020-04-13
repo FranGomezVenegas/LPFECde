@@ -15,6 +15,7 @@ import '../../../../internalComponents/form-fields/field-icon-button.js';
 //import {EmDemoAapiEnvMonit} from '../../01moduleFunctionality/api-env-monit.js';
 import '../../01moduleFunctionality/env-monit-elements-sample.js';
 import {dialog_buttons} from '../../../../../config/app-config.js';
+import '../../../../internalComponents/dialogs/modalwindow-buttons.js';
 import {schema_name, sampleResults_givenSampleAnalysisListDialog_buttons} from '../../../process-us/03config/config-process.js';
 /**
  * `em-demo-a-list-modal-sampleanalysis` Description
@@ -50,11 +51,9 @@ class emDemoAListModalSampleanalysis extends ((PolymerElement)) {
 
         <env-monit-elements-sample id="myElementsSample" call-back-function-env-monit-elem="{{callBackRefreshWindow}}"></env-monit-elements-sample>  	
         <div class="modal-content bgimg">
-        <div> 
-            <paper-button name="cancel" dialog-dismiss on-click="dialogCanceled">Cancel</paper-button>
-            <paper-button name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
-        </div>
-        
+        <modalwindow-buttons 
+            display-cancel-button 							display-confirm-button 								
+            on-dialog-cancelbutton-clicked="dialogCanceled" on-dialog-confirmedbutton-clicked="dialogConfirmed"> </modalwindow-buttons>             
         <div name="Buttons1" class="buttonGroup">
             <template is="dom-repeat" items="{{buttons}}" as="currentfield">       
                 <field-controller id="{{currentfield.name}}"  field="{{currentfield}}"

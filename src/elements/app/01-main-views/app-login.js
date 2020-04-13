@@ -13,7 +13,7 @@ import '../../internalComponents/others/language-selector';
 import '../../internalComponents/others/ribbon-element';
 
 import {AuthenticationApi} from '../mixin/authentication-api';
-import {appLogin_formFields, appLogin_ribbonField, userProfileHome} from '../../../config/app-config';
+import {appLogin_formFields, appLogin_ribbonField, userProfileHome, appLogin_authenticationMessage} from '../../../config/app-config';
 
 import { doLogin } from '../Redux/actions/app_actions';
 
@@ -27,17 +27,15 @@ import './../../../config/styles/img-style.js';
 class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store)(PolymerElement)))) {
   static get properties() {
     return {
-      axiosErrorMessage: String, //{type: String, notify: true},
+      axiosMessage: {type: String, value:appLogin_authenticationMessage},
       finalToken: {type: String, notify: true},
       loading: {type: Boolean,value: false},
       partialToken: String, 
       partialTokenn: String, 
       sessionId: String,
-      userTabsOnLogin : String,
       appSessionStartDate: String,    
       userName: String,
       password: String,
-      //password: {type: String, notify:true, observer: 'login'},
       userInfoId: String,
       userTabsOnLogin: String,
       userRole: { type: String},  
@@ -50,6 +48,7 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
       appLoginFormBackground:{type:String, value:'./images/hexagon-white-blue-light.jpg'},
       appLoginFormBackgroundBuena:{type:String, value:'./images/app-login/login-hexagon-background.png'},
       appLoginFormBackground2:{type:String, value:'https://cdn5.vectorstock.com/i/1000x1000/90/09/abstract-hexagonal-background-vector-9339009.jpg'},      
+      selectedLanguage: String,
     }
   }
   stateChanged(state) {
@@ -70,10 +69,11 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
         <ribbon-element field="{{appLoginRibbonField.0}}"></ribbon-element>
         
         <paper-spinner-lite alt="Authenticating user and password" width="6px" active="[[loading]]"></paper-spinner-lite>
-        
-        <template is="dom-repeat" items="{{formFields}}" as="currentfield">       
-          <field-controller on-keydown="keyPressed" on-field-button-clicked="fieldButtonClicked" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
-        </template>       
+        <form id="form">
+          <template is="dom-repeat" items="{{formFields}}" as="currentfield">       
+            <field-controller on-keydown="keyPressed" on-field-button-clicked="fieldButtonClicked" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
+          </template>       
+        </form>
       </div>
       </div>
     `;
@@ -81,6 +81,17 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
   keyPressed(e){
     //console.log('key pressed');
     if(e.key=="Enter") {
+      if (e.target.field.name=="User"){
+        this.shatowDOM
+        const form = document.getElementById('form');//.getElementById('Password');
+        const field=this.shadowRoot.getElementById('password');
+        field.shadowRoot.focus;
+        //field.focus;
+        //var x=document.getElementById("Password");        
+        console.log(form, field);
+
+        return;
+      }
       this.login();
       return;
     }   
@@ -112,23 +123,32 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
   }  
   authSuccess(){
     //console.log('authSuccess');
+    var message=''; 
+    switch(this.selectedLanguage){
+        case 'es': message=this.axiosMessage.connectedSuccess.message_es; break; //message=response.data.message_es; break;            
+        default: message=this.axiosMessage.connectedSuccess.message_en; break; //message=response.data.message_en; break;
+    }        
     this.authenticated=true;
     this.dispatchEvent(new CustomEvent('toast-message', {
       bubbles: true,        composed: true,
-      detail: 'User valid, please select your role to proceed'
+      detail: message//'User valid, please select your role to proceed'
     }));    
     this.loading=false;
   }
   authError(e) {
       this.authenticated=false;
       this.loading=false;      
-      var msg='User not valid!'; //'authError'+this.axiosErrorMessage;
+      var message=''; 
+      switch(this.selectedLanguage){
+          case 'es': message=this.axiosMessage.connectedFails.message_es; break; //message=response.data.message_es; break;            
+          default: message=this.axiosMessage.connectedFails.message_en; break; //message=response.data.message_en; break;
+      }          
       this.set('formFields.1.read_only', false); // userName
       this.set('formFields.2.read_only', false); // password
       this.set('formFields.4.read_only', true); // roleList    
       this.dispatchEvent(new CustomEvent('toast-error', {
         bubbles: true,        composed: true,
-        detail: msg
+        detail: message
       }));
       //console.log('User not valid!', req.statusText);
       this.set('formFields.3.value', ''); // Reset back the button value to be clickable again
@@ -141,6 +161,12 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
       this.set('formFields.4.read_only', false); // roleList          
       
       var i;
+      if (this.userRoles.length==1){
+        this.userRole=this.userRoles[0];
+        this.doLogin(this.userRole);
+        return;
+      }
+
       for (i = 0; i < this.userRoles.length; i++) { 
         var newElement=[{"keyName":'', "keyValue_en":'',"keyValue_es":''}];
         newElement.keyName=this.userRoles[i]; 
@@ -157,13 +183,14 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
         startDate: this.appSessionStartDate,    
         userTabsOnLogin : this.userTabsOnLogin     
       };
-     // console.log('app-login >> initAppSession >> addSession', 'data', data, 'this.userRole', this.userRole);
+//console.log('app-login >> initAppSession >> addSession', 'data', data, 'this.userRole', this.userRole);
       this.getProcedureList({finalToken:this.finalToken});            
       store.dispatch(addSession(data));   
       var actionName='getAppHeader';
       var paramsUrl='actionName='+actionName+'&finalToken='+this.finalToken+'&personFieldsName='+this.userInfoId;
       var datas = [];
       datas.finalToken=this.finalToken; datas.actionName=actionName; datas.paramsUrl=paramsUrl;
+
       this.openTabsOnLogin(this.userTabsOnLogin);
       this.getAppHeader(datas);   
       store.dispatch(doLogin(this.finalToken, this.userName, this.userInfoId, this.userTabsOnLogin ));
@@ -243,15 +270,17 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
       //var curTab = [];
       //curTab.tabName ='sop-allMySops';
       store.dispatch(setCurrentTab(incidentsHome));        
-      return;
-      var procObj = {"name": "em-demo-a"};
+      //return;
+      var procObj = {"name": "em-demo-b"};
       store.dispatch(addTab({ 
-        lp_frontend_page_name: 'sample-incub-batch',
-        tabName: procObj.name + '-' + 'sample-incub-batch',
-        tabLabel_en: procObj.name + '-' + 'sample-incub-batch',
-        tabLabel_es: procObj.name + '-' + 'sample-incub-batch',
+        lp_frontend_page_name: 'home',
+        tabName: procObj.name + '-' + 'home',
+        tabLabel_en: procObj.name + '-' + 'home',
+        tabLabel_es: procObj.name + '-' + 'home',
         procedure: procObj, tabEsignRequired: false, tabConfirmUserRequired: false
       }));      
+      return;
+
       curTab.tabName = procObj.name + '-' + 'sample-incub-batch';
       curTab.currTabEsignRequired=false;
       curTab.currTabConfirmUserRequired=false;

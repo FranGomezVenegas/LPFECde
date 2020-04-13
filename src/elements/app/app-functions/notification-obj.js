@@ -8,10 +8,16 @@ export const NotificationObj = (superClass) => class extends superClass {
 }
 export function diagnosticToNotification(respData, data) {
     var notifObj = [];
-    notifObj.notificationName=data.schemaPrefix+'.'+data.actionName;
-    notifObj.label_en=respData.error_value_en;
-    notifObj.label_es=respData.error_value_es;
+    if (data){
+        notifObj.category=data.schemaPrefix+'.'+respData.category+'.'+data.actionName;
+    }else{
+        notifObj.category=respData.category;
+    }
+    notifObj.label_en=respData.message_en;
+    notifObj.label_es=respData.message_es;
     notifObj.diagnostic=respData.diagnostic;
+    notifObj.is_error=respData.is_error;
+    notifObj.relatedObjects=respData.relatedObjects;
     //console.log('diagnosticToNotification', 'notifObj', notifObj);
    return notifObj;         
 }

@@ -101,27 +101,33 @@ class emDemoASampleLogin extends (FrontendEnvMonitSample(connect(store)(PolymerE
               }
             </style>      
             <!-- <procedure-sops></procedure-sops> -->
-            <div name="sampleTemplatesList" class="container"> 
-                <template is="dom-repeat" index="{{index}}" items="{{sampleTemplatesList}}" as="currentfield">
-                    <field-controller on-field-list-value-changed="onListChange" 
-                        name="{{sampleTemplatesList}}{{currentfield.name}}" 
-                        field="{{currentfield}}" value="{{selectedSampleTemplate}}">
-                    </field-controller>
-                </template>    
-                <template>     
-                <field-controller  
-                    name="numSamples" 
-                    field="{{sumSamplesFld}}" value="{{numSamples}}">
-                </field-controller> 
-                </template>                      
-            </div>   
-            
-            <div id="form">             
-                <template is="dom-repeat" items="{{sampleTemplatesFields}}" as="currentfield">                
-                    <field-controller on-field-button-clicked="SampleLogButtonClicked" on-field-list-value-changed="onListChange" name="{{sampleTemplatesList}}{{currentfield.name}}" 
-                      field="{{currentfield}}" value="{{selectedSampleTemplate}}"></field-controller> 
-                </template>
-            </div>          
+            <div class="main-div">
+                <div "logSampleForm">
+                    <div name="sampleTemplatesList" class="container"> 
+                        <template is="dom-repeat" index="{{index}}" items="{{sampleTemplatesList}}" as="currentfield">
+                            <field-controller on-field-list-value-changed="onListChange" 
+                                name="{{sampleTemplatesList}}{{currentfield.name}}" 
+                                field="{{currentfield}}" value="{{selectedSampleTemplate}}">
+                            </field-controller>
+                        </template>    
+                        <template>     
+                        <field-controller  
+                            name="numSamples" 
+                            field="{{sumSamplesFld}}" value="{{numSamples}}">
+                        </field-controller> 
+                        </template>                      
+                    </div>               
+                    <div id="form">             
+                        <template is="dom-repeat" items="{{sampleTemplatesFields}}" as="currentfield">                
+                            <field-controller on-field-button-clicked="SampleLogButtonClicked" on-field-list-value-changed="onListChange" name="{{sampleTemplatesList}}{{currentfield.name}}" 
+                            field="{{currentfield}}" value="{{selectedSampleTemplate}}"></field-controller> 
+                        </template>
+                    </div>   
+                </div>
+                <div id="scheduledLocations">
+                hola
+                </div>
+            </div>
             <ribbon-element field="{{sampleLoginRibbonField.0}}"></ribbon-element>              
             <paper-spinner-lite alt="log New Sample" width="6px" active="[[loading]]"></paper-spinner-lite>                            
             <esign-dialog></esign-dialog>

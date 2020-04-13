@@ -96,7 +96,7 @@ class emDemoASampleReception extends EmDemoAapiEnvMonit(FrontendEnvMonitSample(c
     }
     onFinalTokenFilled(){
         if ( (!this.finalToken) || (!this.schemaPrefix) ) {return;}
-        console.log('em-demo-a-sample-reception >> onFinalTokenFilled', this.finalToken, 'this.schemaPrefix', this.schemaPrefix);
+        //console.log('em-demo-a-sample-reception >> onFinalTokenFilled', this.finalToken, 'this.schemaPrefix', this.schemaPrefix);
         this.getAllProgramsUnreceivedSamples({
              finalToken:this.finalToken, schemaPrefix:this.schemaPrefix, actionName:'UNRECEIVESAMPLES_LIST'
             ,sampleFieldToRetrieve:sampleReception_sampleFieldToRetrieve

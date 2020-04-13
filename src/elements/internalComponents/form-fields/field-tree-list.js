@@ -28,22 +28,23 @@ class FieldTreeList extends FieldsMethods(connect(store)(PolymerElement)) {
                     display: inline-block;              
                 }                
                 div.level1 {
+                    padding-top: 5px;
                     position: relative;
                     left: auto;
                     width: 50px;
-                    height: 15px;                
+                    height: 35px;                
                 }                 
                 div.level2 {
                     position: relative;
                     left: 20px;
                     width: 150px;
-                    height: 15px;                
+                    height: 25px;                
                 } 
                 div.level3 {
                     position: relative;
                     left: 40px;
                     width: 150px;
-                    height: 15px;                
+                    height: 25px;                
                 }
                 div.vaadin-button-container{       
                     justify-content: left;
@@ -53,7 +54,8 @@ class FieldTreeList extends FieldsMethods(connect(store)(PolymerElement)) {
                 }  
                 .level1{       
                     height: 15px;              
-                    text-shadow: 3px 2px #4CAF50;
+                    text-shadow: 3px 2px #4285f4;
+                    text-size:
                 }  
                 .level2{  
                     height: 15px;                   
@@ -68,7 +70,7 @@ class FieldTreeList extends FieldsMethods(connect(store)(PolymerElement)) {
                 }            
             </style> 
             <div class$="{{field.branch_level}}">
-            <p>
+            
                 <template is="dom-if" if="{{sopsPassed(field.sops_passed)}}">
                     <vaadin-button class$="{{field.branch_level}}" on-click="clicked">{{labelValue(selectedLanguage, field)}}
                         <template is="dom-if" if="{{hasBadge(field.badge)}}">
@@ -88,7 +90,7 @@ class FieldTreeList extends FieldsMethods(connect(store)(PolymerElement)) {
                         <field-badge value="{{field.badge}}"></field-badge>
                     </template>                                                  
                 </template> 
-            </p>    
+                
             </div>                                     
 
 <!--            <div class$="formFieldTreeListDiv{{field.branch_level}}">            

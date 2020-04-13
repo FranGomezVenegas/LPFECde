@@ -128,7 +128,7 @@ addAdhocMicroorganism(e){
         currTabConfirmUserRequired: e.detail.buttonDefinition.confirmuser_required};
 //console.log('em-demo-a-frontend-env-monit-sample >> sampleLogButtonClicked >> row = ', row);      
     //this.$.myElements.actionTrigger(actionName, row, e.detail.buttonDefinition);      
-    this.sampleActionTriggerAPI(this.schemaPrefix, this.finalToken, actionName, row, tabInfo, undefined);    
+    this.sampleActionTriggerAPI(this.schemaPrefix, this.finalToken, actionName, row, tabInfo, this.callBackFunctionEnvMonitElem);    
 }    
 addMicroorganism(e){   
     console.log('addMicroorganism', 'e.detail', e.detail, 'this.$.mygridid.selectedItems', this.$.mygridid.selectedItems);
@@ -157,7 +157,7 @@ console.log('row', row, 'this.selectedObject', this.selectedObject);
         currTabConfirmUserRequired: e.detail.buttonDefinition.confirmuser_required};
 //console.log('em-demo-a-frontend-env-monit-sample >> sampleLogButtonClicked >> row = ', row);      
     //this.$.myElements.actionTrigger(actionName, row, e.detail.buttonDefinition);      
-    this.sampleActionTriggerAPI(this.schemaPrefix, this.finalToken, actionName, row, tabInfo, undefined);    
+    this.sampleActionTriggerAPI(this.schemaPrefix, this.finalToken, actionName, row, tabInfo, this.callBackFunctionEnvMonitElem);    
 
 }    
 
@@ -172,7 +172,7 @@ sampleLogButtonClicked(e){
         return;
     }
     var locationName="";
-    console.log('sampleLogButtonClicked', e.detail.name, this.selectedSamplingPoint);
+    //console.log('sampleLogButtonClicked', e.detail.name, this.selectedSamplingPoint);
     var numSamplesToLog = 1; //this.sampleTemplatesList[1].value;
     if (numSamplesToLog==0){
         this.dispatchEvent(new CustomEvent('toast-error', {
@@ -260,6 +260,7 @@ sampleLogButtonClicked(e){
     //this.$.myElements.actionTrigger(actionName, row, e.detail.buttonDefinition);      
     this.sampleActionTriggerAPI(this.schemaPrefix, this.finalToken, actionName, row, tabInfo, undefined);
     //this.sampleActionTriggerAPI(this.schemaPrefix, this.finalToken, actionName, row, tabInfo, null);    
+    this.$.pointCard.close();
 }        
 
 

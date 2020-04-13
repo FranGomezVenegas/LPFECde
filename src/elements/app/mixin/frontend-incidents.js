@@ -1,53 +1,53 @@
-import {backendUrl, frontEndSopUrl} from '../../../config/api-config'
+import {backendUrl, frontEndIncidentsUrl} from '../../../config/api-config'
 import {store} from '../../../store';
 import { addNotification  } from '../Redux/actions/notifications_actions';
-//import{userOpenIncidents} from '../Redux/actions/incidents_actions';
+import{userOpenIncidents, selectedUserIncidentDetail} from '../Redux/actions/incidents_actions';
 /**
  * @mixinFunction
  * @polymer
  */
 export const FrontendIncidents = (superClass) => class extends superClass {
-
     
 fieldButtonClickedForIncidents(e) {
-        console.log('optionPressed', e.detail.buttonName, 'selectedSampleAnalysis', e.target.value);                
-        if (this.selectedObject==null){
-            this.dispatchEvent(new CustomEvent('toast-error', {bubbles: true, composed: true,
-                detail: 'Please select one sample analysis first'}));    
-            //return;
-        }          
+        //console.log('optionPressed', e.detail.buttonName, 'selectedObject', this.selectedObject);                
         var datas = [];
         var paramsUrl="";
         var actionName= "";  
         //var schemaPrefix=e.target.value.procedure;
         switch (e.detail.buttonName.toUpperCase()) {        
         case 'NEW_INCIDENT':
-            console.log('NEW_INCIDENT');
+            //console.log('NEW_INCIDENT');
             paramsUrl=paramsUrl+"&actionName="+e.detail.buttonName.toUpperCase();
             paramsUrl=paramsUrl+"&incidentTitle="+this.formFields[0].value;
             paramsUrl=paramsUrl+"&incidentDetail="+this.formFields[1].value;
             var storeCurrentState=JSON.stringify(store.getState());
             datas.storeCurrentState=storeCurrentState;
+            datas.incidentTitle=this.formFields[0].value;
+            datas.incidentDetail=this.formFields[1].value;
+            this.$.myElements.actionTrigger(e.detail.buttonName, datas, e.detail.buttonDefinition);   
             //paramsUrl=paramsUrl+"&sessionInfo="+storeCurrentState;
-            break;
+            return;
+        case 'CONFIRM_INCIDENT':
+        case 'ADD_NOTE_INCIDENT':
+        case 'CLOSE_INCIDENT':
+        case 'REOPEN_INCIDENT':      
+            if (this.selectedObject==null){
+                this.dispatchEvent(new CustomEvent('toast-error', {bubbles: true, composed: true,
+                    detail: 'Please select one incident first'}));    
+                //return;
+            }          
+            this.$.myElements.actionTrigger(e.detail.buttonName, this.selectedObject, e.detail.buttonDefinition);                      
+            return;            
         default:
+            var msgErr='action '+e.detail.buttonName.toUpperCase()+' not declared in frontend-incidents';
+            console.log(msgErr);
+            this.dispatchEvent(new CustomEvent('toast-error', {bubbles: true, composed: true,
+                detail: msgErr}));             
             return;
         }
-        paramsUrl="&actionName="+e.detail.buttonName.toUpperCase()   +"&finalToken="+this.finalToken
-            //+"&schemaPrefix="+schemaPrefix
-            +paramsUrl;
-        //datas.schemaPrefix=schemaPrefix; 
-        datas.actionName=actionName; datas.paramsUrl=paramsUrl;
-        //datas.callbackFunction=myCallbackFunctionTrigger.bind(this);
-        var tabInfo={
-            currTabEsignRequired: this.currTabEsignRequired,
-            currTabConfirmUserRequired: this.currTabConfirmUserRequired};
-        datas.tabInfo=tabInfo;               
-        console.log('process-us-sample-reception >> itemSelected >> SampleAPI', paramsUrl, datas);            
-        this.incidentsEndPoint(datas);           
 }    
 frontEndIncidentsAPI(data) {
-    var apiUrl=backendUrl+frontEndSopUrl+"?"+data.paramsUrl; 
+    var apiUrl=backendUrl+frontEndIncidentsUrl+"?"+data.paramsUrl; 
     if (!data.finalToken){ return;}
 
 //    console.log('frontEndIncidentsAPI', apiUrl, data.paramsUrl);
@@ -93,18 +93,18 @@ frontEndIncidentsAPI(data) {
     });
 }
     
-getSopPane(data) {
-    var apiUrl=backendUrl+frontEndSopUrl+"?"+"actionName=SOP_TREE_LIST_ELEMENT&finalToken="+data.finalToken;
+getUserOpenIncidents(data) {
+    var apiUrl=backendUrl+frontEndIncidentsUrl+"?"+"actionName=USER_OPEN_INCIDENTS";
     if (!data.finalToken){ return;}
-    //console.log('getSopPane', apiUrl, data.finalToken);
+    //console.log('getUserOpenIncidents', apiUrl, data.finalToken);
     axios.get(apiUrl, {        
         params: {            
             'finalToken': data.finalToken}
     })
     .then( response => {
         if(response.status == 200) {
-//            console.log(response.data);
-            this.SOPList=response.data;
+            //console.log(response.data);
+            store.dispatch(userOpenIncidents(response.data));
             if (data.callBackFunction){data.callBackFunction();}
             return;
         }
@@ -116,7 +116,40 @@ getSopPane(data) {
         })
     .catch(function (error) {
         if (data.callBackFunctionError){data.callBackFunctionError();}
-        console.log('FrontEnd.sopuser.js >> getSopPane', error.message);
+        //console.log('FrontEnd-incidents.js >> getUserOpenIncidents', error.message);
+        this.dispatchEvent(new CustomEvent('toast-error', {
+            bubbles: true,        composed: true,
+            detail: 'Error on authentication'+error.message
+          }));           
+        })
+    .then(function () {
+        });
+}
+
+getSelectedUserIncidentDetail(data) {
+    var apiUrl=backendUrl+frontEndIncidentsUrl+"?"+"actionName=INCIDENT_DETAIL_FOR_GIVEN_INCIDENT";
+    if (!data.finalToken){ return;}
+    //console.log('getSelectedUserIncidentDetail', apiUrl, data);
+    axios.get(apiUrl, {        
+        params: {            
+            'finalToken': data.finalToken, 'incidentId': data.incidentId}
+    })
+    .then( response => {
+        if(response.status == 200) {
+            //console.log(response.data);
+            store.dispatch(selectedUserIncidentDetail(response.data));
+            if (data.callBackFunction){data.callBackFunction();}
+            return;
+        }
+        if (data.callBackFunctionError){data.callBackFunctionError();}
+        this.dispatchEvent(new CustomEvent('toast-error', {
+            bubbles: true,        composed: true,
+            detail: 'Error on '+apiUrl+' although the connectivity with the API ended with success! Status: '+response.status
+          }));         
+        })
+    .catch(function (error) {
+        if (data.callBackFunctionError){data.callBackFunctionError();}
+        //console.log('FrontEnd-incidents.js >> getUserOpenIncidents', error.message);
         this.dispatchEvent(new CustomEvent('toast-error', {
             bubbles: true,        composed: true,
             detail: 'Error on authentication'+error.message

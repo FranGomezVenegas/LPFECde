@@ -28,7 +28,7 @@ import"./app/01-main-views/app-login.js";import"./app/01-main-views/app-header.j
       .left {
         top: 10%;
         left: 2px;
-        width: 12%;
+        width: 18%;
         height: 100%;        
         -- background: #032bbc; /* Old browsers */
         -- background: -moz-linear-gradient(top, #032bbc 0%, #2989d8 5%, #b3cfe5 15%, #ffffff 37%, #ffffff 54%, #032bbc 88%, #207cca 88%, #207cca 88%, #032bbc 88%, #207cca 91%, #032bbc 93%, #2989d8 96%, #b3cfe5 100%, #b3cfe5 101%); /* FF3.6-15 */
@@ -38,7 +38,7 @@ import"./app/01-main-views/app-login.js";import"./app/01-main-views/app-header.j
       }
       .right {
         top: 14%;
-        left: 12%; 
+        left: 18%; 
         width: 88%;
         height: 80%;
         float: right;

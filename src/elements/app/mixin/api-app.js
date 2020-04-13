@@ -15,13 +15,27 @@ export const Appapi = (superClass) => class extends superClass {
         actionName=actionName.toUpperCase();
         var paramsUrl='';   
         switch (actionName) {
-        case 'USER_CHANGE_PASSWORD':            
+        case 'USER_CHANGE_PSWD':   
+            if (!selectedRow.newPassword){
+                dispatchEvent(new CustomEvent('toast-error', {
+                    bubbles: true,
+                    composed: true,
+                    detail: 'newPassword is mandatory'
+                }));                  
+            }
             paramsUrl=paramsUrl+"&newPassword="+selectedRow.newPassword;     
             paramsUrl=paramsUrl+"&userToCheck="+selectedRow.userToCheck;     
             paramsUrl=paramsUrl+"&passwordToCheck="+selectedRow.passwordToCheck;     
             break;    
         case 'USER_CHANGE_ESIGN':            
-            paramsUrl=paramsUrl+"&newEsign="+selectedRow.newEsign;     
+        if (!selectedRow.newEsign){
+            dispatchEvent(new CustomEvent('toast-error', {
+                bubbles: true,
+                composed: true,
+                detail: 'newEsign is mandatory'
+            }));                  
+        }
+        paramsUrl=paramsUrl+"&newEsign="+selectedRow.newEsign;     
             paramsUrl=paramsUrl+"&userToCheck="+selectedRow.userToCheck;     
             paramsUrl=paramsUrl+"&passwordToCheck="+selectedRow.passwordToCheck;     
             break;    
@@ -59,15 +73,22 @@ appBackEndCallAPI(data) {
         var notifObj=diagnosticToNotification(response.data, data);
         console.log('process-us>api-sample>sampleBackEndCallAPI.addNotification', 'notifObj', notifObj);
         store.dispatch(addNotification(notifObj));
+        var state=store.getState();
+        var language=state.app.user.appLanguage; 
+        var message=''; 
+        switch(language){
+            case 'es': message=response.data.message_es; break;            
+            default: message=response.data.message_en; break;
+        }            
         if (response.data.diagnostic=="LABPLANET_TRUE"){
             this.dispatchEvent(new CustomEvent('toast-message', {
                 bubbles: true,        composed: true,
-                detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                detail: message //response.data.error_value_es //ApiMessage.errorMessage(response.data)
                 }));       
         }else{
             this.dispatchEvent(new CustomEvent('toast-error', {
                 bubbles: true,        composed: true,
-                detail: response.data.error_value_es //ApiMessage.errorMessage(response.data)
+                detail: message //response.data.error_value_es //ApiMessage.errorMessage(response.data)
                 }));                   
         }
         if(response.status == 200) {

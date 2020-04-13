@@ -21,39 +21,38 @@ export const FieldsMethods = (superClass) => class extends superClass {
     }
 
     labelValue(langApp, field) {  
-//        console.log("methods.js", "labelValue", "langApp="+langApp, field);
+        //console.log("field-methods.js", "labelValue", "langApp="+langApp, 'fields=', field);
         if (!langApp && !field){
-            console.log("methods.js", "labelValue with no langApp recognized", 
-                        'field=', field, 'langApp=', langApp ); return '';}
+            console.log("methods.js", "labelValue with no langApp recognized", 'field=', field, 'langApp=', langApp ); return '';}
 
         if (langApp=="en"){
-            if (!field.label_en){
-                console.log("methods.js", "labelValue with no label_en recognized", 
-                            'field=', field, 'langApp=', langApp ); return field.name;}            
-            return field.label_en;}
+            if (field.label_en){return field.label_en;}
+            if (field.message_en){return field.message_en;}
+            //console.log("methods.js", "labelValue with no label_es recognized", 'field=', field, 'langApp=', langApp );            
+            return '';
+        }
         if (langApp=="es"){
-            if (!field.label_es){
-                console.log("methods.js", "labelValue with no label_es recognized", 
-                            'field=', field, 'langApp=', langApp ); return field.name;}            
-            return field.label_es;
+            if (field.label_es){return field.label_es;}
+            if (field.message_es){return field.message_es;}
+            //console.log("methods.js", "labelValue with no label_es recognized", 'field=', field, 'langApp=', langApp );            
+            return '';
         } 
         return field.label_en;
     }  
     tabLabelValue(langApp, field) {  
         //        console.log("methods.js", "labelValue", "langApp="+langApp, field);
                 if (!langApp && !field){
-                    console.log("methods.js", "labelValue with no langApp recognized", 
-                                'field=', field, 'langApp=', langApp ); return '';}
+                    console.log("methods.js", "labelValue with no langApp recognized", 'field=', field, 'langApp=', langApp ); return '';}
         
                 if (langApp=="en"){
                     if (!field.tabLabel_en){
-                        console.log("methods.js", "labelValue with no label_en recognized", 
-                                    'field=', field, 'langApp=', langApp ); return field.name;}            
+                        //console.log("methods.js", "labelValue with no label_en recognized", 'field=', field, 'langApp=', langApp ); 
+                        return field.name;}            
                     return field.tabLabel_en;}
                 if (langApp=="es"){
                     if (!field.tabLabel_es){
-                        console.log("methods.js", "labelValue with no label_es recognized", 
-                                    'field=', field, 'langApp=', langApp ); return field.name;}            
+                        //console.log("methods.js", "labelValue with no label_es recognized", 'field=', field, 'langApp=', langApp ); 
+                        return field.name;}            
                     return field.tabLabel_es;
                 } 
                 return field.tabLabel_en;

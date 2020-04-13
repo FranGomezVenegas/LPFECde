@@ -9,8 +9,8 @@ import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 import '../../../../internalComponents/form-fields/field-controller';
 import {FrontendEnvMonitSample} from '../../01moduleFunctionality/frontend-env-monit-sample';
 import {EmDemoAapiEnvMonit} from '../../01moduleFunctionality/api-env-monit';
-import {schema_name, microorganism_allowAddNotOnTheList, microorganism_allowAddNotOnTheList_formFields} from '../../03config/config-process';
-
+import {schema_name, productionLot_newLot_formFields} from '../../03config/config-process';
+import '../../../../internalComponents/dialogs/modalwindow-buttons.js';
 class emDemoAListModalProdLotBrowser extends EmDemoAapiEnvMonit(FrontendEnvMonitSample(PolymerElement)) {
     static get properties() {
         return {
@@ -20,11 +20,9 @@ class emDemoAListModalProdLotBrowser extends EmDemoAapiEnvMonit(FrontendEnvMonit
                 value: [
                 {code: 'LOD', method_name: 'LOD Method', method_version: 1}]
             },
-            displayFreeText: {type:Boolean, value:microorganism_allowAddNotOnTheList},
-            adhocFormFields: {type: Array, notify: true, bubble: true, value: microorganism_allowAddNotOnTheList_formFields},
+            adhocFormFields: {type: Array, notify: true, bubble: true, value: productionLot_newLot_formFields},
             schemaPrefix:{type:String, value:schema_name},
             sampleId:{type: Number},
-            finalToken: {type: String}, selectedObject:{type: Object},
             actionName:{type:String},
         }
     }
@@ -37,27 +35,23 @@ class emDemoAListModalProdLotBrowser extends EmDemoAapiEnvMonit(FrontendEnvMonit
         } 
         </style>        
         <div class="modal-content bgimg">
-            <div>
-                <paper-button name="cancel" dialog-dismiss on-click="dialogCanceled">Cancel</paper-button>
-                <paper-button name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
-            </div>
+            <modalwindow-buttons 
+                display-cancel-button 							display-confirm-button 								
+                on-dialog-cancelbutton-clicked="dialogCanceled" on-dialog-confirmedbutton-clicked="dialogConfirmed"> </modalwindow-buttons>             
         <div>
-            <template is="dom-if" if="{{displayFreeText}}">
-                <template is="dom-repeat" items="{{adhocFormFields}}" as="currentfield">       
-                    <field-controller on-field-button-clicked="addAdhocMicroorganism" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
-                </template>             
-            </template>
-<!--            <vaadin-grid id="mygridid" items="{{listRows}}">  
-                <vaadin-grid-selection-column  auto-select></vaadin-grid-selection-column>
-                <template is="dom-repeat" items="{{listHeader}}" as="fld">        
-                    <vaadin-grid-column resizable width="{{fld.width}}" path="{{fld.name}}" header="{{fld.label_en}}"></vaadin-grid-column>
-                </template>
-            </vaadin-grid>      
--->            
+            <template is="dom-repeat" items="{{adhocFormFields}}" as="currentfield">       
+                <field-controller on-keydown="keyPressed" on-field-button-clicked="addAdhocMicroorganism" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
+            </template>             
         </div>    
         `;
     } 
-
+    keyPressed(e){
+        //console.log('key pressed');
+        if(e.key=="Enter") {
+          this.dialogConfirmed();
+          return;
+        }   
+    }  
     actionOnSel(){
         //console.log('actionOnSel');
     }   

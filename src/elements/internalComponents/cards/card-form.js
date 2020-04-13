@@ -4,6 +4,7 @@ import './../dialogs/shared-styles';
 import '../form-fields/field-button';
 import {ApiSample} from '../../modules/process-us/01moduleFunctionality/api-sample';
 import './../../../config/styles/div-style.js'; 
+import '../dialogs/modalwindow-buttons';
 /**
  * `card-form` Description
  *
@@ -34,10 +35,8 @@ class CardForm extends ApiSample(PolymerElement) {
         return html`  
         <style include="div-style"></style>
         <div class="internalComponentCardFormMainDiv internalComponentCardFormMainDivBgimg">
-            <div>
-                <field-button name="cancel" field="[[buttonCancel]]" dialog-dismiss on-click="dialogCanceled">Cancel</field-button>
-                <paper-button name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
-            </div>
+            <modalwindow-buttons display-close-button
+                on-dialog-cancelbutton-clicked="dialogCanceled" on-dialog-confirmedbutton-clicked="dialogConfirmed"> </modalwindow-buttons>             
             <div name="Buttons1" class="buttonGroup">
                 <template is="dom-repeat" items="{{buttons}}" as="currentfield">                       
                     <field-controller id="{{currentfield.name}}"  field="{{currentfield}}"
@@ -54,7 +53,6 @@ class CardForm extends ApiSample(PolymerElement) {
         </div>            
         `;
     } 
-
     cardFormdButtonClicked(e) {
         console.log('card-form, button clicked!. Button action=', e.detail.buttonName);
         this.dispatchEvent(new CustomEvent('field-button-clicked', {

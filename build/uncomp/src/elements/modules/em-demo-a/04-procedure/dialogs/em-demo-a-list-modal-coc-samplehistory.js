@@ -1,6 +1,6 @@
 import{PolymerElement,html}from"../../../../../../node_modules/@polymer/polymer/polymer-element.js";import"../../../../../../node_modules/@polymer/paper-button/paper-button.js";import"../../03config/css/Theme01/modal-dialogs.js";import"../../../../internalComponents/grid-components/vaadingrid-singleselect.js";//import '../../../../internalComponents/grid-components/vaadingrid-multiselect';
 //import '../../../../app/module-functionality/sample/sample-elements.js';
-import"../../../../internalComponents/form-fields/field-icon-button.js";import{dialog_buttons}from"../../../../../config/app-config.js";import{schema_name,sampleCustodian_cocSampleHistoryButtons}from"../../../process-us/03config/config-process.js";import{SampleIcons}from"../../03config/config-icons.js";/**
+import"../../../../internalComponents/form-fields/field-icon-button.js";import{dialog_buttons}from"../../../../../config/app-config.js";import{schema_name,sampleCustodian_cocSampleHistoryButtons}from"../../../process-us/03config/config-process.js";import{SampleIcons}from"../../03config/config-icons.js";import"../../../../internalComponents/dialogs/modalwindow-buttons.js";/**
  * `em-demo-a-list-modal-coc-samplehistory` Description
  *
  * @customElement
@@ -13,11 +13,11 @@ import"../../../../internalComponents/form-fields/field-icon-button.js";import{d
                 width: 450px;
             } 
         </style>        
-        <div class="modal-content bgimg">              
-            <div>
-                <paper-button style="font-size: 20px; color: #4285f4;" name="cancel" dialog-dismiss on-click="dialogCanceled">Cancel</paper-button>
-                <paper-button style="font-size: 20px; color: #4285f4;" name="confirm" dialog-confirm autofocus on-click="dialogConfirmed">Accept</paper-button>
-            </div>            
+        <div class="modal-content bgimg">       
+        <modalwindow-buttons 
+            display-cancel-button 							display-confirm-button 								
+            on-dialog-cancelbutton-clicked="dialogCanceled" on-dialog-confirmedbutton-clicked="dialogConfirmed"> </modalwindow-buttons>       
+                       
             <div name="Buttons1" class="buttonGroup">
                 <template is="dom-repeat" items="{{buttons}}" as="currentfield">       
                     <field-controller id="{{currentfield.name}}"  field="{{currentfield}}"

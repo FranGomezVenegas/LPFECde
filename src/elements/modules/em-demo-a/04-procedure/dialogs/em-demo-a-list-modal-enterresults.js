@@ -9,6 +9,7 @@ import '@polymer/paper-dialog/paper-dialog';
 import '@polymer/paper-input/paper-input';
 import {FrontendEnvMonitSample} from '../../01moduleFunctionality/frontend-env-monit-sample.js';
 import {EmDemoAapiEnvMonit} from '../../01moduleFunctionality/api-env-monit.js';
+import '../../../../internalComponents/dialogs/modalwindow-buttons.js';
 
 class emDemoAListModalEnterresults extends EmDemoAapiEnvMonit(FrontendEnvMonitSample(PolymerElement)) {
     static get properties() {
@@ -17,7 +18,8 @@ class emDemoAListModalEnterresults extends EmDemoAapiEnvMonit(FrontendEnvMonitSa
             schemaPrefix: String,
             fieldCol1: {
                 type:String, value:'item.result_id'
-            }
+            },
+            callBackFunctionEnvMonitElem: Object,
         }
     }
    
@@ -37,6 +39,7 @@ class emDemoAListModalEnterresults extends EmDemoAapiEnvMonit(FrontendEnvMonitSa
         </style>
 
         <div class="modal-content bgimg">
+        <modalwindow-buttons display-close-button> </modalwindow-buttons>
         <template is="dom-repeat" items="{{dialogButtons}}" as="currentfield">       
           <field-controller on-keydown="keyPressed" on-field-button-clicked="dialogConfirmed" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
         </template>           
@@ -86,18 +89,18 @@ class emDemoAListModalEnterresults extends EmDemoAapiEnvMonit(FrontendEnvMonitSa
         return 'resultBlue';
     }
     editableIsInteger(e){
-        console.log('editableIsInteger', e); //this.$.mygridid.__data.items[e.currentTarget.id].param_type);
+        //console.log('editableIsInteger', e); //this.$.mygridid.__data.items[e.currentTarget.id].param_type);
         if (fld=='INTEGER') {return true;}
         if (fld=='FLOAT') {return true;}
         return true;
     }
     enterResult(e){
-        console.log('enterResult', e.currentTarget.id, e.currentTarget.value, this.$.mygridid.__data.items[e.currentTarget.id].result_id); 
+        console.log('enterResult', 'callBackFunctionEnvMonitElem', this.callBackFunctionEnvMonitElem, e.currentTarget.id, e.currentTarget.value, this.$.mygridid.__data.items[e.currentTarget.id].result_id); 
         this.$.mygridid.__data.items[e.currentTarget.id].raw_value=e.currentTarget.value; 
         let sampleId=this.$.mygridid.__data.items[e.currentTarget.id].sample_id; 
         let resultId=this.$.mygridid.__data.items[e.currentTarget.id].result_id;
         let rawValue=e.currentTarget.value;
-        console.log(resultId, rawValue);
+        //console.log(resultId, rawValue);
 
         var actionName='ENTERRESULT';
         var paramsUrl="actionName="+actionName+"&finalToken="+this.finalToken+"&schemaPrefix="+this.schemaPrefix
@@ -114,10 +117,10 @@ class emDemoAListModalEnterresults extends EmDemoAapiEnvMonit(FrontendEnvMonitSa
         return false;
     }
     actionOnSel(){
-        console.log('actionOnSel');
+    //    console.log('actionOnSel');
     }   
-    dialogConfirmed(e){
-        console.log('clicked', this.$.mygridid.selectedItems);        
+    dialogConfirmed(e){        
+        //console.log('clicked', this.$.mygridid.selectedItems);        
         this.value='confirmed';
         this.dispatchEvent(new CustomEvent('dialog-button-clicked', {
             bubbles: true,

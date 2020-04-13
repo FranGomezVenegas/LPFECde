@@ -140,6 +140,14 @@
       "type": "script",
       "weight": 1
     },
+    "src/elements/app/Redux/reducers/incidents_reducers.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "src/elements/app/Redux/actions/incidents_actions.js": {
+      "type": "script",
+      "weight": 1
+    },
     "src/elements/app/Redux/reducers/sop_reducers.js": {
       "type": "script",
       "weight": 1
@@ -1136,6 +1144,26 @@
       "type": "script",
       "weight": 1
     },
+    "src/elements/internalComponents/form-fields/field-text-area.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "node_modules/%40vaadin/vaadin-text-field/vaadin-text-area.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "node_modules/%40vaadin/vaadin-text-field/theme/lumo/vaadin-text-area.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "node_modules/%40vaadin/vaadin-text-field/theme/lumo/vaadin-text-area-styles.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "node_modules/%40vaadin/vaadin-text-field/src/vaadin-text-area.js": {
+      "type": "script",
+      "weight": 1
+    },
     "src/elements/internalComponents/form-fields/field-textconfirmuser.js": {
       "type": "script",
       "weight": 1
@@ -1524,6 +1552,10 @@
       "type": "script",
       "weight": 1
     },
+    "src/elements/internalComponents/dialogs/modalwindow-buttons.js": {
+      "type": "script",
+      "weight": 1
+    },
     "src/elements/internalComponents/grid-components/vaadingrid-singleselect.js": {
       "type": "script",
       "weight": 1
@@ -1577,6 +1609,14 @@
       "weight": 1
     },
     "src/elements/modules/em-demo-a/04-procedure/program-tabs/em-demo-a-prog-corrective-actions.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "src/elements/app/mixin/api-app.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "src/elements/app/mixin/app-elements.js": {
       "type": "script",
       "weight": 1
     }
@@ -2146,6 +2186,14 @@
       "type": "script",
       "weight": 1
     },
+    "src/elements/app/Redux/reducers/incidents_reducers.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "src/elements/app/Redux/actions/incidents_actions.js": {
+      "type": "script",
+      "weight": 1
+    },
     "src/elements/app/Redux/reducers/sop_reducers.js": {
       "type": "script",
       "weight": 1
@@ -2275,6 +2323,10 @@
       "weight": 1
     },
     "src/config/app-config.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "src/elements/internalComponents/dialogs/modalwindow-buttons.js": {
       "type": "script",
       "weight": 1
     }
@@ -2848,6 +2900,14 @@
       "type": "script",
       "weight": 1
     },
+    "src/elements/app/Redux/reducers/incidents_reducers.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "src/elements/app/Redux/actions/incidents_actions.js": {
+      "type": "script",
+      "weight": 1
+    },
     "src/elements/app/Redux/reducers/sop_reducers.js": {
       "type": "script",
       "weight": 1
@@ -3336,6 +3396,26 @@
       "type": "script",
       "weight": 1
     },
+    "src/elements/internalComponents/form-fields/field-text-area.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "node_modules/%40vaadin/vaadin-text-field/vaadin-text-area.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "node_modules/%40vaadin/vaadin-text-field/theme/lumo/vaadin-text-area.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "node_modules/%40vaadin/vaadin-text-field/theme/lumo/vaadin-text-area-styles.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "node_modules/%40vaadin/vaadin-text-field/src/vaadin-text-area.js": {
+      "type": "script",
+      "weight": 1
+    },
     "src/elements/internalComponents/form-fields/field-textconfirmuser.js": {
       "type": "script",
       "weight": 1
@@ -3409,6 +3489,14 @@
       "weight": 1
     },
     "src/elements/app/app-functions/notification-obj.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "src/elements/internalComponents/dialogs/modalwindow-buttons.js": {
+      "type": "script",
+      "weight": 1
+    },
+    "src/config/app-config.js": {
       "type": "script",
       "weight": 1
     }

@@ -58,8 +58,9 @@ import {systemTabContentUrl, tabContentUrl} from '../../../../config/api-config.
       }
       case ADD_TAB:
         var tabUrl = tabContentUrl;
-        tabUrl = tabUrl.replace('#ModuleName', action.tab.procedure.name);
-        tabUrl = tabUrl.replace('#PageName', action.tab.procedure.name+'-'+action.tab.lp_frontend_page_name);
+        tabUrl = tabUrl.replace('#ModuleName', action.tab.procedure.name);        
+        tabUrl = tabUrl.replace('#PageName', action.tab.tabName);
+        //tabUrl = tabUrl.replace('#PageName', action.tab.procedure.name+'-'+action.tab.lp_frontend_page_name);
         //console.log('ADD_TAB', 'tabUrl', tabUrl);              
         import(tabUrl);
         var found = state.tabs.find(function(tab) {
@@ -81,21 +82,33 @@ import {systemTabContentUrl, tabContentUrl} from '../../../../config/api-config.
         }
       }
       case CLOSE_TAB:
-        //console.log('CLOSE_TAB', action);
         let tabI;
-        if (action.tabIndex==0){
-          tabI = 0; 
-          if (state.tabIndex==1) return InitialTabState;
-        }else{tabI=action.tabIndex-1}
-        return {
-          ...state,
-          tabIndex: state.tabIndex - 1,          
-          currentTab: state.tabs[tabI].tabName,
-          tabs: state.tabs.filter((tab) => {
-            
-            //console.log('CLOSE_TAB FILTER', tab, action);
-            return (tab.tabName != action.tabName);
-          })
+        let newCurrentTab;
+        if (state.tabs.length<=1){
+          newCurrentTab='';
+          action.tabName='';
+          // console.log('CLOSE_TAB for 0 or 1 tab');//, 'action', action, 'state.tabIndex', state.tabIndex);
+          return {                      
+            tabIndex:0, 
+            currentTab:'',
+            tabs: [],
+            currTabEsignRequired: false,
+            currTabConfirmUserRequired: false
+          }
+        }else{
+          if (action.tabIndex<=0){tabI=1;}
+          else if (action.tabIndex > 0 && action.tabIndex<=state.tabs.length-1){tabI=action.tabIndex-1;}
+          else{tabI=state.tabIndex-1;}
+          newCurrentTab=state.tabs[tabI].tabName;        
+          //console.log('CLOSE TAB > 1', 'action', action, 'newCurrentTab', newCurrentTab);
+          return {
+              ...state,
+              tabIndex:tabI, 
+              currentTab: newCurrentTab, 
+              tabs: state.tabs.filter((tab) => {            
+                return (tab.tabName != action.tabName);
+              })
+            }
         }
       case SET_CURRENT_TAB:
         return {

@@ -30,6 +30,26 @@ export const sopMyPendingSops_buttons=[
 	}
 ];
 
+export const appConfirmUserOrEsign_notCorrectMessage={
+    "message_en":"Validation fault. All attempts consumed.",
+    "message_es":"Validación fallada, Todos los intentos consumidos",
+}
+export const appLogOut_logOutMessage={
+  "closedSession":{
+    "message_en":"Session closed",
+    "message_es":"Sesión cerrada",
+  },
+}
+export const appLogin_authenticationMessage={
+  "connectedSuccess":{
+    "message_en":"Valid user, please proceed selecting the role",
+    "message_es":"Usuario válido, por favor escoja rol",
+  },
+  "connectedFails":{
+    "message_en":"I guess there is no user with those credentials",
+    "message_es":"Me temo que el usuario o la contraseña no son correctos.",    
+  }
+}
 export const appLogin_ribbonField=[{"label_en": "Draft", "label_es": "Provisional",}];
 export const appLogin_formFields=[
     {
@@ -49,7 +69,7 @@ export const appLogin_formFields=[
       "read_only": false
     },    
     {
-      "name": "Password",
+      "name": "password",
       "label_en": "Password", "label_es": "Contraseña",
       "type": "password",
       "password": "true",
@@ -103,10 +123,10 @@ export const appConfirmUser_formFields=[
     },    
     {
       "name": "pwToCheck",
-      "label_en": "Password", "label_es": "Contraseña",
+      "label_en": "Current Password", "label_es": "Contraseña Actual",
       "type": "password",
       "password": "true",
-      "value": "avecesllegaelmomento",
+      "value": "",
       "read_only": false,
       "showDisplayPasswordType": "Button"
     },
@@ -222,7 +242,7 @@ export const changeUserPasswordForm=[
   "showDisplayPasswordType": "Button"
 },
 {
-  "name": "USER_CHANGE_PASSWORD",
+  "name": "USER_CHANGE_PSWD",
   "label_en": "Confirm", "label_es": "Confirmar",
   "type": "icon-button",
   "icon_name": "icons:restore-page", "icon_color": "aqua",
@@ -318,3 +338,86 @@ export const appNewIncident_formFields=[
     "read_only": false
   },              
 ];
+export const incidents_userOpenIncidentsFieldToDisplay=[
+  {name: 'id', label_en:'Id', label_es: 'Id', sort:true, filter:false, width:'10%'}
+//, {name: 'status', label_en:'Status', label_es: 'Estado', sort:false, filter:true, width:'22%'}
+, {name: 'date_last_update', label_en:'Last Update', label_es: 'Último cambio', sort:false, filter:true, width:'22%'}
+, {name: 'date_creation', label_en:'Creation', label_es: 'Creación', sort:false, filter:true, width:'22%'}
+, {name: 'item_title', label_en:'Title', label_es: 'Título', sort:false, filter:true, width:'20%'}
+, {name: 'item_detail', label_en:'Detail', label_es: 'Detalle', sort:false, filter:true, width:'30%'}];
+export const incidents_userOpenIncidentsButtons=[
+  {
+    "name": "CONFIRM_INCIDENT",
+    "label_en": "Confirm", "label_es": "Confirmar",
+    "type": "button",
+    "icon_name": "icons:assignment-return",
+    "read_only": false,
+  },
+  {
+    "name": "ADD_NOTE_INCIDENT",
+    "label_en": "Add Note", "label_es": "Añadir Nota",
+    "type": "button",
+    "icon_name": "icons:assignment-return",
+    "read_only": false,
+  },
+  {
+    "name": "CLOSE_INCIDENT",
+    "label_en": "Close it!", "label_es": "¡Zanjarla!",
+    "type": "button",
+    "icon_name": "icons:assignment-return",
+    "read_only": false,
+  },
+  {
+    "name": "REOPEN_INCIDENT",
+    "label_en": "ReOpen it!", "label_es": "¡Reabrirla!",
+    "type": "button",
+    "icon_name": "icons:assignment-return",
+    "read_only": false,
+  },    
+];
+
+export const cancelDialogButton={
+  "name": "CANCEL_DIALOG_BUTTON",
+  "label_en": "Cancel", "label_es": "Cancelar",
+  "type": "button",
+  "icon_name": "icons:next-week",
+  "read_only": false,
+}
+export const confirmDialogButton={
+"name": "ACCEPT_DIALOG_BUTTON",
+"label_en": "Accept", "label_es": "Aceptar",
+"type": "button",
+"icon_name": "icons:next-week",
+"read_only": false,
+}
+export const closeDialogButton={
+"name": "CLOSE_DIALOG_BUTTON",
+"label_en": "Close", "label_es": "Cerrar",
+"type": "button",
+"icon_name": "icons:next-week",
+"read_only": false,
+}
+export const notificationsPaneTitle={
+  open:
+  {
+    "label_en": "Notifications", "label_es": "Notificaciones",
+    "icon_name": "vaadin:chevron-circle-up"
+  }, 
+  closed:
+  {
+    "label_en": "Notifications", "label_es": "Notificaciones",
+    "icon_name": "vaadin:chevron-circle-down"
+  },   
+};
+export const proceduresListPaneTitle={
+  open:
+  {
+    "label_en": "Procedures", "label_es": "Procesos",
+    "icon_name": "vaadin:chevron-circle-up"
+  }, 
+  closed:
+  {
+    "label_en": "Procedures", "label_es": "Procesos",
+    "icon_name": "vaadin:chevron-circle-down"
+  },   
+};

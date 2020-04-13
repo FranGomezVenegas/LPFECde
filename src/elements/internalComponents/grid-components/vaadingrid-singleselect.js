@@ -21,7 +21,7 @@ class VaadingridSingleselect extends SampleIcons(FieldsMethods(connect(store)(Po
       }         
     static get properties() {
         return {
-            selectedObject: {type: String, notify: true},
+            selectedObject: {type: Object, notify: true},
             addSelectionColumn:{type: Boolean, value: false},
             detailsOpened:{type: Boolean, value: false},detailsOpenedTwo:{type: Boolean, value: false},            
             sampleAnalysisFieldsNames:{type: Array, value:['status', 'test_id', 'analysis', 'method_name', 'method_version']},
@@ -132,6 +132,7 @@ class VaadingridSingleselect extends SampleIcons(FieldsMethods(connect(store)(Po
         return fldName=='status';
     }
     itemSelected(e) {       
+console.log('itemSelected', e.detail.value);
         this.selectedObject=e.detail.value; 
         if (this.selectedObject==null){return;}
         this.$.gridLevel1.selectedObject=this.selectedObject;

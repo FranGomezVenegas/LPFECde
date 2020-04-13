@@ -111,8 +111,10 @@ const documentContainer=document.createElement("div");documentContainer.setAttri
           width: 80%;
         }          
         div.internalComponentCardFormMainDivBgimg {
-          background-image: url('./images/app-login/login-hexagon-background.png');   
-          width: 410px;       
+          background-image: url('./images/hexagon-white-blue-light.jpg'), url('./images/app-login/LabPLANET_Atom54x42.png'); 
+          background-repeat: no-repeat, no-repeat;  
+          width: inherit, inherit;  
+          height: inherit, inherit;     
         } 
         div.confirmUserDialogModalMain {
           position: fixed;

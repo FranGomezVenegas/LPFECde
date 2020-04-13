@@ -101,7 +101,7 @@ class EmDemoAProgCorrectiveActions extends EmDemoAapiEnvMonit(FrontendEnvMonit(c
                 </template>  
             </div>            
             <div style="display:flex">
-                <vaadingrid-singleselect style="width:750px;" id="mygridid" headerfields="{{programCorrectiveActionTableHeaderFields}}" 
+                <vaadingrid-singleselect style="width:100%;" id="mygridid" headerfields="{{programCorrectiveActionTableHeaderFields}}" 
                     rowcontainer="{{selectedProgramCorrectiveActions}}" selected-object="{{selectedObject}}"
                     ></vaadingrid-singleselect>
             </div>

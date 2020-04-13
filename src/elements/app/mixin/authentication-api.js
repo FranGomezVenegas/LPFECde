@@ -26,12 +26,20 @@ ajaxAuthenticate(data) {
             this.ajaxUserRoles({actionName:'getuserrole', myToken:response.data.myToken}); 
             return;
         }
+        var state=store.getState();
+        var language=state.app.user.appLanguage; 
+        var message=''; 
+        switch(language){
+            case 'es': message=response.data.message_es; break;            
+            default: message=response.data.message_en; break;
+        }            
+
         //console.log('.then , response!=200, calling callBackFunctionError', 'response.data', response.data);
         //if (data.callBackFunctionError){data.callBackFunctionError();}
         //var errMessage = ApiMessage.errorMessage(response.data);
         this.dispatchEvent(new CustomEvent('toast-error', {
              bubbles: true,        composed: true,
-             detail: response.data.error_code //ApiMessage.errorMessage(response.data)
+             detail: message //response.data.error_code //ApiMessage.errorMessage(response.data)
            }));          
     })
     .catch(function (error) {
@@ -123,7 +131,7 @@ ajaxTokenValidateEsignPhrase(data) {
     //console.log('authentication-api.ajaxUserRoles', data);
     axios.get(apiUrl, {
         params: {
-        'actionName': 'TOKEN_VALIDATE_ESIGN_PHRASE', 'myToken': data.myToken, 'esignPhraseToCheck': data.esignPhraseToCheck}
+        'actionName': 'TOKEN_VALIDATE_ESIGN_PHRASE', 'finalToken': data.finalToken, 'esignPhraseToCheck': data.esignPhraseToCheck}
     })
     .then( response => {
         if(response.status == 200) {
@@ -156,7 +164,7 @@ ajaxTokenValidateUserCredentials(data) {
     //console.log('authentication-api.ajaxUserRoles', data);
     axios.get(apiUrl, {
         params: {
-        'actionName': 'TOKEN_VALIDATE_USER_CREDENTIALS', 'myToken': data.myToken
+        'actionName': 'TOKEN_VALIDATE_USER_CREDENTIALS', 'finalToken': data.finalToken
       , 'userToCheck': data.userToCheck, 'passwordToCheck': data.passwordToCheck}
     })
     .then( response => {

@@ -14,13 +14,15 @@ import {EmDemoAapiEnvMonit} from './api-env-monit';
 import {FrontendEnvMonit} from './frontend-env-monit.js';
 import {openEsignDialog} from '../../../app/Redux/actions/esign-actions.js';
 import {openConfirmUserDialog} from '../../../app/Redux/actions/confirmuser-actions.js';
+import {appConfirmUserOrEsign_notCorrectMessage} from '../../../../config/app-config';
 
 import {schema_name, sampleIncubation_incubBatch_incubatorsFieldToDisplay,
     sampleCustodian_cocUsersListFieldToRetrieve, sampleCustodian_cocUsersListFieldToDisplay, sampleCustodian_cocUsersListFieldToSort,
     sampleCustodian_cocSampleHistoryFieldToRetrieve, sampleCustodian_cocSampleHistoryFieldToDisplay, sampleCustodian_cocSampleHistoryFieldToSort,
     sampleResults_analysisListFieldsToRetrieve, sampleResults_analysisListToDisplay,
     sampleResults_sampleAnalysisListToDisplay, sampleResults_sampleAnalysisListFieldsToRetrieve,
-    sampleResults_sampleAnalysisResultEntryFieldsToRetrieve, sampleResults_sampleAnalysisResultEntryFieldsToDisplay, sampleResults_sampleAnalysisResultEntryFieldToSort
+    sampleResults_sampleAnalysisResultEntryFieldsToRetrieve, sampleResults_sampleAnalysisResultEntryFieldsToDisplay, sampleResults_sampleAnalysisResultEntryFieldToSort,
+    sampleIncubation_incubBatch_newBatchFormFields
 } from '../03config/config-process.js';    
 
 class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvMonit(connect(store)(PolymerElement)))) {
@@ -61,7 +63,10 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
                 ]
             },
             incubatorsListFieldsToDisplay: {type: Object, value:sampleIncubation_incubBatch_incubatorsFieldToDisplay}, 
-            selectedBatch:{type: Object},            
+            selectedBatch:{type: Object},        
+            newBatchFormFields:{type: Array, value:sampleIncubation_incubBatch_newBatchFormFields},  
+            validationNotCorrectMessage: {type: Object, value: appConfirmUserOrEsign_notCorrectMessage},
+            selectedLanguage:{ type: String},              
         }
     }
     static get template() {
@@ -122,7 +127,7 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
             on-dialog-button-clicked="dialogClosedProdLotBrowser" action-name="{{actionName}}"> </em-demo-a-list-modal-prodlotbrowser>
         </paper-dialog>    
         <paper-dialog id="batchBrowser">
-            <em-demo-a-list-modal-prodlotbrowser list-header="{{incubatorsListFieldsToDisplay}}" list-rows="{{activeIncubatorsList}}" 
+            <em-demo-a-list-modal-prodlotbrowser adhoc-form-fields="{{newBatchFormFields}}" list-header="{{incubatorsListFieldsToDisplay}}" list-rows="{{activeIncubatorsList}}" 
             on-dialog-button-clicked="dialogClosedBatchBrowser" action-name="{{actionName}}"> </em-demo-a-list-modal-prodlotbrowser>
         </paper-dialog>   
         
@@ -136,6 +141,7 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
     }
     
     stateChanged(state) {        
+        this.selectedLanguage = state.app.user.appLanguage;  
         this.finalToken = state.app.user.finalToken; 
         if (state.emDemoA!=null){            
             this.forResultsSamples= state.emDemoA.forResultsSamples;
@@ -177,10 +183,15 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
         this.actionTriggerNext();
     }    
     actionTriggerAbort(){
-        this.dispatchEvent(new CustomEvent('toast-message', {
+        var message=''; 
+        switch(this.selectedLanguage){
+            case 'es': message=this.validationNotCorrectMessage.message_es; break; //message=response.data.message_es; break;            
+            default: message=this.validationNotCorrectMessage.message_en; break; //message=response.data.message_en; break;
+        }     
+        this.dispatchEvent(new CustomEvent('toast-error', {
             bubbles: true,        composed: true,
-            detail: 'Va a ser que por mis loginCancelar no continuas! :)'
-        }));    
+            detail: message
+        }));   
         this.loading=false;  
     }
     actionTriggerNext(){
@@ -244,7 +255,8 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
             var paramsUrl='actionName='+actionName+'&finalToken='+this.finalToken+'&schemaPrefix='+this.schemaPrefix
             +'&batchName='+this.selectedBatch.name+'&batchtemplateId='+this.selectedBatch.incub_batch_config_id+'&batchtemplateVersion='+this.selectedBatch.incub_batch_config_version;
             datas.actionName=actionName; datas.paramsUrl=paramsUrl; datas.selectedBatch=this.selectedBatch;
-            datas.callBackFunction=this.refreshWindow.bind(this);
+            if (this.refreshWindow!=undefined){
+                datas.callBackFunction=this.refreshWindow.bind(this);}
             this.batchActionTriggerAPI(this.schemaPrefix, this.finalToken, actionName, datas, datas.tabInfo, datas.callBackFunction);
             break;    
         case 'EM_NEW_PRODUCTION_LOT':
@@ -262,7 +274,8 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
             var paramsUrl='actionName='+actionName+'&finalToken='+this.finalToken+'&schemaPrefix='+this.schemaPrefix
             +'&lotName='+datas.selectedObject.lot_name;
             datas.actionName=actionName; datas.paramsUrl=paramsUrl; datas.selectedProdLot=datas.selectedObject.lot_name;
-            datas.callBackFunction=this.refreshWindow.bind(this);
+            if (this.refreshWindow!=undefined){
+                datas.callBackFunction=this.refreshWindow.bind(this);}
             this.prodLotActionTriggerAPI(this.schemaPrefix, this.finalToken, actionName, datas, datas.tabInfo, datas.callBackFunction);    
             //console.log(actionName + "recognized in env-monit-elements >> actionTriggerNext but not implemented yet");
             break;
@@ -303,11 +316,14 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
             datas.selectedBatch=this.selectedBatch;
             datas.schemaPrefix=this.schemaPrefix; datas.actionName=actionName;// datas.paramsUrl=paramsUrl;   
             datas.incubName=incubName; datas.batchName=this.selectedBatch.name; //this.backEndData.selectedObject.sample_id; 
-            datas.callBackFunction=this.callBackFunctionEnvMonitElem; //.bind(this); //this.refreshWindow.bind(this);
+            if (this.callBackFunctionEnvMonitElem!=undefined){  
+                datas.callBackFunction=this.callBackFunctionEnvMonitElem; //.bind(this); //this.refreshWindow.bind(this);
+            }
             this.batchActionTriggerAPI(this.schemaPrefix, this.finalToken, actionName, datas, datas.tabInfo, datas.callBackFunction);
             //datas.selectedObject=this.backEndData.selectedObject;
             //this.sampleActionTrigger(actionName, datas, datas.tabInfo);                        
         }
+        this.$.incubatorsList.close();
         return;
     }       
     dialogClosedBatchBrowser(e){
@@ -318,12 +334,14 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
             var selectedBatch = [];    
             selectedBatch.name=e.detail.value;          
             datas.selectedBatch=selectedBatch;
-            datas.schemaPrefix=this.schemaPrefix; datas.actionName=e.detail.actionName;// datas.paramsUrl=paramsUrl;     
-            datas.callBackFunction=this.refreshWindow.bind(this);          
+            datas.schemaPrefix=this.schemaPrefix; datas.actionName=e.detail.actionName;// datas.paramsUrl=paramsUrl;                
+            if (this.refreshWindow!=undefined){
+                datas.callBackFunction=this.refreshWindow.bind(this);}
             this.batchActionTriggerAPI(this.schemaPrefix, this.finalToken, actionName, datas, datas.tabInfo, datas.callBackFunction);
             //datas.selectedObject=this.backEndData.selectedObject;
             //this.sampleActionTrigger(actionName, datas, datas.tabInfo);                        
         }
+        this.$.batchBrowser.close();
         return;
     }  
     dialogClosedProdLotBrowser(e){
@@ -332,12 +350,14 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
             var actionName=e.detail.actionName;
             var datas = [];              
             datas.selectedProdLot=e.detail.value;
-            datas.schemaPrefix=this.schemaPrefix; datas.actionName=e.detail.actionName;// datas.paramsUrl=paramsUrl;     
-            datas.callBackFunction=this.refreshWindow.bind(this);          
+            datas.schemaPrefix=this.schemaPrefix; datas.actionName=e.detail.actionName;// datas.paramsUrl=paramsUrl;  
+            if (this.refreshWindow!=undefined){   
+                datas.callBackFunction=this.refreshWindow.bind(this);}
             this.prodLotActionTriggerAPI(this.schemaPrefix, this.finalToken, actionName, datas, datas.tabInfo, datas.callBackFunction);
             //datas.selectedObject=this.backEndData.selectedObject;
             //this.sampleActionTrigger(actionName, datas, datas.tabInfo);                        
         }
+        this.$.prodLotBrowser.close();
         return;
     }   
     dialogClosedIncubatorAddTempReading(e){
@@ -350,14 +370,16 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
             //paramsUrl=paramsUrl+"&temperature="+selectedRow.selectedIncubator.temperature;  
 
             datas.selectedProdLot=e.detail.value;
-            datas.schemaPrefix=this.schemaPrefix; datas.actionName=e.detail.actionName;// datas.paramsUrl=paramsUrl;     
-            datas.callBackFunction=this.callBackFunctionEnvMonitElem.bind(this);  
+            datas.schemaPrefix=this.schemaPrefix; datas.actionName=e.detail.actionName;// datas.paramsUrl=paramsUrl;  
+            if (this.callBackFunctionEnvMonitElem!=undefined){   
+                datas.callBackFunction=this.callBackFunctionEnvMonitElem.bind(this);  }
             datas.temperature=e.detail.value;        
             datas.selectedIncubator=this.backEndData.selectedObject;
             this.incubationTriggerAPI(this.schemaPrefix, this.finalToken, actionName, datas, datas.tabInfo, datas.callBackFunction);
             //datas.selectedObject=this.backEndData.selectedObject;
             //this.sampleActionTrigger(actionName, datas, datas.tabInfo);                        
         }
+        this.$.incubatorAddTempReading.close();
         return;
     }          
 

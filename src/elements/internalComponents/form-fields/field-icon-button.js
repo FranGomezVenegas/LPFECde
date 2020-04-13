@@ -27,10 +27,20 @@ class FieldIconButton extends FieldsMethods(connect(store)(PolymerElement)) {
     return !this.field.icon_color ? 'color:cornflowerblue;': 'color:'+this.field.icon_color+';'; 
   }
   clicked(){
+    var proc=[];
+    if (this.procedure){
+      proc=this.procedure;
+      var procLabelEn="";
+      if (this.procedure.label_en){procLabelEn=this.procedure.label_en;}
+  
+    }
+    var fieldLabelEn="";
+    if (this.field.label_en){fieldLabelEn=this.field.label_en;}
     this.dispatchEvent(new CustomEvent('field-button-clicked', {
       bubbles: true,
       composed: true,
-      detail: {'buttonName': this.field.name,'value': this.value, 'buttonDefinition': this.field}
+      detail: {'buttonName': this.field.name,'value': this.value, 'buttonDefinition': this.field,
+      'procEvent': this.field,'procedure': proc, 'tabName_en': procLabelEn+'-'+fieldLabelEn}
     }));    
   }
 }

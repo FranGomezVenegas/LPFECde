@@ -34,10 +34,11 @@ class emDemoASamplePlateReading extends EmDemoAapiEnvMonit(FrontendEnvMonitSampl
         }
     }
     refreshWindow() {
+        console.log('plate-reading. triggered refreshWindow')
         this.onFinalTokenFilled();
         //this.$.mygridid.clearCache();
     }
-    onFinalTokenFilled(){
+    onFinalTokenFilled(){        
         this.callBackRefreshWindow = this.refreshWindow.bind(this);
         if ( (!this.finalToken) || (!this.schemaPrefix) ) {return;}
         //console.log('getAllSamplesStagePlateReading', 'samplesWhereFieldsName', this.samplesWhereFieldsName, 'samplesWhereFieldsValue', this.samplesWhereFieldsValue);

@@ -18,13 +18,13 @@ class FieldAvatar extends PolymerElement {
                 font-size:0;
               }
             </style>
-            <vaadin-button on-click="clicked"  class="button" value="{{field.name}}">
-              <img class="formFieldAvatar" src="{{field.source}}" aligned="center"  height="80" width="80"> 
-            </vaadin-button>
+            <!-- <vaadin-button on-click="clicked"  class="button" value="{{field.name}}"> -->
+              <img class="formFieldAvatar"  on-click="clicked" src="{{field.source}}" aligned="center"  height="80" width="80"> 
+              <!-- </vaadin-button> -->
         `;
     }
     clicked(){        
-        this.dispatchEvent(new CustomEvent('on-avatar-item-clicked', {
+        this.dispatchEvent(new CustomEvent('avatar-item-clicked', {
           bubbles: true,
           composed: true,
           detail: {'avatarName': this.field.name,'value': this.value, 'avatarDefinition': this.field}

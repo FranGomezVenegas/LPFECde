@@ -8,7 +8,7 @@ import {ADD_NOTIFICATION, DO_LOGOUT_NOTIFICATION} from '../actions/notifications
   const notificationsReducer = (state = InitialNotificationState, action) => {
     switch(action.type) {
       case ADD_NOTIFICATION:
-      //console.log('tab reducer', action);
+//      console.log('tab reducer', action);
         return {
           ...state,
           totalNotifications: state.totalNotifications + 1,
