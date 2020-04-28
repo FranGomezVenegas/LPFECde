@@ -33,6 +33,7 @@
     "@vaadin/vaadin-radio-button": "^1.1.2",
     "@vaadin/vaadin-text-field": "^2.1.6",
     "axios": "^0.18.1",
+    "dile-spinner": "^2.0.3",
     "flag-icon-css": "^3.3.0",
     "google-chart-polymer-3": "^3.0.1",
     "lit-element": "^2.0.1",

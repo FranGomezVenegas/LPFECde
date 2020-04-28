@@ -17,10 +17,10 @@ define(["../../../../../../node_modules/@polymer/polymer/polymer-element.js","..
                         </field-controller>
                     </template>  
             </div>            
-
         <div>
-       
-            <vaadin-grid id="mygridid" items="{{listRows}}" on-active-item-changed="itemSelected">  
+<!-- theme="column-borders" -->
+            <vaadin-grid id="mygridid" items="{{listRows}}" on-active-item-changed="itemSelected" 
+            column-reordering-allowed multi-sort selected-object="{{selectedObject}}">  
                 <vaadin-grid-selection-column  auto-select></vaadin-grid-selection-column>
                 <template name="auditLvl2" class="row-details">
                     <div class="details">
@@ -44,10 +44,16 @@ define(["../../../../../../node_modules/@polymer/polymer/polymer-element.js","..
             </vaadin-grid> 
 
         </div>    
-        `}itemSelectedOld(e){this.selectedObject=e.detail.value;this.$.mygridid.selectedObject=this.selectedObject;if(null==this.selectedObject){return}console.log("vaadingrid-singleselect >> itemSelected",this.selectedObject);//if (e.detail.value==null){this.selectedSample=null; return;}
-const item=e.detail.value;this.$.mygridid.selectedItems=item?[item]:[];this.selectedObject=item;this.$.mygridid.selectedObject=item}itemSelected(e){if(null==e.detail.value){this.selectedSample=null;return}if(this.selectedSample==e.detail.value.sample_id){this.selectedSample=null;return}//this.selectedObject=e.detail.value.sample_id;
-//console.log('Object selected', this.selectedObject); 
-const item=e.detail.value;this.$.mygridid.selectedItems=item?[item]:[];this.selectedObject=e.detail.value}actionOnSel(){//console.log('actionOnSel');
+        `}itemSelectedOld(e){// this.selectedObject=e.detail.value; 
+// this.$.mygridid.selectedObject=this.selectedObject;
+// if (this.selectedObject==null){return;}
+// console.log('vaadingrid-singleselect >> itemSelected', this.selectedObject);
+//if (e.detail.value==null){this.selectedSample=null; return;}
+const item=e.detail.value;this.$.mygridid.selectedItems=item?[item]:[];this.selectedObject=item;this.$.mygridid.selectedObject=item}itemSelected(e){//if (e.detail.value==null){this.selectedSample=null; return;}
+//if (this.selectedSample==e.detail.value.sample_id){this.selectedSample=null; return;}
+//this.selectedObject=e.detail.value.sample_id;
+const item=e.detail.value;this.selectedObject=item;console.log(" em-demo-a-list-modal-sample-audit >> itemSelected",this.selectedObject);//this.$.mygridid.selectedItems = item ? [item] : [];
+this.$.mygridid.selectedItems=[]}actionOnSel(){//console.log('actionOnSel');
 }dialogConfirmed(){//console.log('clicked', this.$.mygrid.getSelectedRows());        
 this.value="confirmed";this.dispatchEvent(new CustomEvent("dialog-button-clicked",{bubbles:!0,composed:!0,detail:{buttonName:this.name,value:this.value,dialogState:"confirmed",selectedItems:this.$.mygridid.selectedItems}}));this.$.mygridid.selectedItems=[]}dialogCanceled(){//console.log('clicked', this.value);
 this.value="confirmed";this.dispatchEvent(new CustomEvent("dialog-button-clicked",{bubbles:!0,composed:!0,detail:{buttonName:this.name,value:this.value,dialogState:"canceled"}}))}stateChanged(state){this.finalToken=state.app.user.finalToken}}customElements.define("em-demo-a-list-modal-sample-audit",emDemoAListModalSampleAudit)});

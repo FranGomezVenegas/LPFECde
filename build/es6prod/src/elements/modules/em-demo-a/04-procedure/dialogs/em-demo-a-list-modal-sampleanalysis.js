@@ -72,8 +72,16 @@ define(["../../../../../../node_modules/@polymer/polymer/polymer-element.js","..
         console.log('optionPressed', e.detail.buttonName, 'selectedSampleAnalysis', this.selectedObject);                
         //console.log('optionPressed', e.detail.buttonName, 'selectedSample', this.selectedObject);                
         if (this.selectedObject==null){
-            this.dispatchEvent(new CustomEvent('toast-error', {bubbles: true, composed: true,
-                detail: 'Please select one sample analysis first'}));    
+            var message=''; 
+            switch(this.selectedLanguage){
+                case 'es': message='Por favor selecciona un objeto primero'; break; //message=response.data.message_es; break;            
+                default: message='Please select one object first.'; break; //message=response.data.message_en; break;
+            }                    
+            this.dispatchEvent(new CustomEvent('toast-error', {
+                bubbles: true,
+                composed: true,
+                detail: message
+                }));        
             return;
         }           
         var datas = [];

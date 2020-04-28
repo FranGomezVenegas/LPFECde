@@ -9,6 +9,7 @@ export const SET_APP_LANGUAGE = 'SET_APP_LANGUAGE';
 export const SET_APP_PROCEDURE_LIST = 'SET_APP_PROCEDURE_LIST';
 export const UPDATE_FINAL_TOKEN = 'UPDATE_FINAL_TOKEN';
 export const USER_INFO = 'USER_INFO';
+export const CHANGE_LOADING ='CHANGE_LOADING';
 
 
 //export const ADD_USER_TOKEN = 'ADD_USER_TOKEN';
@@ -102,7 +103,19 @@ export function setAppProcedureList(data) {
     procListData: data
   }
 }
+export const startLoading = () => {
+  return changeLoading(true);
+}
 
+export const stopLoading = () => {
+  return changeLoading(false);
+}
+export const changeLoading = (loading) => {
+  return {
+    type: CHANGE_LOADING,
+    loading
+  }
+}
 /*export function addUserToken(finalToken) {
   console.log('AddUserToken');
   return {

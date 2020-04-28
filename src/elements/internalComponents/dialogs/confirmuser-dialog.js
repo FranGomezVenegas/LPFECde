@@ -6,18 +6,18 @@ import { store } from '../../../store.js';
 import { connect } from 'pwa-helpers/connect-mixin';
 import {AuthenticationApi} from '../../app/mixin/authentication-api.js';
 import '../form-fields/field-controller.js';
+import {CloseOnEscPressed} from '../../app/mixin/close-on-esc-pressed-mixin';
 
 import {closeConfirmUserDialog, resetAndCloseConfirmUserDialog, confirmUserSuccess, confirmUserFailure} from '../../app/Redux/actions/confirmuser-actions.js';
-import {appConfirmUser_formFields} from '../../../config/app-config.js';
+import {dialog_buttons, appConfirmUser_formFields, appConfirmUserOrEsign_notCorrectMessage} from '../../../config/app-config.js';
 import './../../../config/styles/div-style.js'; 
 
 let acceptedHandler = null;
 let canceledHandler = null;
 let numConfirmations = null;
-import {dialog_buttons} from '../../../config/app-config.js';
 import './modalwindow-buttons.js';
 
-class ConfirmUserDialog extends AuthenticationApi(connect(store)(PolymerElement)) {
+class ConfirmUserDialog extends CloseOnEscPressed(AuthenticationApi(connect(store)(PolymerElement))){
   static get properties() {
     return {
       dialogButtons: { type: Array, value: dialog_buttons},
@@ -28,6 +28,8 @@ class ConfirmUserDialog extends AuthenticationApi(connect(store)(PolymerElement)
       attemptsPhrase: String,
       classModal: {type: String, computed: 'changeClass(opened)'},
       formFields: {type: Array, notify: true, bubble: true, value: appConfirmUser_formFields},      
+      validationNotCorrectMessage: {type: Object, value: appConfirmUserOrEsign_notCorrectMessage},
+      selectedLanguage:{ type: String},      
     }
   }
 
@@ -53,7 +55,7 @@ class ConfirmUserDialog extends AuthenticationApi(connect(store)(PolymerElement)
       
       <div class$="{{classModal}}">
         <div class="confirmUserDialogModalMain"></div>
-        <div class="confirmUserDialogModalDialog">
+        <div class="confirmUserDialogModalDialog" >
           <template is="dom-repeat" items="{{formFields}}" as="currentfield">       
             <field-controller on-keydown="keyPressed" on-field-button-clicked="fieldButtonClicked" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
           </template>          
@@ -67,15 +69,19 @@ class ConfirmUserDialog extends AuthenticationApi(connect(store)(PolymerElement)
       </div>
     `;
   }
+  close(){
+    this.dialogCanceled();
+  }
+
   keyPressed(e){
     if(e.code.includes("Enter")) {
       this.dialogConfirmed();
       return;
     }
-    if(e.code == "Escape") {
-      this.dialogCanceled();
-      return;
-    }    
+    // if(e.code == "Escape") {
+    //   this.dialogCanceled();
+    //   return;
+    // }    
   }
   confirmUserFailure(){
     console.log('esignFailure', this.numAttempts+1 , this.maximumFailures-1);
@@ -83,6 +89,15 @@ class ConfirmUserDialog extends AuthenticationApi(connect(store)(PolymerElement)
       store.dispatch(confirmUserFailure());
       return;
     }
+    var message=''; 
+    switch(this.selectedLanguage){
+        case 'es': message=this.validationNotCorrectMessage.attempts_consumed.message_es; break; //message=response.data.message_es; break;            
+        default: message=this.validationNotCorrectMessage.attempts_consumed.message_en; break; //message=response.data.message_en; break;
+    }     
+    this.dispatchEvent(new CustomEvent('toast-error', {
+        bubbles: true,        composed: true,
+        detail: message
+    }));      
     if(canceledHandler) {canceledHandler();}
     store.dispatch(resetAndCloseConfirmUserDialog());
     return;
@@ -105,10 +120,20 @@ class ConfirmUserDialog extends AuthenticationApi(connect(store)(PolymerElement)
     this.ajaxTokenValidateUserCredentials(datas);    
   }
   dialogCanceled() {
+    var message=''; 
+    switch(this.selectedLanguage){
+        case 'es': message=this.validationNotCorrectMessage.dialog_cancelled.message_es; break; //message=response.data.message_es; break;            
+        default: message=this.validationNotCorrectMessage.dialog_cancelled.message_en; break; //message=response.data.message_en; break;
+    }     
+    this.dispatchEvent(new CustomEvent('toast-error', {
+        bubbles: true,        composed: true,
+        detail: message
+    }));    
     if(canceledHandler) {canceledHandler();}
     store.dispatch(closeConfirmUserDialog());    
   }
   stateChanged(state) {    
+    this.selectedLanguage = state.app.user.appLanguage;   
     this.opened = state.confirmUserDialog.confirmUserDialogOpened;
     acceptedHandler = state.confirmUserDialog.acceptedHandler;
     canceledHandler = state.confirmUserDialog.canceledHandler;

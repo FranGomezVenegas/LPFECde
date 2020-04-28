@@ -8,32 +8,40 @@ import {EmDemoAapiEnvMonit} from '../../01moduleFunctionality/api-env-monit.js';
 import '../../01moduleFunctionality/env-monit-elements.js';
 import {tableFieldLabel} from '../../03config/tablefield_labels';
 //import '../../internalComponents/pdf-browser-viewer';
-import {schema_name, browserIncubatorFieldToRetrieve, browserIncubatorFieldsToDisplay, browserIncubator_buttons } from '../../03config/config-process.js';
+import {schema_name, browserIncubatorFieldToRetrieve, browserIncubatorFieldsToDisplay, browserIncubator_buttons, browserIncubatorTemperatureReadingsNotFound } from '../../03config/config-process.js';
 
 class emDemoABrIncubator extends tableFieldLabel(EmDemoAapiEnvMonit(FrontendEnvMonitSample(connect(store)(PolymerElement)))) {
     stateChanged(state) {
         this.finalToken = state.app.user.finalToken; 
+        this.schemaPrefix=schema_name;
+        this.selectedLanguage=state.app.user.appLanguage;
         if (state.emDemoA!=null){
-            if (state.emDemoA.browserSelectedIncubator!=null){
+            if (state.emDemoA.browserSelectedIncubator){
+                if (state.emDemoA.browserSelectedIncubator.incubatorFieldToRetrieve){
+                    this.selectedObject=state.emDemoA.browserSelectedIncubator.incubatorFieldToRetrieve.name;}
                 this.selIncubator=state.emDemoA.browserSelectedIncubator;
+                this.selIncubatorLastNtempReadings=[];
                 if (this.selIncubator.lastTemperatureReadings!=null){
                     var i;
                     this.selIncubatorLastNtempReadings=[["Time", "Temperature"]];
+                    if (!this.selIncubator.lastTemperatureReadings){
+                        this.displayChart=false;
+                        return;}
+                    if (this.selIncubator.lastTemperatureReadings[0].error){
+                        this.displayChart=false;
+                        return;}
+                    this.displayChart=true;
                     for (i = 0; i < this.selIncubator.lastTemperatureReadings.length; i++) {
                         this.selIncubatorLastNtempReadings.push([this.selIncubator.lastTemperatureReadings[i].created_on, 
                         this.selIncubator.lastTemperatureReadings[i].temperature]);
-                        
                     }
-                    this.selectedObject=this.selIncubator.incubatorFieldToRetrieve.name;
-                    //console.log('this.selIncubatorLastNtempReadings', this.selIncubatorLastNtempReadings);
                 }                
             }            
         }        
-        this.schemaPrefix=schema_name;
-        this.selectedLanguage=state.app.user.appLanguage;
     }        
     static get properties() {
         return {
+            displayChart: Boolean,
             buttons:{type: String, value:browserIncubator_buttons},
             finalToken: {type: String},  
             schemaPrefix: {type: String},   
@@ -84,6 +92,7 @@ class emDemoABrIncubator extends tableFieldLabel(EmDemoAapiEnvMonit(FrontendEnvM
                 }]
             },
             tableFieldLabelSchemaName: {type: String, value: 'config'}, tableFieldLabelTableName: {type: String, value: 'Incubator'},
+            NoContent: {type: Array, notify: true, value:browserIncubatorTemperatureReadingsNotFound},
         }
 
     }
@@ -136,7 +145,6 @@ class emDemoABrIncubator extends tableFieldLabel(EmDemoAapiEnvMonit(FrontendEnvM
                 </field-controller>
             </template>  
         </div>            
-
             <div id="topBar">            
                 <div class="cardPendingSops"> 
                 <p><h2><b>{{getTableFieldLabel(tableFieldLabelSchemaName, tableFieldLabelTableName, '*incubator_info_title', selectedLanguage)}}</h2></p>
@@ -146,49 +154,16 @@ class emDemoABrIncubator extends tableFieldLabel(EmDemoAapiEnvMonit(FrontendEnvM
                 </div>
             </div>
 
-            <div id="central"> 
-            
-                <google-chart type="line" style="height: 500px; width: 750px;" data="{{selIncubatorLastNtempReadings}}"></google-chart>
+            <div id="central">             
+                <template is="dom-if" if="{{displayChart}}" >
+                    <google-chart type="line" style="height: 500px; width: 750px;" data="{{selIncubatorLastNtempReadings}}"></google-chart>
+                </template>
+                <template is="dom-if" if="!{{displayChart}}" >
+                    <template is="dom-repeat" items="{{NoContent}}" as="currentfield">       
+                        <field-controller on-keydown="keyPressed" on-field-button-clicked="RunReport" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
+                    </template>                               
+                </template>                   
             </div> 
-
-<!--            <div id="central"> 
-                <template is="dom-repeat" items="[[selIncubator.stages]]" as="stage">  
-                    <div class="cardPendingSops"> 
-                        <p><h2><b>{{stage.current_stage}}</h2> {{stage.started_on}} >> {{stage.ended_on}}   </b></p>                        
-                        <template is="dom-if" if="{{isTheCurrentStage(stage)}}">                        
-                            <field-controller id="OpenStage"  field="{{goToStageButton}}" value="{{item}}"
-                                on-field-button-clicked="openTab" 
-                                selected-Object="[[item]]"> 
-                            </field-controller>
-                        </template>            
-                        <template is="dom-if" if="{{isIncubationStage(stage)}}">  
-                            <div id="incub1" class="cardPendingSops"> 
-                                <p><h2><b>Incubation 1</h2></p>
-                                <template is="dom-repeat" items="[[stage.data.0.incubation_1]]" as="incub1item">  
-                                    <template is="dom-if" if="{{displayStageFld(stage, incub1item)}}"> 
-                                        <p><b>{{incub1item.field_name}}:</b> {{incub1item.field_value}}<p></p>
-                                    </template>
-                                </template>
-                            </div>
-                            <div id="incub2" class="cardPendingSops"> 
-                                <p><h2><b>Incubation 2</h2></p>
-                                <template is="dom-repeat" items="[[stage.data.0.incubation_2]]" as="incub2item">  
-                                    <template is="dom-if" if="{{displayStageFld(stage, incub2item)}}"> 
-                                        <p><b>{{incub2item.field_name}}:</b> {{incub2item.field_value}}<p></p>
-                                    </template>    
-                                </template>
-                            </div>
-                        </template>
-                        <template is="dom-if" if="{{!isIncubationStage(stage)}}">    
-                            <template is="dom-repeat" items="[[stage.data]]">  
-                                <template is="dom-if" if="{{displayStageFld(stage, item)}}"> 
-                                    <p><b>{{item.field_name}}:</b> {{item.field_value}}<p></p>
-                                </template>    
-                            </template>
-                        </template>
-                    </div>
-                </template>            
-            </div>-->            
         </div>
         `;
     }
@@ -228,15 +203,17 @@ class emDemoABrIncubator extends tableFieldLabel(EmDemoAapiEnvMonit(FrontendEnvM
     }    
     RunReport(){
         var data=[];
+        console.log('RunReport', 'data', data);            
         data.finalToken=this.finalToken;
         data.schemaPrefix=this.schemaPrefix;
         data.incubName=this.incubationBrowserFields[0].value;
         data.browserIncubatorFieldToRetrieve=this.browserIncubatorFieldToRetrieve;
         data.browserIncubatorFieldsToDisplay =this.browserIncubatorFieldsToDisplay;
+            
         if (this.incubationBrowserFields[1].value.length>0){data.startDate=this.incubationBrowserFields[1].value;}
         if (this.incubationBrowserFields[2].value.length>0){data.endDate=this.incubationBrowserFields[2].value;}
-        this.getBrowserSelectedIncubatorData(data);        
-        console.log('RunReport', 'data', data);
+        this.getBrowserSelectedIncubatorData(data);                
+        
     }
     openTab(){
         //console.log('openTab > '+this.schemaPrefix+ '-' + this.selIncubator.currentStage);

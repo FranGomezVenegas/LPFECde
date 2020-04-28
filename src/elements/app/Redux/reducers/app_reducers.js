@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 
-import {UPDATE_PAGE,  DO_LOGIN,  DO_LOGOUT,  SET_APP_LANGUAGE,  SET_APP_PROCEDURE_LIST, UPDATE_FINAL_TOKEN ,USER_INFO 
+import {UPDATE_PAGE,  DO_LOGIN,  DO_LOGOUT,  SET_APP_LANGUAGE,  SET_APP_PROCEDURE_LIST, UPDATE_FINAL_TOKEN ,USER_INFO, CHANGE_LOADING
     } from '../actions/app_actions.js';
 
 import { ADD_SESSION } from '../actions/session_actions.js';
@@ -30,7 +30,8 @@ const InitialUserState = {
   userID: '',
   tabsOpenOnLogin: '',
   appProcedureList: [],
-  userInfo: []
+  userInfo: [],
+  loading: false,
 }
 
 function user(state = InitialUserState, action) {
@@ -69,7 +70,12 @@ function user(state = InitialUserState, action) {
       return {
         ...state,
         appProcedureList: action.procListData
-      }     
+      }    
+    case CHANGE_LOADING:
+      return {
+        ...state,
+        loading: action.loading
+      };       
     default:
       return state;
   }

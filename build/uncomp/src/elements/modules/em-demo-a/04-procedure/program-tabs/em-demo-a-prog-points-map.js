@@ -2,9 +2,9 @@ import{PolymerElement,html}from"../../../../../../node_modules/@polymer/polymer/
 //import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 //import {appLogin_formFields, appLogin_ribbonField} from '../../../../config/app-config.js';
 import{EmDemoAapiEnvMonit}from"../../01moduleFunctionality/api-env-monit.js";import"../../01moduleFunctionality/env-monit-elements.js";import{FrontendEnvMonit}from"../../01moduleFunctionality/frontend-env-monit.js";import{schema_name,progProintsMapCardFormButtons,programProgPoints_samplePointsMapTableHeaderFields}from"../../03config/config-process.js";//import {selectedProgram} from '../00jsonFake/selectedProgram.js';
-import{setSelectedSamplingPoint}from"../../02Redux/em-demo-a_actions.js";class EmDemoAProgPointsMap extends EmDemoAapiEnvMonit(FrontendEnvMonit(connect(store)(PolymerElement))){static get properties(){return{schemaPrefix:{type:String,value:schema_name},selectedPointCardForm:{type:Object},//, value:appLogin_formFields},
+import{setSelectedSamplingPoint}from"../../02Redux/em-demo-a_actions.js";import{FieldsMethods}from"../../../../app/app-functions/fields-methods.js";class EmDemoAProgPointsMap extends FieldsMethods(EmDemoAapiEnvMonit(FrontendEnvMonit(connect(store)(PolymerElement)))){static get properties(){return{selectedLanguage:{type:String},schemaPrefix:{type:String,value:schema_name},selectedPointCardForm:{type:Object},//, value:appLogin_formFields},
 selectedProgram:{type:Object},selectedSamplingPoint:{type:Object},cardFormButtons:{type:Object,value:progProintsMapCardFormButtons},appLoginLogoOnTop:{type:String,value:"./images/app-login/labplanet.png"},appLoginFormBackground:{type:String,value:"./images/app-login/login-hexagon-background.png"},samplePointsTableHeaderFields:{type:Array,value:programProgPoints_samplePointsMapTableHeaderFields},//cleanRoomExample:{type:String, value:selectedProgram.map_image //'../images/clean-room-example.png'},
-editMode:{type:Boolean,value:!1},callBackRefreshWindow:Object}}static get template(){return html`
+editMode:{type:Boolean,value:!1},callBackRefreshWindow:Object,tableTitle:{type:Object,value:{label_en:"Defined program locations",label_es:"Tabla de ubicaciones definidas para el programa"}}}}static get template(){return html`
             <style>
             vaadin-button {
                 top: 0;
@@ -65,13 +65,23 @@ editMode:{type:Boolean,value:!1},callBackRefreshWindow:Object}}static get templa
                     border-radius: 5px;
                     background-color: #fff;
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-                }                             
+                }  
+                p.tableTitle{
+                    margin-top: 0px;
+                    margin-bottom: 3px;
+                    color: #4285f4;
+                    font-size:30px;
+                }            
             </style>
             <env-monit-elements id="myElements" call-back-function-env-monit-elem="{{callBackRefreshWindow}}"></env-monit-elements>
              <!-- {{selectedProgram.name}}
              <vaadin-button on-click="editModeToggle"  class="button" value="{{editMode}}">
                 Edit
             </vaadin-button>  -->
+            <div>
+                <p class="tableTitle">{{labelValue(selectedLanguage, tableTitle)}} {{selectedProgram.name}}</p>
+            </div>
+
              <div style="display:flex">
                 <vaadingrid-multiselect style="width:450px;" id="mygridid" headerfields="{{samplePointsTableHeaderFields}}" 
                     rowcontainer="{{selectedProgram.sample_points}}"            
@@ -142,5 +152,5 @@ editMode:{type:Boolean,value:!1},callBackRefreshWindow:Object}}static get templa
         }
     }
 */pointClicked(e){store.dispatch(setSelectedSamplingPoint(e.currentTarget.cardForm));//this.selectedPointCardForm=e.currentTarget.cardForm;
-console.log("em-demo-a-prog-points-map >> pointClicked",this.selectedSamplingPoint);this.$.pointCard.open()}openDialog(e){console.log(e)}dialogClosedpointCard(){console.log("dialogClosedpointCard triggered in vain!")}editModeToggle(){return!editMode;console.log("editMode",editMode)}constructor(){super()}ready(){super.ready()}stateChanged(state){this.finalToken=state.app.user.finalToken;if(null!=state.emDemoA){this.selectedSamplingPoint=state.emDemoA.selectedSamplingPoint;this.selectedProgram=state.emDemoA.selectedProgram;//this.unReceivedSamples= state.processUs.unReceivedSamples;
+console.log("em-demo-a-prog-points-map >> pointClicked",this.selectedSamplingPoint);this.$.pointCard.open()}openDialog(e){console.log(e)}dialogClosedpointCard(){console.log("dialogClosedpointCard triggered in vain!")}editModeToggle(){return!editMode;console.log("editMode",editMode)}constructor(){super()}ready(){super.ready()}stateChanged(state){this.selectedLanguage=state.app.user.appLanguage;this.finalToken=state.app.user.finalToken;if(null!=state.emDemoA){this.selectedSamplingPoint=state.emDemoA.selectedSamplingPoint;this.selectedProgram=state.emDemoA.selectedProgram;//this.unReceivedSamples= state.processUs.unReceivedSamples;
 }this.schemaPrefix=schema_name}}customElements.define("em-demo-a-prog-points-map",EmDemoAProgPointsMap);

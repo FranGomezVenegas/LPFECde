@@ -4,6 +4,8 @@ import {
     
     ALL_SAMPLES_STAGE_SAMPLING, ALL_SAMPLES_STAGE_INCUBATION1, ALL_SAMPLES_STAGE_INCUBATION2, 
     ALL_SAMPLES_STAGE_PLATEREADING, ALL_SAMPLES_STAGE_MICROORGANISM,
+
+    ALL_PERSON_SAMPLES_STAGE_SAMPLING, ALL_PERSON_SAMPLES_STAGE_PLATEREADING, ALL_PERSON_SAMPLES_STAGE_MICROORGANISM,
     
     SET_SELECTED_INCUBATOR, GET_ALL_INCUBATORS, SET_SELECTED_BATCH, GET_ACTIVE_BATCHES,
 
@@ -34,6 +36,10 @@ const INITIAL_STATE = {
     , allSamplesStageIncubation2: []
     , allSamplesStagePlateReading: []
     , allSamplesStageMicroorganism: []
+
+    , allPersonSamplesStageSampling: []
+    , allPersonSamplesStagePlateReading: []
+    , allPersonSamplesStageMicroorganism: []
 
     , sampleTemplates: []
     , unReceivedSamples: []
@@ -163,6 +169,24 @@ const EmDemoAReducer = (state = INITIAL_STATE, action) => {
         return {
             ...state,        
             allSamplesStageMicroorganism: action.DATA,
+        }  
+    case ALL_PERSON_SAMPLES_STAGE_SAMPLING:
+        //console.log('em-demo-a_reducers.programs', action);
+        return {
+            ...state,        
+            allPersonSamplesStageSampling: action.DATA,
+        }  
+    case ALL_PERSON_SAMPLES_STAGE_PLATEREADING:
+        //console.log('em-demo-a_reducers.programs', action);
+        return {
+            ...state,        
+            allPersonSamplesStagePlateReading: action.DATA,
+        }  
+    case ALL_PERSON_SAMPLES_STAGE_MICROORGANISM:
+        //console.log('em-demo-a_reducers.programs', action);
+        return {
+            ...state,        
+            allPersonSamplesStageMicroorganism: action.DATA,
         }  
     case MICROORGANISM_LIST:
             //console.log('em-demo-a_reducers.programs', action);

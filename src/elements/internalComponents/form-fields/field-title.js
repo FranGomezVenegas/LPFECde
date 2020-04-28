@@ -4,6 +4,12 @@ import { store } from '../../../store';
 import {FieldsMethods} from '../../app/app-functions/fields-methods';
 import './../../../config/styles/form-fields-style'
 class FieldTitle extends FieldsMethods(connect(store)(PolymerElement)) {
+  static get properties() {
+    return {
+      field: {        type: Object,        notify: true      },
+      selectedLanguage: String
+    }
+  }
   stateChanged(state) {
     this.selectedLanguage = state.app.user.appLanguage;        
   }   

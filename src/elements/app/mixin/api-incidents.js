@@ -11,11 +11,11 @@ export const ApiIncidents = (superClass) => class extends (superClass) {
 
 incidentsEndPoint(data) {
     var apiUrl=backendUrl+ApiIncidentsUrl+"?"+data.paramsUrl; 
-    console.log('App >> ApiIncidents >> incidentsEndPoint ', 'data', data);    
+    //console.log('App >> ApiIncidents >> incidentsEndPoint ', 'data', data);    
 //    console.log('process-us>api-sample>incidentsEndPoint', data.schemaPrefix, data.actionName, apiUrl, data.paramsUrl);     
     //axios.get(apiUrl)
     axios({method:'post', url:apiUrl
-        , data:JSON.stringify({firstName: 'Finn', lastName: 'Williams' })
+        , //data:JSON.stringify({firstName: 'Finn', lastName: 'Williams' })
         })
     .then( response => {
         var state=store.getState();

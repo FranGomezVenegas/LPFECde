@@ -11,7 +11,7 @@ To run the project do this:
 Clone the repo and install it's dependencies:
 
 ```
-git clone https://github.com/midesweb/polymer3-redux-todo-list.git redux-demo
+git clone https://github.com/FranGomezVenegas/LPFECde.git redux-demo
 cd redux-demo
 npm i
 ```

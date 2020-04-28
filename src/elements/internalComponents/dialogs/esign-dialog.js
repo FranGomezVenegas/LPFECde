@@ -7,9 +7,8 @@ import { connect } from 'pwa-helpers/connect-mixin';
 import {AuthenticationApi} from '../../app/mixin/authentication-api.js';
 
 import {closeEsignDialog, resetAndCloseEsignDialog, esignSuccess, esignFailure} from '../../app/Redux/actions/esign-actions.js';
-import {appEsign_formFields} from '../../../config/app-config.js';
 import './../../../config/styles/div-style.js'; 
-import {dialog_buttons} from '../../../config/app-config.js';
+import {dialog_buttons, appEsign_formFields, appConfirmUserOrEsign_notCorrectMessage} from '../../../config/app-config.js';
 import './modalwindow-buttons.js';
 
 let acceptedHandler = null;
@@ -26,6 +25,8 @@ class EsignDialog extends AuthenticationApi(connect(store)(PolymerElement)) {
       attemptsPhrase: String,
       classModal: {type: String, computed: 'changeClass(opened)'},
       formFields: {type: Array, notify: true, bubble: true, value: appEsign_formFields},
+      validationNotCorrectMessage: {type: Object, value: appConfirmUserOrEsign_notCorrectMessage},
+      selectedLanguage:{ type: String},      
     }
   }
 
@@ -75,11 +76,20 @@ class EsignDialog extends AuthenticationApi(connect(store)(PolymerElement)) {
     }    
   }
   esignFailure(){
-    console.log('esignFailure', this.numAttempts+1 , this.maximumFailures-1);
+    //console.log('esignFailure', this.numAttempts+1 , this.maximumFailures-1);
     if (this.numAttempts+1<=this.maximumFailures-1){
       store.dispatch(esignFailure());
       return;
     }
+    var message=''; 
+    switch(this.selectedLanguage){
+        case 'es': message=this.validationNotCorrectMessage.attempts_consumed.message_es; break; //message=response.data.message_es; break;            
+        default: message=this.validationNotCorrectMessage.attempts_consumed.message_en; break; //message=response.data.message_en; break;
+    }     
+    this.dispatchEvent(new CustomEvent('toast-error', {
+        bubbles: true,        composed: true,
+        detail: message
+    }));      
     if(canceledHandler) {canceledHandler();}
     store.dispatch(resetAndCloseEsignDialog());
     return;
@@ -100,11 +110,21 @@ class EsignDialog extends AuthenticationApi(connect(store)(PolymerElement)) {
     this.ajaxTokenValidateEsignPhrase(datas);    
   }
   dialogCanceled() {
+    var message=''; 
+    switch(this.selectedLanguage){
+        case 'es': message=this.validationNotCorrectMessage.dialog_cancelled.message_es; break; //message=response.data.message_es; break;            
+        default: message=this.validationNotCorrectMessage.dialog_cancelled.message_en; break; //message=response.data.message_en; break;
+    }     
+    this.dispatchEvent(new CustomEvent('toast-error', {
+        bubbles: true,        composed: true,
+        detail: message
+    }));    
     if(canceledHandler) {canceledHandler();}
     store.dispatch(closeEsignDialog());    
   }
   stateChanged(state) {    
 //    console.log('esign-dialog.js >> stateChanged >> opened=', state.esignDialog);
+    this.selectedLanguage = state.app.user.appLanguage;     
     this.opened = state.esignDialog.esignDialogOpened;
     if (this.opened){this.$.esign.focus();}
     acceptedHandler = state.esignDialog.acceptedHandler;

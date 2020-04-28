@@ -52,7 +52,8 @@ class emDemoASimpleModalDialog extends PolymerElement {
             'value': this.value,
             'dialogState': 'confirmed'
             }
-        }));    
+        }));   
+        this.resetValue(); 
     }        
     dialogCanceled(){
         //console.log('clicked', this.value);
@@ -66,7 +67,13 @@ class emDemoASimpleModalDialog extends PolymerElement {
             'dialogState': 'canceled'
             }
         }));    
-    }         
+        this.resetValue();
+    } 
+    resetValue(){
+        if (!this.dialogElements[0]){return;}
+        const field=this.shadowRoot.getElementById(this.dialogElements[0].name);
+        if (field){field.resetValue();}
+    }
     
 }
 

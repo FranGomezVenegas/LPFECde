@@ -14,12 +14,6 @@ import '../../../../internalComponents/dialogs/modalwindow-buttons.js';
 class emDemoAListModalProdLotBrowser extends EmDemoAapiEnvMonit(FrontendEnvMonitSample(PolymerElement)) {
     static get properties() {
         return {
-            listRows: {
-                type:Array
-                ,
-                value: [
-                {code: 'LOD', method_name: 'LOD Method', method_version: 1}]
-            },
             adhocFormFields: {type: Array, notify: true, bubble: true, value: productionLot_newLot_formFields},
             schemaPrefix:{type:String, value:schema_name},
             sampleId:{type: Number},
@@ -56,7 +50,7 @@ class emDemoAListModalProdLotBrowser extends EmDemoAapiEnvMonit(FrontendEnvMonit
         //console.log('actionOnSel');
     }   
     dialogConfirmed(){
-        //console.log('clicked', this.$.mygrid.getSelectedRows());        
+        console.log('dialogConfirmed');        
         this.value='confirmed';
         this.dispatchEvent(new CustomEvent('dialog-button-clicked', {
             bubbles: true,
@@ -69,11 +63,14 @@ class emDemoAListModalProdLotBrowser extends EmDemoAapiEnvMonit(FrontendEnvMonit
             'actionName': this.actionName   
             }
         })); 
-        //this.$.mygridid.selectedItems=[];  
+        this.resetValue;
+        //const field=this.shadowRoot.getElementById(this.adhocFormFields[0].name);
+        //if (field){field.resetValue();}
+                //this.$.mygridid.selectedItems=[];  
     }        
     dialogCanceled(){
-        //console.log('clicked', this.value);
-        this.value='confirmed';
+        console.log('dialogCanceled', this.value);
+        this.value='canceled';
         this.dispatchEvent(new CustomEvent('dialog-button-clicked', {
             bubbles: true,
             composed: true,
@@ -83,7 +80,18 @@ class emDemoAListModalProdLotBrowser extends EmDemoAapiEnvMonit(FrontendEnvMonit
             'dialogState': 'canceled'
             }
         }));    
+        this.resetValue;
+        //const field=this.shadowRoot.getElementById(this.adhocFormFields[0].name);
+        //if (field){field.resetValue();}
     } 
+    resetValue(){
+        if (!this.adhocFormFields){return;}
+        const field=this.shadowRoot.getElementById(this.adhocFormFields[0].name);
+        if (field){field.resetValue();}
+    }
+    constructor(){
+        super();
+    }
 }
 
 customElements.define('em-demo-a-list-modal-prodlotbrowser', emDemoAListModalProdLotBrowser);

@@ -9,7 +9,7 @@ const documentContainer=document.createElement("div");documentContainer.setAttri
         }        
         paper-button.sopIconAndBadgeAllUserSop{
           position: fixed;
-          top: 125px;
+          top: 5px;
           left: 45px;
           --paper-badge-background: var(--google-blue-700);
         }      

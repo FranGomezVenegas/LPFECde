@@ -49,15 +49,31 @@ _store.store.dispatch((0,_emDemoA_actions.getActiveBatches)(response.data));if(d
 }).then(function(){})}prodLotFieldButtonClicked(e){//console.log('frontend-env-monit-sample >> prodLotFieldButtonClicked ', 
 //    'e.detail.buttonName', e.detail.buttonName, 'this.selectedObject', this.selectedObject, 'e.detail.buttonDefinition', e.detail.buttonDefinition);
 // if (this.selectedObject==null){
-//     this.dispatchEvent(new CustomEvent('toast-error', {bubbles: true, composed: true,
-//         detail: 'Please select one production lot first '}));    
-//     return;
+// var message=''; 
+// switch(this.selectedLanguage){
+//     case 'es': message='Por favor selecciona un objeto primero'; break; //message=response.data.message_es; break;            
+//     default: message='Please select one object first.'; break; //message=response.data.message_en; break;
+// }                    
+// this.dispatchEvent(new CustomEvent('toast-error', {
+//     bubbles: true,
+//     composed: true,
+//     detail: message
+//     }));        
+// return;
 // }    
 var datas=[];datas.actionName=e.detail.buttonName;datas.selectedObject=this.selectedObject;if(this.refreshWindow){datas.callBackFunction=this.refreshWindow.bind(this)}var tabInfo={currTabEsignRequired:e.detail.buttonDefinition.esign_required,currTabConfirmUserRequired:e.detail.buttonDefinition.confirmuser_required};this.$.myElements.actionTrigger(e.detail.buttonName,datas,e.detail.buttonDefinition)}fieldButtonClicked(e){//console.log('frontend-env-monit >> fieldButtonClicked ', 
 //    'e.detail.buttonName', e.detail.buttonName, 'datas', datas, 'e.detail.buttonDefinition', e.detail.buttonDefinition);
 // if (this.selectedObject==null){
-//     this.dispatchEvent(new CustomEvent('toast-error', {bubbles: true, composed: true,
-//         detail: 'Please select one sample first '}));    
-//     return;
+// var message=''; 
+// switch(this.selectedLanguage){
+//     case 'es': message='Por favor selecciona un objeto primero'; break; //message=response.data.message_es; break;            
+//     default: message='Please select one object first.'; break; //message=response.data.message_en; break;
+// }                    
+// this.dispatchEvent(new CustomEvent('toast-error', {
+//     bubbles: true,
+//     composed: true,
+//     detail: message
+//     }));        
+// return;
 // }    
 var datas=[];datas.actionName=e.detail.buttonName;datas.selectedObject=this.selectedObject;if(this.refreshWindow){datas.callBackFunction=this.refreshWindow.bind(this)}this.$.myElements.actionTrigger(e.detail.buttonName,datas,e.detail.buttonDefinition)}};_exports.FrontendEnvMonit=FrontendEnvMonit});

@@ -3,6 +3,7 @@ import {store} from '../../../store';
 import {ApiMessage} from '../app-functions/apiMessage';
 //import { addNotification  } from '../../../app/Redux/actions/notifications_actions';
 //import { foo } from '../redux/actions';
+//import {startLoading} from '../Redux/actions/app_actions';
 /**
  * @mixinFunction
  * @polymer
@@ -97,11 +98,12 @@ ajaxFinalToken(data) {
     })
     .then( response => {
         if(response.status == 200) {
-//            console.log(response);
+//console.log('authentication-api >> ajaxFinalToken', 'response.data', response.data);
             this.finalToken=response.data.finalToken;
             this.appSessionId=response.data.appSessionId;
             this.appSessionStartDate=response.data.appSessionStartDate;
-            this.userTabsOnLogin=response.data.userTabsOnLogin; 
+            this.userTabsOnLogin=response.data.userTabsOnLogin;
+            
 //console.log('this.userTabsOnLogin', this.userTabsOnLogin);
             this.initAppSession();
             if (data.callBackFunction){data.callBackFunction();}

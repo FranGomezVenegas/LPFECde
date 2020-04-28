@@ -30,7 +30,7 @@ define(["../../../../node_modules/@polymer/polymer/polymer-element.js","../../..
       }      
       inputBlue {
         color: Blue;}
-    }           
+           
     </style>
     <template  is="dom-if" if="{{textType()}}">  
       <paper-input class="inputBlue" type="{{field.type}}" id="{{field.name}}" name="{{field.name}}" readonly="{{field.read_only}}" required label="{{labelValue(selectedLanguage, field)}}" value="{{value}}" auto-validate="{{field.required}}" ></paper-input>
@@ -39,6 +39,6 @@ define(["../../../../node_modules/@polymer/polymer/polymer-element.js","../../..
       <vaadin-password-field id="{{field.name}}" name="{{field.name}}" readonly="{{field.read_only}}" label="{{labelValue(selectedLanguage, field)}}" value="{{value}}">value="{{value}}"</vaadin-password-field>
     </template>
     <template  is="dom-if" if="{{textTypeConfidential()}}">  
-      <paper-input type="{{type}}" name="{{field.name}}" readonly label="{{labelValue(selectedLanguage, field)}}" value="{{confidentialMaskValue(selectedLanguage)}}" required="{{field.required}}" auto-validate tip="You are not authorized to see this information"></paper-input>
+      <paper-input type="{{type}}" id="{{field.name}}" name="{{field.name}}" readonly label="{{labelValue(selectedLanguage, field)}}" value="{{confidentialMaskValue(selectedLanguage)}}" required="{{field.required}}" auto-validate tip="You are not authorized to see this information"></paper-input>
     </template>    
-    `}}customElements.define("field-text",FieldText)});
+    `}focus(){this.shadowRoot.getElementById(this.field.name).focus()}}customElements.define("field-text",FieldText)});

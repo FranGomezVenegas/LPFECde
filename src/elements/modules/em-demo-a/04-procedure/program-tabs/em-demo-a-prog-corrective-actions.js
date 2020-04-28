@@ -11,20 +11,20 @@ import {FrontendEnvMonit} from '../../01moduleFunctionality/frontend-env-monit.j
 import {schema_name, progCorrectiveActionButtons, progCorrectiveActionTableHeaderFields
     } from '../../03config/config-process.js';
 //import {setselectedProgramCorrectiveActions} from '../../02Redux/em-demo-a_actions.js';
-
-class EmDemoAProgCorrectiveActions extends EmDemoAapiEnvMonit(FrontendEnvMonit(connect(store)(PolymerElement))) {
+import {FieldsMethods} from '../../../../app/app-functions/fields-methods';
+class EmDemoAProgCorrectiveActions extends FieldsMethods(EmDemoAapiEnvMonit(FrontendEnvMonit(connect(store)(PolymerElement)))) {
     static get properties() {
         return {            
             schemaPrefix: {type:String, value:schema_name},
             selectedPointCardForm: {type: Object}, //, value:appLogin_formFields},
             selectedProgram:{type: Object, observer:'onFinalTokenFilled'},
             selectedProgramCorrectiveActions:{type: Object},
-            progProintsCardFormButtons:{type: Object, value: progCorrectiveActionButtons},
-            
+            progProintsCardFormButtons:{type: Object, value: progCorrectiveActionButtons},            
             selectedObject:{type: Object, notify:true},            
-
             programCorrectiveActionTableHeaderFields: {type: Array, value: progCorrectiveActionTableHeaderFields},
             callBackRefreshWindow: Object,
+            selectedLanguage: String,
+            tableTitle:{type: Object, value:{label_en:'Pending Corrective Actions', label_es:'Acciones Correctivas Pendientes'}},
         }
     }
 
@@ -90,10 +90,17 @@ class EmDemoAProgCorrectiveActions extends EmDemoAapiEnvMonit(FrontendEnvMonit(c
                     border-radius: 5px;
                     background-color: #fff;
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-                }                             
+                }   
+                p.tableTitle{
+                    margin-top: 0px;
+                    margin-bottom: 3px;    
+                    color: #4285f4;
+                    font-size:30px;
+                }        
             </style>
             <env-monit-elements id="myElements" call-back-function-env-monit-elem="{{callBackRefreshWindow}}"></env-monit-elements>
             <div name="Buttons1" class="buttonGroup">
+                <p class="tableTitle">{{labelValue(selectedLanguage, tableTitle)}}</p>
                 <template is="dom-repeat" items="{{progProintsCardFormButtons}}" as="currentfield">       
                     <field-controller id="{{currentfield.name}}"  field="{{currentfield}}"
                     on-field-button-clicked="fieldButtonClicked" on-field-list-value-changed="onListChange"> 
@@ -141,6 +148,7 @@ class EmDemoAProgCorrectiveActions extends EmDemoAapiEnvMonit(FrontendEnvMonit(c
           });                     
     }     
     stateChanged(state) {
+        this.selectedLanguage = state.app.user.appLanguage; 
         this.finalToken = state.app.user.finalToken; 
         if (state.emDemoA!=null){
             this.selectedProgramCorrectiveActions = state.emDemoA.selectedProgramCorrectiveActions;

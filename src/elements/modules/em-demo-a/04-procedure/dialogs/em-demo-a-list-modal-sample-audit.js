@@ -44,10 +44,10 @@ class emDemoAListModalSampleAudit extends (EmDemoAapiEnvMonit(FrontendEnvMonitSa
                         </field-controller>
                     </template>  
             </div>            
-
         <div>
-       
-            <vaadin-grid id="mygridid" items="{{listRows}}" on-active-item-changed="itemSelected">  
+<!-- theme="column-borders" -->
+            <vaadin-grid id="mygridid" items="{{listRows}}" on-active-item-changed="itemSelected" 
+            column-reordering-allowed multi-sort selected-object="{{selectedObject}}">  
                 <vaadin-grid-selection-column  auto-select></vaadin-grid-selection-column>
                 <template name="auditLvl2" class="row-details">
                     <div class="details">
@@ -74,10 +74,10 @@ class emDemoAListModalSampleAudit extends (EmDemoAapiEnvMonit(FrontendEnvMonitSa
         `;
     } 
     itemSelectedOld(e) {       
-        this.selectedObject=e.detail.value; 
-        this.$.mygridid.selectedObject=this.selectedObject;
-        if (this.selectedObject==null){return;}
-        console.log('vaadingrid-singleselect >> itemSelected', this.selectedObject);
+        // this.selectedObject=e.detail.value; 
+        // this.$.mygridid.selectedObject=this.selectedObject;
+        // if (this.selectedObject==null){return;}
+        // console.log('vaadingrid-singleselect >> itemSelected', this.selectedObject);
         //if (e.detail.value==null){this.selectedSample=null; return;}
         const item = e.detail.value;
         this.$.mygridid.selectedItems = item ? [item] : [];
@@ -85,14 +85,15 @@ class emDemoAListModalSampleAudit extends (EmDemoAapiEnvMonit(FrontendEnvMonitSa
         this.$.mygridid.selectedObject=item;
     } 
     itemSelected(e) {        
-        if (e.detail.value==null){this.selectedSample=null; return;}
-        if (this.selectedSample==e.detail.value.sample_id){this.selectedSample=null; return;}
+        //if (e.detail.value==null){this.selectedSample=null; return;}
+        //if (this.selectedSample==e.detail.value.sample_id){this.selectedSample=null; return;}
         //this.selectedObject=e.detail.value.sample_id;
-        //console.log('Object selected', this.selectedObject); 
         const item = e.detail.value;
-        this.$.mygridid.selectedItems = item ? [item] : [];
-        this.selectedObject=e.detail.value;
-    }              
+        this.selectedObject=item;
+        console.log(' em-demo-a-list-modal-sample-audit >> itemSelected', this.selectedObject); 
+        //this.$.mygridid.selectedItems = item ? [item] : [];
+        this.$.mygridid.selectedItems =[];
+    }       
     actionOnSel(){ 
         //console.log('actionOnSel');
     }   

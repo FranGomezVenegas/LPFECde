@@ -12,20 +12,22 @@ import {EmDemoAapiEnvMonit} from '../../01moduleFunctionality/api-env-monit.js';
 import '../../01moduleFunctionality/env-monit-elements.js';
 import {FrontendEnvMonit} from '../../01moduleFunctionality/frontend-env-monit.js';
 import {FrontendEnvMonitSample} from '../../01moduleFunctionality/frontend-env-monit-sample.js';
-import {schema_name, progProintsCardFormButtons, programProgPoints_samplePointsTableHeaderFields, shifts
+import {schema_name, progProintsFormButtons, progProintsCardFormButtons, programProgPoints_samplePointsTableHeaderFields, shifts
     } from '../../03config/config-process.js';
 //import {selectedProgram} from '../00jsonFake/selectedProgram.js';
 import {setSelectedSamplingPoint} from '../../02Redux/em-demo-a_actions.js';
+import {FieldsMethods} from '../../../../app/app-functions/fields-methods';
 
-class EmDemoAProgPoints extends FrontendEnvMonitSample(EmDemoAapiEnvMonit(FrontendEnvMonit(connect(store)(PolymerElement)))) {
+class EmDemoAProgPoints extends FieldsMethods(FrontendEnvMonitSample(EmDemoAapiEnvMonit(FrontendEnvMonit(connect(store)(PolymerElement))))) {
     static get properties() {
         return {
+            selectedLanguage: {type:String},
             schemaPrefix: {type:String, value:schema_name},
             selectedPointCardForm: {type: Object}, //, value:appLogin_formFields},
             selectedProgram:{type: Object, value:[]},
             selectedSamplingPoint:{type: Array},
             cardFormButtons:{type: Object, value: progProintsCardFormButtons},
-            
+            formButtons:{type: Object, value: progProintsFormButtons},
             systemShifts:{type: Object, value:shifts},
             productionLotsList:{type: Array, value:[{keyName:"rutina", keyValue_en:"routine", keyValue_es:"rutina"},]},
             
@@ -33,6 +35,7 @@ class EmDemoAProgPoints extends FrontendEnvMonitSample(EmDemoAapiEnvMonit(Fronte
             activeProductionLots:{type:Array, value:[]},
             samplePointsTableHeaderFields: {type: Array, value: programProgPoints_samplePointsTableHeaderFields},
             callBackRefreshWindow: Object,
+            tableTitle:{type: Object, value:{label_en:'Defined program locations', label_es:'Tabla de ubicaciones definidas para el programa'}},
         }
     }
 
@@ -98,11 +101,20 @@ class EmDemoAProgPoints extends FrontendEnvMonitSample(EmDemoAapiEnvMonit(Fronte
                     border-radius: 5px;
                     background-color: #fff;
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-                }                             
+                }        
+                p.tableTitle{
+                    margin-top: 0px;
+                    margin-bottom: 3px;
+                    color: #4285f4;
+                    font-size:30px;
+                }            
             </style>
             <env-monit-elements id="myElements" call-back-function-env-monit-elem="{{callBackRefreshWindow}}"></env-monit-elements>
+            <div>
+                <p class="tableTitle">{{labelValue(selectedLanguage, tableTitle)}} {{selectedProgram.name}}</p>
+            </div>
             <div name="Buttons1" class="buttonGroup">
-                <template is="dom-repeat" items="{{cardFormButtons}}" as="currentfield">       
+                <template is="dom-repeat" items="{{formButtons}}" as="currentfield">       
                     <field-controller id="{{currentfield.name}}"  field="{{currentfield}}"
                     on-field-button-clicked="pointClicked" on-field-list-value-changed="onListChange"> 
                     </field-controller>
@@ -177,6 +189,7 @@ class EmDemoAProgPoints extends FrontendEnvMonitSample(EmDemoAapiEnvMonit(Fronte
     }
 
     stateChanged(state) {
+        this.selectedLanguage = state.app.user.appLanguage; 
         this.finalToken = state.app.user.finalToken; 
         if (state.emDemoA!=null){
             this.selectedSamplingPoint = state.emDemoA.selectedSamplingPoint;

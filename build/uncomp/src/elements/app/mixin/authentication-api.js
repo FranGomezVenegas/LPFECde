@@ -1,5 +1,6 @@
 import{backendUrl,appAuthenticateApiUrl}from"../../../config/api-config.js";import{store}from"../../../store.js";import{ApiMessage}from"../app-functions/apiMessage.js";//import { addNotification  } from '../../../app/Redux/actions/notifications_actions';
 //import { foo } from '../redux/actions';
+//import {startLoading} from '../Redux/actions/app_actions';
 /**
  * @mixinFunction
  * @polymer
@@ -16,7 +17,7 @@ this.dispatchEvent(new CustomEvent("toast-error",{bubbles:!0,composed:!0,detail:
 axios.get(apiUrl,{params:{actionName:data.actionName,myToken:data.myToken}}).then(response=>{if(200==response.status){//            console.log(response);
 this.userRoles=response.data;this.fillUserRoleList();if(data.callBackFunction){data.callBackFunction()}return}if(data.callBackFunctionError){data.callBackFunctionError()}this.dispatchEvent(new CustomEvent("toasterror",{bubbles:!0,composed:!0,detail:"Error on authentication although the connectivity with the API ended with success! Status: "+response.status}))}).catch(function(error){if(data.callBackFunctionError){data.callBackFunctionError()}this.dispatchEvent(new CustomEvent("toasterror",{bubbles:!0,composed:!0,detail:"Error on getting user roles"}))}).then(function(){//        console.log('always executed')
 })}ajaxFinalToken(data){var apiUrl=backendUrl+appAuthenticateApiUrl;//    console.log('authentication-api.ajaxUserRoles', data);
-axios.get(apiUrl,{params:{actionName:data.actionName,myToken:data.partialToken,userRole:data.userRole}}).then(response=>{if(200==response.status){//            console.log(response);
+axios.get(apiUrl,{params:{actionName:data.actionName,myToken:data.partialToken,userRole:data.userRole}}).then(response=>{if(200==response.status){//console.log('authentication-api >> ajaxFinalToken', 'response.data', response.data);
 this.finalToken=response.data.finalToken;this.appSessionId=response.data.appSessionId;this.appSessionStartDate=response.data.appSessionStartDate;this.userTabsOnLogin=response.data.userTabsOnLogin;//console.log('this.userTabsOnLogin', this.userTabsOnLogin);
 this.initAppSession();if(data.callBackFunction){data.callBackFunction()}return}if(data.callBackFunctionError){data.callBackFunctionError()}this.dispatchEvent(new CustomEvent("toasterror",{bubbles:!0,composed:!0,detail:"Error on authentication although the connectivity with the API ended with success! Status: "+response.status}))}).catch(function(error){if(data.callBackFunctionError){data.callBackFunctionError()}this.dispatchEvent(new CustomEvent("toasterror",{bubbles:!0,composed:!0,detail:"Error on getting Token, Cannot proceed!"}))}).then(function(){//      console.log('always executed')
 })}ajaxTokenValidateEsignPhrase(data){var apiUrl=backendUrl+appAuthenticateApiUrl;//console.log('authentication-api.ajaxUserRoles', data);

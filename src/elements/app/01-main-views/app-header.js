@@ -1,7 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import { connect } from 'pwa-helpers/connect-mixin';
 import { store } from '../../../store';
-import { doLogout } from '../Redux/actions/app_actions';
+import { doLogout, stopLoading } from '../Redux/actions/app_actions';
 import { doLogoutNotification } from '../Redux/actions/notifications_actions';
 import { doLogoutTab } from '../Redux/actions/tabs_actions';
 import {appHeader_fieldsLeft, appHeader_fieldsCenter, appHeader_fieldsRight, appHeader_personFieldsName, appHeader_ribbonField, appLogOut_logOutMessage
@@ -77,7 +77,21 @@ class appHeader extends UserSession(connect(store)(PolymerElement)) {
         `;
     }
     AppHeaderRightClicked(e){
-        if (e.detail.avatarName="user_avatar"){
+//console.log('AppHeaderRightClicked');
+        if (e.detail.avatarName=="procedure-management"){
+            var userProfileTab={
+                lp_frontend_page_name: '../../modules/procedures/04-procedure/procedure-management.js',        
+                tabName: 'procedure-management',
+                tabLabel_en: 'Procedure Management',
+                tabLabel_es: 'Gestión de Proceso',
+                procedure:'procedure',
+                tabEsignRequired: false, tabConfirmUserRequired: true
+              }
+            store.dispatch(addSystemTab(userProfileTab));    
+            store.dispatch(setCurrentTab(userProfileTab)); 
+            return;                     
+        }
+        if (e.detail.avatarName=="user_avatar"){
             var userProfileTab={
                 lp_frontend_page_name: 'user-profile/user-profile.js',        
                 tabName: 'user-profile',
@@ -87,7 +101,21 @@ class appHeader extends UserSession(connect(store)(PolymerElement)) {
                 tabEsignRequired: false, tabConfirmUserRequired: true
               }
             store.dispatch(addSystemTab(userProfileTab));    
-            store.dispatch(setCurrentTab(userProfileTab));                      
+            store.dispatch(setCurrentTab(userProfileTab)); 
+            return;                     
+        }
+        if (e.detail.avatarName=="incidents"){
+            var incidentTab={
+                lp_frontend_page_name: 'incidents/new-incident.js',        
+                tabName: 'new-incident',
+                tabLabel_en: 'Incidents',
+                tabLabel_es: 'Incidencias',
+                procedure:'incident',
+                tabEsignRequired: false, tabConfirmUserRequired: false
+              }
+            store.dispatch(addSystemTab(incidentTab));    
+            store.dispatch(setCurrentTab(incidentTab)); 
+            return;                    
         }
     }
     doLogout() {
@@ -111,6 +139,7 @@ class appHeader extends UserSession(connect(store)(PolymerElement)) {
         var datas = [];
         datas.finalToken=this.finalToken; datas.actionName=actionName; datas.paramsUrl=paramsUrl;
         this.getAppHeader(datas);
+        store.dispatch(stopLoading());
     }
 
     fieldDynamicContent(){        

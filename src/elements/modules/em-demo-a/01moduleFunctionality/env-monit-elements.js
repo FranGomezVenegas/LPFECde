@@ -64,7 +64,7 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
             },
             incubatorsListFieldsToDisplay: {type: Object, value:sampleIncubation_incubBatch_incubatorsFieldToDisplay}, 
             selectedBatch:{type: Object},        
-            newBatchFormFields:{type: Array, value:sampleIncubation_incubBatch_newBatchFormFields},  
+            newBatchFormFields:{type: Array, value:sampleIncubation_incubBatch_newBatchFormFields},              
             validationNotCorrectMessage: {type: Object, value: appConfirmUserOrEsign_notCorrectMessage},
             selectedLanguage:{ type: String},              
         }
@@ -75,6 +75,12 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
         paper-dialog{
             top:100px; height:0px; width:0px;
         }
+        #toast {
+            --paper-toast-background-color: #0085ffe6;
+          }          
+          #toasterror {
+            --paper-toast-background-color: #a33;
+          }              
         </style>
         <esign-dialog></esign-dialog>
         <confirmuser-dialog></confirmuser-dialog>
@@ -122,24 +128,42 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
             on-dialog-button-clicked="dialogClosedBatchAssignIncubator"> </em-demo-a-list-modal-batchassignincubator>
         </paper-dialog>    
 
-        <paper-dialog id="prodLotBrowser">
-            <em-demo-a-list-modal-prodlotbrowser list-header="{{incubatorsListFieldsToDisplay}}" list-rows="{{activeIncubatorsList}}" dialog-elements="{{fieldsDialogAddComment}}" 
+        <paper-dialog id="prodLotBrowser" on-opened-changed="openedChangedListenerForprodLotBrowser">
+            <em-demo-a-list-modal-prodlotbrowser id="prodLotBrowser_modal" list-header="{{incubatorsListFieldsToDisplay}}" list-rows="{{activeIncubatorsList}}" dialog-elements="{{fieldsDialogAddComment}}" 
             on-dialog-button-clicked="dialogClosedProdLotBrowser" action-name="{{actionName}}"> </em-demo-a-list-modal-prodlotbrowser>
         </paper-dialog>    
-        <paper-dialog id="batchBrowser">
-            <em-demo-a-list-modal-prodlotbrowser adhoc-form-fields="{{newBatchFormFields}}" list-header="{{incubatorsListFieldsToDisplay}}" list-rows="{{activeIncubatorsList}}" 
+
+        <paper-dialog id="batchBrowser" on-opened-changed="openedChangedListenerForBatchBrowser">>
+            <em-demo-a-list-modal-prodlotbrowser id="batchBrowser_modal" adhoc-form-fields="{{newBatchFormFields}}" list-header="{{incubatorsListFieldsToDisplay}}" list-rows="{{activeIncubatorsList}}" 
             on-dialog-button-clicked="dialogClosedBatchBrowser" action-name="{{actionName}}"> </em-demo-a-list-modal-prodlotbrowser>
         </paper-dialog>   
         
         <paper-dialog id="incubatorAddTempReading">
             <em-demo-a-list-modal-prodlotbrowser list-header="{{incubatorsListFieldsToDisplay}}" list-rows="{{activeIncubatorsList}}" 
             on-dialog-button-clicked="dialogClosedIncubatorAddTempReading" action-name="{{actionName}}"> </em-demo-a-list-modal-prodlotbrowser>
-        </paper-dialog>   
-
-                
+        </paper-dialog>           
         `;
     }
-    
+    openedChangedListenerForprodLotBrowser(e){
+        //console.log('env-monit-elements > openedChangedListener', e.detail);
+        const modalwindow=this.shadowRoot.getElementById('prodLotBrowser_modal');
+        if (modalwindow){
+            if (modalwindow.resetValue){
+                modalwindow.resetValue();
+            }
+        }
+    }
+
+    openedChangedListenerForBatchBrowser(e){
+        //console.log('env-monit-elements > openedChangedListener', e.detail);
+        const modalwindowBatch=this.shadowRoot.getElementById('batchBrowser_modal');
+        if (modalwindowBatch){
+            if (modalwindowBatch.resetValue){
+                modalwindowBatch.resetValue();
+            }
+        }
+    }
+
     stateChanged(state) {        
         this.selectedLanguage = state.app.user.appLanguage;  
         this.finalToken = state.app.user.finalToken; 
@@ -161,6 +185,20 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
     }
 
     actionTrigger(buttonName, backEndData, buttonDefinition){
+        if ((!backEndData) || (!backEndData.selectedObject)){
+            var message=''; 
+            switch(this.selectedLanguage){
+                case 'es': message='Por favor selecciona un objeto primero'; break; //message=response.data.message_es; break;            
+                default: message='Please select one object first.'; break; //message=response.data.message_en; break;
+            }                    
+            this.dispatchEvent(new CustomEvent('toast-error', {
+                bubbles: true,
+                composed: true,
+                detail: message
+                }));        
+            return; 
+        }
+
         this.buttonName=buttonName;
         this.backEndData=backEndData;        
 //    console.log('env-monit-elements >> actionTrigger >> backEndData', backEndData, 'this.backEndData', this.backEndData, 'buttonDefinition', buttonDefinition);  
@@ -183,15 +221,6 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
         this.actionTriggerNext();
     }    
     actionTriggerAbort(){
-        var message=''; 
-        switch(this.selectedLanguage){
-            case 'es': message=this.validationNotCorrectMessage.message_es; break; //message=response.data.message_es; break;            
-            default: message=this.validationNotCorrectMessage.message_en; break; //message=response.data.message_en; break;
-        }     
-        this.dispatchEvent(new CustomEvent('toast-error', {
-            bubbles: true,        composed: true,
-            detail: message
-        }));   
         this.loading=false;  
     }
     actionTriggerNext(){
@@ -209,8 +238,21 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
         var actionName= buttonName.toUpperCase();
         this.actionName=actionName;
         console.log('env-monit-elements >> actionTriggerNext >> backEndData', backEndData, 'this.backEndData', this.backEndData, 'buttonName', buttonName);                    
-        switch (buttonName.toUpperCase()) {
-        case 'CORRECTIVE_ACTION_COMPLETE':            
+        switch (buttonName.toUpperCase()) {            
+        case 'CORRECTIVE_ACTION_COMPLETE': 
+            if (this.backEndData.selectedObject==null){      
+                var message=''; 
+                switch(this.selectedLanguage){
+                    case 'es': message='Por favor selecciona un objeto primero'; break; //message=response.data.message_es; break;            
+                    default: message='Please select one object first.'; break; //message=response.data.message_en; break;
+                }                    
+                this.dispatchEvent(new CustomEvent('toast-error', {
+                    bubbles: true,
+                    composed: true,
+                    detail: message
+                    }));        
+                return;
+            }
             this.backEndData=backEndData;
             this.programActionTriggerAPI(this.schemaPrefix, this.finalToken, buttonName, datas, datas.tabInfo, datas.callBackFunction);
             break;  
@@ -227,12 +269,17 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
         //     this.getAnalysisList(datas);
         //     this.$.addSampleAnalysis.open();
         //     break; 
-        case 'INCUBATORSLIST':
+        case 'INCUBATORSLIST':        
             if (!this.selectedIncubator){
-                dispatchEvent(new CustomEvent('toast-error', {
+                var message=''; 
+                switch(this.selectedLanguage){
+                    case 'es': message='Por favor selecciona una tanda primero'; break; //message=response.data.message_es; break;            
+                    default: message='Please select one batch first.'; break; //message=response.data.message_en; break;
+                }                    
+                this.dispatchEvent(new CustomEvent('toast-error', {
                     bubbles: true,
                     composed: true,
-                    detail: 'Please select one batch first.'
+                    detail: message
                 }));                  
                 return;
             }
@@ -241,7 +288,7 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
             this.$.incubatorsList.open();
             break; 
         case 'EM_BATCH_INCUB_CREATE':
-            console.log('EM_BATCH_INCUB_CREATE clicked');
+            //console.log('EM_BATCH_INCUB_CREATE clicked');
             import('../04-procedure/dialogs/em-demo-a-list-modal-prodlotbrowser.js');
             this.$.batchBrowser.open();                    
             break;
@@ -271,6 +318,19 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
             //console.log(actionName + "recognized in env-monit-elements >> actionTriggerNext but not implemented yet");
             break;
         case 'EM_DEACTIVATE_PRODUCTION_LOT':
+            if (!datas.selectedObject){
+                var message=''; 
+                switch(this.selectedLanguage){
+                    case 'es': message='Por favor selecciona una lote de producción primero'; break; //message=response.data.message_es; break;            
+                    default: message='Please select one production lot first.'; break; //message=response.data.message_en; break;
+                }                    
+                this.dispatchEvent(new CustomEvent('toast-error', {
+                    bubbles: true,
+                    composed: true,
+                    detail: message
+                }));                  
+                return;                
+            }
             var paramsUrl='actionName='+actionName+'&finalToken='+this.finalToken+'&schemaPrefix='+this.schemaPrefix
             +'&lotName='+datas.selectedObject.lot_name;
             datas.actionName=actionName; datas.paramsUrl=paramsUrl; datas.selectedProdLot=datas.selectedObject.lot_name;
@@ -361,7 +421,7 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
         return;
     }   
     dialogClosedIncubatorAddTempReading(e){
-        console.log("dialogClosedIncubatorAddTempReading triggered", e.detail, this.fieldsDialogSetSamplingDate);
+        //console.log("dialogClosedIncubatorAddTempReading triggered", e.detail, this.fieldsDialogSetSamplingDate);
         if (e.detail.dialogState=='confirmed'){
             var actionName=e.detail.actionName;
             var datas = [];          
@@ -372,7 +432,7 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
             datas.selectedProdLot=e.detail.value;
             datas.schemaPrefix=this.schemaPrefix; datas.actionName=e.detail.actionName;// datas.paramsUrl=paramsUrl;  
             if (this.callBackFunctionEnvMonitElem!=undefined){   
-                datas.callBackFunction=this.callBackFunctionEnvMonitElem.bind(this);  }
+                datas.callBackFunction=this.callBackFunctionEnvMonitElem.bind(this);  }                
             datas.temperature=e.detail.value;        
             datas.selectedIncubator=this.backEndData.selectedObject;
             this.incubationTriggerAPI(this.schemaPrefix, this.finalToken, actionName, datas, datas.tabInfo, datas.callBackFunction);
@@ -381,7 +441,14 @@ class EnvMonitElements extends EmDemoAapiEnvMonit(AuthenticationApi(FrontendEnvM
         }
         this.$.incubatorAddTempReading.close();
         return;
-    }          
+    }
+    // ready() {
+    //     super.ready();
+    //   }
+      ready(){
+        super.ready();
+        this.addEventListener('opened-changed', (e)=>{console.log('opened-changed', e.detail);})
+    }
 
 }
 customElements.define('env-monit-elements', EnvMonitElements);

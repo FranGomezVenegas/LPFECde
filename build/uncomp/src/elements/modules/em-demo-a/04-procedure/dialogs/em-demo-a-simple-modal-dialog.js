@@ -19,5 +19,5 @@ import{PolymerElement,html}from"../../../../../../node_modules/@polymer/polymer/
       
         `}keyPressed(e){//console.log('key pressed');
 if("Enter"==e.key){this.dialogConfirmed();return}}dialogConfirmed(){//console.log('clicked', this.value);
-this.value="confirmed";this.dispatchEvent(new CustomEvent("dialog-button-clicked",{bubbles:!0,composed:!0,detail:{buttonName:this.name,value:this.value,dialogState:"confirmed"}}))}dialogCanceled(){//console.log('clicked', this.value);
-this.value="confirmed";this.dispatchEvent(new CustomEvent("dialog-button-clicked",{bubbles:!0,composed:!0,detail:{buttonName:this.name,value:this.value,dialogState:"canceled"}}))}}customElements.define("em-demo-a-simple-modal-dialog",emDemoASimpleModalDialog);
+this.value="confirmed";this.dispatchEvent(new CustomEvent("dialog-button-clicked",{bubbles:!0,composed:!0,detail:{buttonName:this.name,value:this.value,dialogState:"confirmed"}}));this.resetValue()}dialogCanceled(){//console.log('clicked', this.value);
+this.value="confirmed";this.dispatchEvent(new CustomEvent("dialog-button-clicked",{bubbles:!0,composed:!0,detail:{buttonName:this.name,value:this.value,dialogState:"canceled"}}));this.resetValue()}resetValue(){if(!this.dialogElements[0]){return}const field=this.shadowRoot.getElementById(this.dialogElements[0].name);if(field){field.resetValue()}}}customElements.define("em-demo-a-simple-modal-dialog",emDemoASimpleModalDialog);

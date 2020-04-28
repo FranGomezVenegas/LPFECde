@@ -50,14 +50,14 @@ documentContainer.innerHTML = `
         }        
         div.appHeaderCenter {
           top: 0%;
-          left: 25%; 
-          width: 75%;
+          left: 15%; 
+          width: 50%;
           height: 100%;    
           position:relative;
         }
         div.appHeaderRight {
           top: 0%;
-          left: 75%; 
+          left: 65%; 
           width: 100%;
           height: 100%; 
           display: flex; 

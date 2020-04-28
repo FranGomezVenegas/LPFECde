@@ -40,7 +40,15 @@ class FrontendIncidentsElements extends ApiIncidents(AuthenticationApi(connect(s
             cocSampleHistoryFieldToDisplay: String,            
             currTabConfirmUserRequired: Boolean, 
             currTabEsignRequired: Boolean,
-            confirmIncidentFormFields:{type: Array, notify: true, bubble: true, value: [
+            confirmIncidentFormFieldsForId:{type: Array, notify: true, bubble: true, value: [
+                {
+                    "name": "incident_id",
+                    "label_en": "Incident Id", "label_es": "Id de Incidencia",
+                    "type": "text",
+                    "password": "false",
+                    "read_only": false,
+                    "value": ''
+                },
                 {
                     "name": "Comment",
                     "label_en": "Add Comment", "label_es": "Añade comentario",
@@ -49,8 +57,19 @@ class FrontendIncidentsElements extends ApiIncidents(AuthenticationApi(connect(s
                     "read_only": false,
                     "value": ''
                 }
-            ]
-            },
+
+            ]},
+            confirmIncidentFormFieldsForNote:{type: Array, notify: true, bubble: true, value: [
+                {
+                    "name": "Comment",
+                    "label_en": "Add Comment", "label_es": "Añade comentario",
+                    "type": "text-area",
+                    "password": "false",
+                    "read_only": false,
+                    "value": ''
+                }
+            ]},
+            
             selectedIncident:{type: Object},        
             incidentDialogFormFields:{type: Array},//, value:sampleIncubation_incubBatch_newBatchFormFields},    
             validationNotCorrectMessage: {type: Object, value: appConfirmUserOrEsign_notCorrectMessage},
@@ -117,15 +136,6 @@ class FrontendIncidentsElements extends ApiIncidents(AuthenticationApi(connect(s
         this.actionTriggerNext();
     }    
     actionTriggerAbort(){
-        var message=''; 
-        switch(this.selectedLanguage){
-            case 'es': message=this.validationNotCorrectMessage.message_es; break; //message=response.data.message_es; break;            
-            default: message=this.validationNotCorrectMessage.message_en; break; //message=response.data.message_en; break;
-        }     
-        this.dispatchEvent(new CustomEvent('toast-error', {
-            bubbles: true,        composed: true,
-            detail: message
-        }));    
         this.loading=false;  
     }
     actionTriggerNext(){
@@ -134,15 +144,15 @@ class FrontendIncidentsElements extends ApiIncidents(AuthenticationApi(connect(s
         var datas = [];
         datas.finalToken=this.finalToken;
         if (this.backEndData.selectedObject!=null){
-            if (this.backEndData.selectedObject.program_name!=null){
-                datas.program_name=this.backEndData.selectedObject.program_name;}
-            datas.id=this.backEndData.selectedObject.id
-            datas.selectedObject=this.backEndData.selectedObject;
+            //if (this.backEndData.selectedObject.program_name!=null){
+                //datas.program_name=this.backEndData.selectedObject.program_name;}
+            datas.id=this.backEndData.id;
+            datas.selectedObject=this.backEndData;
         }
         var actionName= buttonName.toUpperCase();
         this.actionName=actionName;
         datas.actionName=buttonName.toUpperCase();
-        console.log('frontend-incidents-elements >> actionTriggerNext >> backEndData', backEndData, 'this.backEndData', this.backEndData, 'buttonName', buttonName);                    
+//        console.log('frontend-incidents-elements >> actionTriggerNext >> backEndData', backEndData, 'this.backEndData', this.backEndData, 'buttonName', buttonName);                    
         switch (buttonName.toUpperCase()) {
         case 'CORRECTIVE_ACTION_COMPLETE':            
             this.backEndData=backEndData;
@@ -161,9 +171,14 @@ class FrontendIncidentsElements extends ApiIncidents(AuthenticationApi(connect(s
         case 'CONFIRM_INCIDENT':
         case 'ADD_NOTE_INCIDENT':
         case 'CLOSE_INCIDENT':
+//            console.log(buttonName.toUpperCase()+' clicked');
+            this.incidentDialogFormFields=this.confirmIncidentFormFieldsForNote;
+            import('../../internalComponents/dialogs/simple-modal-dialog.js');
+            this.$.incidentActionBrowser.open();                    
+            break;
         case 'REOPEN_INCIDENT':            
-            console.log(buttonName.toUpperCase()+' clicked');
-            this.incidentDialogFormFields=this.confirmIncidentFormFields;
+//            console.log(buttonName.toUpperCase()+' clicked');
+            this.incidentDialogFormFields=this.confirmIncidentFormFieldsForId;
             import('../../internalComponents/dialogs/simple-modal-dialog.js');
             this.$.incidentActionBrowser.open();                    
             break;
@@ -174,17 +189,24 @@ class FrontendIncidentsElements extends ApiIncidents(AuthenticationApi(connect(s
         return;            
     }    
     dialogClosedincidentActionBrowser(e){
-        console.log("dialogClosedincidentActionBrowser triggered", e.detail, e.detail.value);
+//        console.log("dialogClosedincidentActionBrowser triggered", e.detail, e.detail.value);
         if (e.detail.dialogState=='confirmed'){
             var datas = [];
             datas.paramUrl='';
             datas.paramsUrl="actionName="+e.target.actionName;
             datas.paramsUrl=datas.paramsUrl+"&finalToken="+this.finalToken;
-            datas.paramsUrl=datas.paramsUrl+"&incidentId="+this.selectedIncident.id;
-            datas.paramsUrl=datas.paramsUrl+"&note="+this.incidentDialogFormFields[0].value;    
-            if (this.refreshWindow!=undefined){
-                datas.callBackFunction=this.refreshWindow.bind(this);}
-            if (this.callBackFunctionIncidentElem!=undefined){                
+            if (e.target.actionName.toUpperCase()=='REOPEN_INCIDENT'){
+                datas.paramsUrl=datas.paramsUrl+"&incidentId="+this.incidentDialogFormFields[0].value;
+                datas.paramsUrl=datas.paramsUrl+"&note="+this.incidentDialogFormFields[1].value; 
+            }else{
+                datas.paramsUrl=datas.paramsUrl+"&incidentId="+this.selectedIncident.id;
+                datas.paramsUrl=datas.paramsUrl+"&note="+this.incidentDialogFormFields[0].value; 
+            }
+//console.log('dialogClosedincidentActionBrowser', 'before binding functions');  
+            if (this.callBackRefreshWindow!=undefined){
+                datas.callBackFunction=this.callBackRefreshWindow.bind(this);}
+            if (this.callBackFunctionIncidentElem!=undefined){  
+                            
                 datas.callBackFunction=this.callBackFunctionIncidentElem.bind(this);}            
             this.incidentsEndPoint(datas);      
         }

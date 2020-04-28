@@ -57,11 +57,11 @@ frontEndIncidentsAPI(data) {
 //            console.log('frontEndIncidentsAPI', apiUrl, data.paramsUrl, data.actionName, response.data);
             switch (data.actionName){
             case 'ALL_MY_SOPS':
-                store.dispatch(userAllSop(response.data));
+//                store.dispatch(userAllSop(response.data));
             case 'MY_PENDING_SOPS':
-                store.dispatch(userPendingSop(response.data));
+//                store.dispatch(userPendingSop(response.data));
             case 'PROCEDURE_SOPS':
-                store.dispatch(procedureSops(response.data));
+//                store.dispatch(procedureSops(response.data));
             default:
                 return;
             }                
@@ -127,9 +127,15 @@ getUserOpenIncidents(data) {
 }
 
 getSelectedUserIncidentDetail(data) {
+    console.log('getSelectedUserIncidentDetail', apiUrl, data);
     var apiUrl=backendUrl+frontEndIncidentsUrl+"?"+"actionName=INCIDENT_DETAIL_FOR_GIVEN_INCIDENT";
+    if (!data.incidentId){
+        var noIncident=[];
+        store.dispatch(selectedUserIncidentDetail(noIncident));
+        return;
+    }
     if (!data.finalToken){ return;}
-    //console.log('getSelectedUserIncidentDetail', apiUrl, data);
+    
     axios.get(apiUrl, {        
         params: {            
             'finalToken': data.finalToken, 'incidentId': data.incidentId}

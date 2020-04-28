@@ -12,14 +12,13 @@ sopUserEndPoint(data) {
     var apiUrl=backendUrl+ApiSopUserUrl+"?"+data.paramsUrl; 
     //console.log('process-us>api-sample>sopUserAPI', 'data', data);    
     
-    //console.log('process-us>api-sample>sopUserAPI', data.schemaPrefix, data.actionName, apiUrl, data.paramsUrl); 
-    
+    //console.log('process-us>api-sample>sopUserAPI', data.schemaPrefix, data.actionName, apiUrl, data.paramsUrl);     
     axios.get(apiUrl)        
     .then( response => {
         var notifObj = [];
         notifObj.notificationName=data.schemaPrefix+'.'+data.actionName;
-        notifObj.label_en=response.data.error_value_en;
-        notifObj.label_es=response.data.error_value_es;
+        notifObj.label_en=response.data.message_es;
+        notifObj.label_es=response.data.message_es;
         notifObj.diagnostic=response.data.diagnostic;
         //console.log('process-us>api-sample>sopUserAPI.addNotification', 'notifObj', notifObj);
         store.dispatch(addNotification(notifObj));
@@ -42,6 +41,7 @@ sopUserEndPoint(data) {
               }));                   
         }
         if(response.status == 200) {
+//console.log('sopUserEndPoint >> status 200 ... calling the callBackFunction if so...');
             if (data.callBackFunction){data.callBackFunction();}
             return;
         }

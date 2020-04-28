@@ -186,15 +186,6 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
         this.sampleActionTriggerNext();
     }    
     sampleActionTriggerAbort(){
-        var message=''; 
-        switch(this.selectedLanguage){
-            case 'es': message=this.validationNotCorrectMessage.message_es; break; //message=response.data.message_es; break;            
-            default: message=this.validationNotCorrectMessage.message_en; break; //message=response.data.message_en; break;
-        }     
-        this.dispatchEvent(new CustomEvent('toast-error', {
-            bubbles: true,        composed: true,
-            detail: message
-        }));   
         this.loading=false;  
     }
     sampleActionTriggerNext(){

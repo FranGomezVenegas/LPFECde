@@ -190,6 +190,7 @@ class PlatformLogin extends AuthenticationApi(connect(store)(PolymerElement)) {
       }
     }
     initAppSession() {
+      //console.log('app-login >> initAppSession', 'data', data, 'this.userRole', this.userRole);
       store.dispatch(doLogin(this.finalToken, this.userName, this.userInfoId, this.tabsOpenOnLogin));
       var data={
         sessionId: this.appSessionId,
@@ -197,7 +198,6 @@ class PlatformLogin extends AuthenticationApi(connect(store)(PolymerElement)) {
         startDate: this.appSessionStartDate,
         tabsOpenOnLogin: this.tabsOpenOnLogin    
       };
-      //console.log('app-login >> initAppSession', 'data', data, 'this.userRole', this.userRole);
       store.dispatch(addSession(data));         
     }
     fieldButtonClicked(e) {  

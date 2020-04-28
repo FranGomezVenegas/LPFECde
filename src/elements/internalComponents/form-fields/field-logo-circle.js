@@ -5,7 +5,7 @@ class FieldLogoCircle extends PolymerElement {
         return html`
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <style include="form-fields-style"></style>
-            <img class="formFieldLogoCircle" src="{{field.source}}" float="{{field.float}}" aligned="center" alt="LabPLANET" height="80" width="100"> 
+            <img class="formFieldLogoCircle" src="{{field.source}}" float="{{field.float}}" aligned="center" alt="LabPLANET" height="40" width="50"> 
         `;
     }
 }

@@ -37,6 +37,7 @@ getProcedureList(data) {
             //this.procedureList=response.data;
             store.dispatch(setAppProcedureList(response.data));
             if (data.callBackFunction){data.callBackFunction();}
+            if (data.callBackFunction2){data.callBackFunction2();}
             return;
         }
         if (data.callBackFunctionError){data.callBackFunctionError();}

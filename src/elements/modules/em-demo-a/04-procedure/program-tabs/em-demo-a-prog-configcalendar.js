@@ -1,14 +1,15 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import { connect } from 'pwa-helpers/connect-mixin';
 import { store } from '../../../../../store.js';
+import {FieldsMethods} from '../../../../app/app-functions/fields-methods';
 
 import '@mpachnis/mp-calendar/mp-calendar.js';
 import {programProgConfigCalendar_progConfigCalendarTableHeaderFields } from '../../03config/config-process.js';
-class EmDemoAProgConfigcalendar extends connect(store)(PolymerElement) {
+class EmDemoAProgConfigcalendar extends FieldsMethods(connect(store)(PolymerElement)) {
     stateChanged(state) {
         this.selectedLanguage = state.app.user.appLanguage; 
         if (state.emDemoA.selectedProgram!=null){
-            //this.selectedProgram=state.emDemoA.selectedProgram;
+            this.selectedProgram=state.emDemoA.selectedProgram;
             //console.log('state.emDemoA.selectedProgram.config_scheduled_calendar',state.emDemoA.selectedProgram.config_scheduled_calendar);
             this.events=state.emDemoA.selectedProgram.config_scheduled_calendar;
         }
@@ -23,17 +24,30 @@ class EmDemoAProgConfigcalendar extends connect(store)(PolymerElement) {
                 [{"title":"E01","content":"Muestreo ...","date":"2020-02-20","category":"blue", "color": "#000"},]},
             progConfigCalendarTableHeaderFields:{type: Object, value:programProgConfigCalendar_progConfigCalendarTableHeaderFields},
             weekDaysDisabled: {type: Object, value:["Sunday", "Saturday"]},
+            tableTitle:{type: Object, value:{label_en:'Scheduled program locations', label_es:'Tabla de ubicaciones programadas para el programa'}},
+            selectedProgram: {type: Object},
         }
     }
     static get template() {
         return html`
+        <style>
+            p.tableTitle{
+                margin-top: 0px;
+                margin-bottom: 3px;
+                color: #4285f4;
+                font-size:30px;
+            }        
+        </style>    
         <mp-calendar id="Jan" show-days-in-month="42" first-day-of-week="[[startDayNumber]]" day-labels="[[daysLabels]]" month-labels="[[monthsLabels]]" 
             disable-prev-days="true" disable-next-days="true" theme="light-blue" disabled-days="[[weekDaysDisabled]]" events-object="[[events]]"></mp-calendar> 
-
+        <div>
+            <p class="tableTitle">{{labelValue(selectedLanguage, tableTitle)}} {{selectedProgram.name}}</p>
+        </div>
+        <div>
         <vaadingrid-singleselect style="width:750px;" id="mygridid" headerfields="{{progConfigCalendarTableHeaderFields}}" 
             rowcontainer="{{events}}" selected-object="{{selectedObject}}"
             on-selected-object-changed="pointClicked"></vaadingrid-singleselect>
-         
+        </div>
         `;
     }
     pointClicked(){

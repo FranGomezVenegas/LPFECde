@@ -1,6 +1,6 @@
 import{PolymerElement,html}from"../../../../../../node_modules/@polymer/polymer/polymer-element.js";import{connect}from"../../../../../../node_modules/pwa-helpers/connect-mixin.js";import{store}from"../../../../../store.js";import"../../../../internalComponents/cards/card-form.js";import"../../../../../../node_modules/@polymer/paper-dialog/paper-dialog.js";import"../../../../internalComponents/grid-components/vaadingrid-singleselect.js";import"../../01moduleFunctionality/env-monit-elements.js";import{EmDemoAapiEnvMonit}from"../../01moduleFunctionality/api-env-monit.js";import{FrontendEnvMonit}from"../../01moduleFunctionality/frontend-env-monit.js";import{schema_name,progCorrectiveActionButtons,progCorrectiveActionTableHeaderFields}from"../../03config/config-process.js";//import {setselectedProgramCorrectiveActions} from '../../02Redux/em-demo-a_actions.js';
-class EmDemoAProgCorrectiveActions extends EmDemoAapiEnvMonit(FrontendEnvMonit(connect(store)(PolymerElement))){static get properties(){return{schemaPrefix:{type:String,value:schema_name},selectedPointCardForm:{type:Object},//, value:appLogin_formFields},
-selectedProgram:{type:Object,observer:"onFinalTokenFilled"},selectedProgramCorrectiveActions:{type:Object},progProintsCardFormButtons:{type:Object,value:progCorrectiveActionButtons},selectedObject:{type:Object,notify:!0},programCorrectiveActionTableHeaderFields:{type:Array,value:progCorrectiveActionTableHeaderFields},callBackRefreshWindow:Object}}static get template(){return html`
+import{FieldsMethods}from"../../../../app/app-functions/fields-methods.js";class EmDemoAProgCorrectiveActions extends FieldsMethods(EmDemoAapiEnvMonit(FrontendEnvMonit(connect(store)(PolymerElement)))){static get properties(){return{schemaPrefix:{type:String,value:schema_name},selectedPointCardForm:{type:Object},//, value:appLogin_formFields},
+selectedProgram:{type:Object,observer:"onFinalTokenFilled"},selectedProgramCorrectiveActions:{type:Object},progProintsCardFormButtons:{type:Object,value:progCorrectiveActionButtons},selectedObject:{type:Object,notify:!0},programCorrectiveActionTableHeaderFields:{type:Array,value:progCorrectiveActionTableHeaderFields},callBackRefreshWindow:Object,selectedLanguage:String,tableTitle:{type:Object,value:{label_en:"Pending Corrective Actions",label_es:"Acciones Correctivas Pendientes"}}}}static get template(){return html`
             <style>
             vaadin-button {
                 top: 0;
@@ -61,10 +61,17 @@ selectedProgram:{type:Object,observer:"onFinalTokenFilled"},selectedProgramCorre
                     border-radius: 5px;
                     background-color: #fff;
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-                }                             
+                }   
+                p.tableTitle{
+                    margin-top: 0px;
+                    margin-bottom: 3px;    
+                    color: #4285f4;
+                    font-size:30px;
+                }        
             </style>
             <env-monit-elements id="myElements" call-back-function-env-monit-elem="{{callBackRefreshWindow}}"></env-monit-elements>
             <div name="Buttons1" class="buttonGroup">
+                <p class="tableTitle">{{labelValue(selectedLanguage, tableTitle)}}</p>
                 <template is="dom-repeat" items="{{progProintsCardFormButtons}}" as="currentfield">       
                     <field-controller id="{{currentfield.name}}"  field="{{currentfield}}"
                     on-field-button-clicked="fieldButtonClicked" on-field-list-value-changed="onListChange"> 
@@ -91,5 +98,5 @@ selectedProgram:{type:Object,observer:"onFinalTokenFilled"},selectedProgramCorre
         store.dispatch(setselectedProgramCorrectiveActions(e.detail.value.card_info));
         this.$.pointCard.open();
     }*/refreshWindow(){this.onFinalTokenFilled()}onFinalTokenFilled(){this.callBackRefreshWindow=this.refreshWindow.bind(this);//console.log('em-demo-a-programs', 'onFinalTokenFilled');
-if(null==this.selectedProgram.name)return;this.getSelectedProgramCorrectiveAction({finalToken:this.finalToken,schemaPrefix:this.schemaPrefix,programName:this.selectedProgram.name})}stateChanged(state){this.finalToken=state.app.user.finalToken;if(null!=state.emDemoA){this.selectedProgramCorrectiveActions=state.emDemoA.selectedProgramCorrectiveActions;this.selectedProgram=state.emDemoA.selectedProgram;//this.unReceivedSamples= state.processUs.unReceivedSamples;
+if(null==this.selectedProgram.name)return;this.getSelectedProgramCorrectiveAction({finalToken:this.finalToken,schemaPrefix:this.schemaPrefix,programName:this.selectedProgram.name})}stateChanged(state){this.selectedLanguage=state.app.user.appLanguage;this.finalToken=state.app.user.finalToken;if(null!=state.emDemoA){this.selectedProgramCorrectiveActions=state.emDemoA.selectedProgramCorrectiveActions;this.selectedProgram=state.emDemoA.selectedProgram;//this.unReceivedSamples= state.processUs.unReceivedSamples;
 }this.schemaPrefix=schema_name}}customElements.define("em-demo-a-prog-corrective-actions",EmDemoAProgCorrectiveActions);

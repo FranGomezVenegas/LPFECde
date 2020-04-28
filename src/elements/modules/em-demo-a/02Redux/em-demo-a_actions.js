@@ -25,6 +25,10 @@ export const ALL_SAMPLES_STAGE_INCUBATION2 = 'ALL_SAMPLES_STAGE_INCUBATION2'+sch
 export const ALL_SAMPLES_STAGE_PLATEREADING = 'ALL_SAMPLES_STAGE_PLATEREADING'+schemaName;
 export const ALL_SAMPLES_STAGE_MICROORGANISM = 'ALL_SAMPLES_STAGE_MICROORGANISM'+schemaName;
 
+export const ALL_PERSON_SAMPLES_STAGE_SAMPLING = 'ALL_PERSON_SAMPLES_STAGE_SAMPLING'+schemaName;
+export const ALL_PERSON_SAMPLES_STAGE_PLATEREADING = 'ALL_PERSON_SAMPLES_STAGE_PLATEREADING'+schemaName;
+export const ALL_PERSON_SAMPLES_STAGE_MICROORGANISM = 'ALL_PERSON_SAMPLES_STAGE_MICROORGANISM'+schemaName;
+
 export const MICROORGANISM_LIST = 'MICROORGANISM_LIST'+schemaName;
 export const GET_SAMPLE_AUDIT = 'GET_SAMPLE_AUDIT'+schemaName;
 
@@ -69,14 +73,14 @@ export function setSelectedIncubator(data) {
   }
 }
 export function getActiveBatches(data) {
-  //console.log('em-demo-a_actions.getAllIncubators', data);
+  //console.log('em-demo-a_actions.getActiveBatches', data);
   return {
     type: GET_ACTIVE_BATCHES,
     DATA: data
   }
 }
 export function setSelectedBatch(data) {
-  //console.log('em-demo-a_actions.setSelectedProgram', data);
+  //console.log('em-demo-a_actions.setSelectedBatch', data);
   return {
     type: SET_SELECTED_BATCH,
     DATA: data
@@ -84,7 +88,7 @@ export function setSelectedBatch(data) {
 }
 
 export function selectedProgramCorrectiveActionList(data) {
-  //console.log('em-demo-a_actions.setSelectedProgram', data);
+  //console.log('em-demo-a_actions.selectedProgramCorrectiveActionList', data);
   return {
     type: SELECTED_PROGRAM_CORRECTIVE_ACTION_LIST,
     DATA: data
@@ -146,6 +150,27 @@ export function getAllSamplesStageMicroorganism(data) {
   //console.log('em-demo-a_actions.getAllProgramsUnreceivedSamples', data);
   return {
     type: ALL_SAMPLES_STAGE_MICROORGANISM,
+    DATA: data
+  }  
+} 
+export function getAllPersonSamplesStageSampling(data) {
+  //console.log('em-demo-a_actions.getAllProgramsUnreceivedSamples', data);
+  return {
+    type: ALL_PERSON_SAMPLES_STAGE_SAMPLING,
+    DATA: data
+  }  
+}
+export function getAllPersonSamplesStagePlateReading(data) {
+  //console.log('em-demo-a_actions.getAllProgramsUnreceivedSamples', data);
+  return {
+    type: ALL_PERSON_SAMPLES_STAGE_PLATEREADING,
+    DATA: data
+  }  
+}
+export function getAllPersonSamplesStageMicroorganism(data) {
+  //console.log('em-demo-a_actions.getAllProgramsUnreceivedSamples', data);
+  return {
+    type: ALL_PERSON_SAMPLES_STAGE_MICROORGANISM,
     DATA: data
   }  
 } 

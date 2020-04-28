@@ -17,6 +17,7 @@ class NotificationsPane extends FieldsMethods(connect(store)(PolymerElement)) {
             notifications: Number,
             paneTitle: { type: Object, value: notificationsPaneTitle},
             titleValue: String, titleIcon: String,
+            notificationPaneIsEmpty: {type: Boolean, value: true},
         }
     }
     stateChanged(state) {        
@@ -24,6 +25,7 @@ class NotificationsPane extends FieldsMethods(connect(store)(PolymerElement)) {
         if (state.notifications!=null){
             this.numNotifications = state.notifications.totalNotifications;
             this.notifications=state.notifications.notifications;
+            if (this.numNotifications>0){this.notificationPaneIsEmpty=false;}
         }
         this.getTextSOP();
     }   
@@ -81,11 +83,18 @@ class NotificationsPane extends FieldsMethods(connect(store)(PolymerElement)) {
                 <vaadin-button id="trigger" on-click="toggle" aria-expanded\$="[[opened]]" aria-controls="collapse">[[titleValue]]</vaadin-button>            
             </div>
             <iron-collapse id="NOTIFPANE" opened="{{opened}}" horizontal="[[horizontal]]" no-animation="[[noAnimation]]" tabindex="1">
+            
+            
+            <template is="dom-if" if="{{notificationPaneIsEmpty}}">
+                <p class$="{{textColor('LABPLANET_TRUE')}}">{{labelValue(language, paneTitle.empty)}}</p>
+            </template> 
+            <template is="dom-if" if="{{!notificationPaneIsEmpty}}">
                 <template is="dom-repeat" items="{{notifications}}" sort="_sortNotifications" as="currNotif">                      
                     <p class$="{{textColor(currNotif.1.diagnostic)}}"> {{currNotif.1.category}} : {{labelValue(language, currNotif.1)}} </p>
                 </template> 
+            </template>                 
             </iron-collapse>
         `;
-    }
+    }    
 }
 customElements.define('notifications-pane', NotificationsPane);

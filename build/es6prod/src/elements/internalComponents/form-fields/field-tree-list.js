@@ -60,12 +60,12 @@ class FieldTreeList extends(0,_fieldsMethods.FieldsMethods)((0,_connectMixin.con
                     </vaadin-button>           
                 </template>
                 <template is="dom-if" if="{{!sopsPassed(field.sops_passed)}}">                
-                    <vaadin-button class$="{{field.branch_level}} red" on-click="clicked">{{labelValue(selectedLanguage, field)}}
+                    <vaadin-button title="{{labelValue(selectedLanguage, title)}}" class$="{{field.branch_level}} red" on-click="clicked">{{labelValue(selectedLanguage, field)}}
                     </vaadin-button> 
-                    <vaadin-button class="red" on-click="openSopsSummary">
+<!--                    <vaadin-button class="red" on-click="openSopsSummary">
                         <iron-icon style="fill:red" icon="report-problem">
                             <span class="tooltiptext">Tooltip text</span>
-                        </iron-icon>
+                        </iron-icon> -->
                     </vaadin-button>    
                     <template is="dom-if" if="{{hasBadge(field.badge)}}">
                         <field-badge value="{{field.badge}}"></field-badge>

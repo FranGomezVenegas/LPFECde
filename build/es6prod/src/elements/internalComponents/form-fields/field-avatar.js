@@ -7,6 +7,6 @@ define(["../../../../node_modules/@polymer/polymer/polymer-element.js","../../..
               }
             </style>
             <!-- <vaadin-button on-click="clicked"  class="button" value="{{field.name}}"> -->
-              <img class="formFieldAvatar"  on-click="clicked" src="{{field.source}}" aligned="center"  height="80" width="80"> 
+              <img class="formFieldAvatar"  on-click="clicked" src="{{field.source}}" aligned="center"  height="50" width="50"> 
               <!-- </vaadin-button> -->
         `}clicked(){this.dispatchEvent(new CustomEvent("avatar-item-clicked",{bubbles:!0,composed:!0,detail:{avatarName:this.field.name,value:this.value,avatarDefinition:this.field}}))}}customElements.define("field-avatar",FieldAvatar)});

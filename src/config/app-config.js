@@ -2,13 +2,17 @@ export const default_language="es";
 
 export const isTabOpenable=true;
 
-export const sopPaneIconAndBadge_iconGreen='./images/spc_sops_green.png';
-export const sopPaneIconAndBadge_iconRed='./images/sop_red_animation.gif';
+export const sopPaneIconAndBadge_iconGreen='./images/SOP_OK.png';//spc_sops_green.png';
+export const sopPaneIconAndBadge_iconRed='./images/SOP_NOT_OK.png';//sop_red_animation.gif';
 
 export const sopUserAllSop_fieldToRetrieve='procedure|sop_id|brief_summary|sop_name|status|file_link';
 export const sopUserPendingSop_fieldToRetrieve='procedure|sop_id|brief_summary|sop_name|status|file_link';
 export const sopUserProcedureSop_fieldToRetrieve='procedure|sop_id|brief_summary|sop_name|sop_version|sop_revision|current_status|file_link';
 
+export const sopStatusLabel={
+  pass:{label_en:'Certified', label_es:'Certificado'},
+  not_pass:{label_en:'Not Certified', label_es:'No Certificado'}
+}
 export const sopMySops_buttons=[
 	{
 	  "name": "sopMarkAsCompleted",
@@ -19,6 +23,12 @@ export const sopMySops_buttons=[
 	  "read_only": false,
 	}
 ];
+export const sopMySops_cardContent={
+  display_pdf_link: true,
+  display_certification_status_icon: true,
+  sopFieldsToDisplay:['procedure', 'sop_name', 'brief_summary'],  
+};
+
 export const sopMyPendingSops_buttons=[
 	{
 	  "name": "sopMarkAsCompleted",
@@ -29,11 +39,23 @@ export const sopMyPendingSops_buttons=[
 	  "read_only": false,
 	}
 ];
+export const sopMyPendingSops_cardContent={
+  display_pdf_link: true,
+  display_certification_status_icon: true,
+  sopFieldsToDisplay:['procedure', 'sop_name', 'brief_summary'],  
+}
 
 export const appConfirmUserOrEsign_notCorrectMessage={
-    "message_en":"Validation fault. All attempts consumed.",
-    "message_es":"Validación fallada, Todos los intentos consumidos",
-}
+    "now":{
+    "message_en":"Validation not completed, action aborted",
+    "message_es":"Validación no completada, acción abortada",},
+    "dialog_cancelled":{
+      "message_en":"dialog canceled, action aborted",
+      "message_es":"Diálogo cancelado, acción abortada",},
+    "attempts_consumed":{
+        "message_en":"All attempts consumed, action aborted",
+        "message_es":"Todos los intentos consumidos, acción abortada",},
+    }
 export const appLogOut_logOutMessage={
   "closedSession":{
     "message_en":"Session closed",
@@ -41,6 +63,10 @@ export const appLogOut_logOutMessage={
   },
 }
 export const appLogin_authenticationMessage={
+  "connectedSuccess_singleRole":{
+    "message_en":"Valid user, Starting session ... please wait",
+    "message_es":"Usuario válido, iniciando sesión ... por favor espere",
+  },
   "connectedSuccess":{
     "message_en":"Valid user, please proceed selecting the role",
     "message_es":"Usuario válido, por favor escoja rol",
@@ -57,7 +83,7 @@ export const appLogin_formFields=[
       "label_en": "Welcome to the new Planet", "label_es": "Bienvenido al nuevo Planeta",
       "type": "title",
       "size": 'h2',
-      "style": "color: #0085ffe6;",
+      "style": "color: var(--paper-light-blue-50);",
       "read_only": true
     },             
     {
@@ -221,13 +247,33 @@ export const appHeader_fieldsCenter=[
 ];
 export const appHeader_fieldsRight=[
   {
+    "name": "procedure-management",
+    "source": "./images/procedures/procedure-management.png",
+    "aligned": "center",
+    "label_en": "Procedure", "label_es": "Proceso",
+    "type": "avatar",
+    "password": "False",
+    "value": "",
+    "read_only": true
+  } ,  
+  {
+    "name": "incidents",
+    "source": "./images/Incidents/technical-support-computer-icons-service-support.jpg",
+    "aligned": "center",
+    "label_en": "Incidents", "label_es": "Incidencias",
+    "type": "avatar",
+    "password": "False",
+    "value": "",
+    "read_only": true
+  } ,  
+  {
 	"name": "user_avatar",
 	"source": "./images/avatar/personNoFace.jpg",
 	"aligned": "center",
 	"label_en": "User", "label_es": "Usuario",
 	"type": "avatar",
 	"password": "False",
-	"value": "labplanet",
+	"value": "",
 	"read_only": true
   } 
 ];
@@ -408,7 +454,12 @@ export const notificationsPaneTitle={
     "label_en": "Notifications", "label_es": "Notificaciones",
     "icon_name": "vaadin:chevron-circle-down"
   },   
+  empty:
+  {
+    "label_en": "Empty tray", "label_es": "Bandeja vacía",
+  }
 };
+
 export const proceduresListPaneTitle={
   open:
   {

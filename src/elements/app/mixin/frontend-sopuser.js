@@ -1,4 +1,5 @@
 import {backendUrl, frontEndSopUrl} from '../../../config/api-config'
+import {sopUserPendingSop_fieldToRetrieve} from './../../../config/app-config';
 import {store} from '../../../store';
 import { addNotification  } from '../Redux/actions/notifications_actions';
 import{userAllSop, userPendingSop, procedureSops} from '../Redux/actions/sop_actions';
@@ -36,13 +37,26 @@ fieldButtonClickedForSops(e) {
             +"&schemaPrefix="+schemaPrefix
             +paramsUrl;
         datas.schemaPrefix=schemaPrefix; datas.actionName=actionName; datas.paramsUrl=paramsUrl;
-        //datas.callbackFunction=myCallbackFunctionTrigger.bind(this);
+        datas.callBackFunction=this.refreshAllAndMyPendingSops.bind(this);
         var tabInfo={
             currTabEsignRequired: this.currTabEsignRequired,
             currTabConfirmUserRequired: this.currTabConfirmUserRequired};
-        datas.tabInfo=tabInfo;               
+        datas.tabInfo=tabInfo;   
+
         this.sopUserEndPoint(datas);           
-}    
+} 
+refreshAllAndMyPendingSops(){
+    var actionName='MY_PENDING_SOPS';
+    var paramsUrl='actionName='+actionName+'&finalToken='+this.finalToken+'&sopFieldsToRetrieve='+sopUserPendingSop_fieldToRetrieve;
+    var datas = [];
+    datas.finalToken=this.finalToken; datas.actionName=actionName; datas.paramsUrl=paramsUrl;
+    this.frontEndSopUserAPI(datas);
+    var actionName='ALL_MY_SOPS';
+    var paramsUrl='actionName='+actionName+'&finalToken='+this.finalToken+'&sopFieldsToRetrieve='+sopUserPendingSop_fieldToRetrieve;
+    var datas = [];
+    datas.finalToken=this.finalToken; datas.actionName=actionName; datas.paramsUrl=paramsUrl;
+    this.frontEndSopUserAPI(datas);
+}  
 frontEndSopUserAPI(data) {
     var apiUrl=backendUrl+frontEndSopUrl+"?"+data.paramsUrl; 
     if (!data.finalToken){ return;}
@@ -55,10 +69,13 @@ frontEndSopUserAPI(data) {
             switch (data.actionName){
             case 'ALL_MY_SOPS':
                 store.dispatch(userAllSop(response.data));
+                break;
             case 'MY_PENDING_SOPS':
                 store.dispatch(userPendingSop(response.data));
+                break;
             case 'PROCEDURE_SOPS':
                 store.dispatch(procedureSops(response.data));
+                break;
             default:
                 return;
             }                

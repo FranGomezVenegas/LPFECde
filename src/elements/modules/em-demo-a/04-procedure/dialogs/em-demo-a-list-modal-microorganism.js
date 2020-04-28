@@ -10,17 +10,17 @@ import '../../../../internalComponents/form-fields/field-controller';
 import '../../../../internalComponents/dialogs/modalwindow-buttons.js';
 import {FrontendEnvMonitSample} from '../../01moduleFunctionality/frontend-env-monit-sample';
 import {EmDemoAapiEnvMonit} from '../../01moduleFunctionality/api-env-monit';
-import {schema_name, microorganism_allowAddNotOnTheList, microorganism_allowAddNotOnTheList_formFields} from '../../03config/config-process';
+import {schema_name, microorganism_allowAddNotOnTheList, microorganism_allowAddNotOnTheList_formFields, microorganismList_fieldsToDisplay} from '../../03config/config-process';
 
 class emDemoAListModalMicroorganism extends EmDemoAapiEnvMonit(FrontendEnvMonitSample(PolymerElement)) {
     static get properties() {
         return {
             listRows: {
-                type:Array
-                ,
-                value: [
-                {code: 'LOD', method_name: 'LOD Method', method_version: 1}]
+                type:Array, value: [{code: 'LOD', method_name: 'LOD Method', method_version: 1}]
             },
+            listHeader: {
+                type:Array, value: microorganismList_fieldsToDisplay
+            },            
             displayFreeText: {type:Boolean, value:microorganism_allowAddNotOnTheList},
             adhocFormFields: {type: Array, value: microorganism_allowAddNotOnTheList_formFields},
             schemaPrefix:{type:String, value:schema_name},
@@ -42,9 +42,10 @@ class emDemoAListModalMicroorganism extends EmDemoAapiEnvMonit(FrontendEnvMonitS
             
             <template is="dom-if" if="{{displayFreeText}}">
                 <template is="dom-repeat" items="{{adhocFormFields}}" as="currentfield">       
-                    <field-controller on-keydown="keyPressed" on-field-button-clicked="actionOnSel" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
+                    <field-controller on-keydown="keyPressedAdhoc" on-field-button-clicked="actionOnSel" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
                 </template>             
             </template>
+            
             <vaadin-grid id="mygridid" items="{{listRows}}">  
                 <vaadin-grid-selection-column  auto-select></vaadin-grid-selection-column>
                 <template is="dom-repeat" items="{{listHeader}}" as="fld">        
@@ -54,9 +55,27 @@ class emDemoAListModalMicroorganism extends EmDemoAapiEnvMonit(FrontendEnvMonitS
         </div>    
         `;
     } 
+    keyPressedAdhoc(e){
+        var buttonName = 'buttonNewAdhocMicroorganism';
+        if(e.key=="Enter") {
+            var elem=this.shadowRoot.getElementById(buttonName);
+            if (elem){
+                //console.log('keyPressedAdhoc', 'elem', this.adhocFormFields[1]);    
+                elem.focus();  
+                var i=0;
+                for (i = 0; i < this.adhocFormFields.length; i++) {               
+                    if (this.adhocFormFields[i].name==buttonName){
+                        var mye={ detail: {'buttonName': this.adhocFormFields[1].name,'value': this.adhocFormFields[1].value, 'buttonDefinition': this.adhocFormFields[1]}};    
+                        this.addAdhocMicroorganism(mye);
+                        return;
+                    }
+                }
+            }
+        }
+    }
 
     actionOnSel(e){
-        //console.log('actionOnSel');
+//        console.log('actionOnSel');
         if (e.detail.buttonName=="buttonNewMicroorganism"){this.addMicroorganism(e);}
         if (e.detail.buttonName=="buttonNewAdhocMicroorganism"){this.addAdhocMicroorganism(e);}
         //addAdhocMicroorganism
@@ -88,7 +107,16 @@ class emDemoAListModalMicroorganism extends EmDemoAapiEnvMonit(FrontendEnvMonitS
             'dialogState': 'canceled'
             }
         }));    
-    }     
+    }   
+    // openDialog(){
+    //     var fldName=this.adhocFormFields[0].name;
+    //     var elem=this.shadowRoot.getElementById(fldName);   
+    //     if (elem){elem.focus();}
+    // }
+    constructor(){
+        super();     
+//        this.$.mygridid.selectedItems=[];
+    }  
 }
 
 customElements.define('em-demo-a-list-modal-microorganism', emDemoAListModalMicroorganism);

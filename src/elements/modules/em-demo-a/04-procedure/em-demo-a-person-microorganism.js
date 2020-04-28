@@ -21,7 +21,7 @@ class emDemoAPersonMicroorganism extends EmDemoAapiEnvMonit(FrontendEnvMonitSamp
             currTabEsignRequired: Boolean,
             currTabConfirmUserRequired: Boolean,
             selectedSample: {type: Number},      
-            allSamplesStageMicroorganism: {type: Array, notify:true},             
+            allPersonSamplesStageMicroorganism: {type: Array, notify:true},             
             sampleFieldToDisplay: {type: Array,value: personMicroorganism_sampleFieldToDisplay},   
             samplesWhereFieldsName: {type: String, value:personMicroorganism_samplesWhereFieldsName},            
             samplesWhereFieldsValue: {type: String, value:personMicroorganism_samplesWhereFieldsValue},
@@ -41,7 +41,7 @@ class emDemoAPersonMicroorganism extends EmDemoAapiEnvMonit(FrontendEnvMonitSamp
     onFinalTokenFilled(){
         this.callBackRefreshWindow = this.refreshWindow.bind(this);
         if ( (!this.finalToken) || (!this.schemaPrefix) ) {return;}
-        this.getAllSamplesStageMicroorganism({
+        this.getAllPersonSamplesStageMicroorganism({
             finalToken:this.finalToken, schemaPrefix:this.schemaPrefix, actionName:'GET_SAMPLE_MICROORGANISM_VIEW'
             , personFieldToRetrieve:personMicroorganism_sampleFieldToRetrieve//this.sampleFieldToRetrieve
             , samplesTabSortFields:personMicroorganism_sampleFieldToSort//this.samplesTabSortFields,
@@ -54,7 +54,7 @@ class emDemoAPersonMicroorganism extends EmDemoAapiEnvMonit(FrontendEnvMonitSamp
     stateChanged(state) {
         this.finalToken = state.app.user.finalToken;         
         if (state.emDemoA!=null){
-            this.allSamplesStageMicroorganism= state.emDemoA.allSamplesStageMicroorganism;
+            this.allPersonSamplesStageMicroorganism= state.emDemoA.allPersonSamplesStageMicroorganism;
         }          
         if (this.tabIndex!=0){
             //this.schemaPrefix = state.tabs.tabs[this.tabIndex-1].procedure.schemaPrefix;
@@ -88,7 +88,7 @@ class emDemoAPersonMicroorganism extends EmDemoAapiEnvMonit(FrontendEnvMonitSamp
                     </field-controller>
                 </template>  
             </div>            
-            <vaadingrid-singleselect class="vaadin-grid" id="mygridid" headerfields="{{sampleFieldToDisplay}}" rowcontainer="{{allSamplesStageMicroorganism}}"            
+            <vaadingrid-singleselect class="vaadin-grid" id="mygridid" headerfields="{{sampleFieldToDisplay}}" rowcontainer="{{allPersonSamplesStageMicroorganism}}"            
             selected-object="{{selectedObject}}">
             </vaadingrid-singleselect>
         `;

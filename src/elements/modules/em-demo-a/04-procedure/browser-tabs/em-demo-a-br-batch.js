@@ -1,12 +1,14 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import { connect } from 'pwa-helpers/connect-mixin';
 import { store } from '../../../../../store.js';
+import '@polymer/polymer/lib/elements/dom-if';
 import '../../../../../config/styles/cards-style.js';
 import {addTab, setCurrentTab} from '../../../../app/Redux/actions/tabs_actions';
 import {FrontendEnvMonitSample} from '../../01moduleFunctionality/frontend-env-monit-sample';
 //import '../../internalComponents/pdf-browser-viewer';
 import {tableFieldLabel} from '../../03config/tablefield_labels';
-import {schema_name, browserBatchFieldToRetrieve, browserBatchFieldsToDisplay } from '../../03config/config-process.js';
+import '../../01moduleFunctionality/env-monit-elements.js';
+import {schema_name, browserBatchFieldToRetrieve, browserBatchFieldsToDisplay, browserBatchNoContent } from '../../03config/config-process.js';
 
 class emDemoABrBatch extends tableFieldLabel(FrontendEnvMonitSample(connect(store)(PolymerElement))) {
     stateChanged(state) {
@@ -14,17 +16,23 @@ class emDemoABrBatch extends tableFieldLabel(FrontendEnvMonitSample(connect(stor
         if (state.emDemoA!=null){            
             if (state.emDemoA.browserSelectedBatch!=null){
                 this.selBatch=state.emDemoA.browserSelectedBatch;
-                //console.log('this.selBatch', this.selBatch);
                 if (this.selBatch.lastTemperatureReadings!=null){
                     var i;
                     this.selBatchTempReadings=[["Time", "Temperature"]];
+                    if (!this.selBatch.lastTemperatureReadings){
+                        this.displayChart=false;
+                        return;}
+                    if (this.selBatch.lastTemperatureReadings[0].error){
+                        this.displayChart=false;
+                        return;}
+                    this.displayChart=true;
                     for (i = 0; i < this.selBatch.lastTemperatureReadings.length; i++) {
-                        this.selBatchTempReadings.push([this.selBatch.lastTemperatureReadings[i].created_on, 
-                        this.selBatch.lastTemperatureReadings[i].temperature]);
-                        
+                        if (!this.selBatch.lastTemperatureReadings[i].error){
+                            this.selBatchTempReadings.push([this.selBatch.lastTemperatureReadings[i].created_on, 
+                            this.selBatch.lastTemperatureReadings[i].temperature]);
+                        }
                     }
-                    this.selectedObject=this.selBatch.incubatorFieldToRetrieve.name;
-                    //console.log('this.selBatchTempReadings', this.selBatchTempReadings);
+                    this.selectedObject=this.selBatch.batchFieldToRetrieve.name;
                 }                
             }                      
         }        
@@ -33,6 +41,7 @@ class emDemoABrBatch extends tableFieldLabel(FrontendEnvMonitSample(connect(stor
     }        
     static get properties() {
         return {
+            displayChart: Boolean,
             finalToken: {type: String},  
             schemaPrefix: {type: String},   
             selectedLanguage: String,
@@ -69,6 +78,7 @@ class emDemoABrBatch extends tableFieldLabel(FrontendEnvMonitSample(connect(stor
                 }]
             },
             tableFieldLabelSchemaName: {type: String, value: 'data'}, tableFieldLabelTableName: {type: String, value: 'Batch'},
+            NoContent: {type: Array, notify: true, value:browserBatchNoContent},
         }
 
     }
@@ -109,17 +119,17 @@ class emDemoABrBatch extends tableFieldLabel(FrontendEnvMonitSample(connect(stor
                 padding:5px;
                 }  
         </style>
-
+        <env-monit-elements id="myElements" call-back-function-env-monit-elem="{{RunReport}}"></env-monit-elements> 
         <div id="wrapper"> <!--This is the Div 1 in the picture-->        
         <template is="dom-repeat" items="{{browserBatchFields}}" as="currentfield">       
           <field-controller on-keydown="keyPressed" on-field-button-clicked="RunReport" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
         </template>       
             <div id="topBar">            
                 <div class="cardPendingSops"> 
-                <p><h2><b>{{getTableFieldLabel(tableFieldLabelSchemaName, tableFieldLabelTableName, '*batch_info_title', selectedLanguage)}}</h2></p>
-                <template is="dom-repeat" items="[[selBatch.batchFieldsToDisplay]]">  
-                <p><b>{{getTableFieldLabel(tableFieldLabelSchemaName, tableFieldLabelTableName, item.field_name, selectedLanguage)}}:</b> {{item.field_value}}<p></p>
-                </template>
+                    <p><h2><b>{{getTableFieldLabel(tableFieldLabelSchemaName, tableFieldLabelTableName, '*batch_info_title', selectedLanguage)}}</h2></p>
+                    <template is="dom-repeat" items="[[selBatch.batchFieldsToDisplay]]">  
+                        <p><b>{{getTableFieldLabel(tableFieldLabelSchemaName, tableFieldLabelTableName, item.field_name, selectedLanguage)}}:</b> {{item.field_value}}<p></p>
+                    </template>
                 </div>
             </div>     
             <div id="topBar">                   
@@ -128,12 +138,28 @@ class emDemoABrBatch extends tableFieldLabel(FrontendEnvMonitSample(connect(stor
                         {{currentfield.sample_id}} Incubation {{currentfield.incubation_moment}}
                     </div>
                 </template>
-
-                <google-chart type="line" style="height: 500px; width: 750px;" data="{{selBatchTempReadings}}"></google-chart>
+            </div>                
+            <div id="topBar">                   
+                <template is="dom-if" if="{{displayChart(selBatchTempReadings)}}" >
+                    <google-chart type="line" style="height: 500px; width: 750px;" data="{{selBatchTempReadings}}"></google-chart>
+                </template>    
+                <template is="dom-if" if="{{!displayChart(selBatchTempReadings)}}" >
+                    <template is="dom-repeat" items="{{NoContent}}" as="currentfield">       
+                        <field-controller on-keydown="keyPressed" on-field-button-clicked="RunReport" on-field-list-value-changed="onListChange" id="{{currentfield.name}}"  field="{{currentfield}}"></field-controller>
+                    </template>                               
+                </template>    
             </div>     
 
         `;
     }
+//     displayChart(e){
+//         console.log('displayChart');
+// //        return false;
+// //console.log('displayChart', this.selBatchTempReadings.length); 
+//         if (!this.selBatchTempReadings) return false;       
+//         if (this.selBatchTempReadings.length<=1) return false;
+//         return true;
+//     }
     isIncubationStage(st){
         if (st.current_stage=="Incubation") return true;
         return false;
@@ -175,7 +201,7 @@ class emDemoABrBatch extends tableFieldLabel(FrontendEnvMonitSample(connect(stor
         data.BatchName=this.browserBatchFields[0].value;
         data.browserBatchFieldToRetrieve=this.browserBatchFieldToRetrieve;
         data.browserBatchFieldsToDisplay =this.browserBatchFieldsToDisplay;
-        this.getBrowserSelectedBatchData(data);        
+        this.getBrowserSelectedBatchData(data);                
         //console.log('RunReport', 'browserBatchFields', this.browserBatchFields);
     }
     openTab(){

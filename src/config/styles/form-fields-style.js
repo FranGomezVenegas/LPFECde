@@ -7,8 +7,8 @@ documentContainer.innerHTML = `
       <style>
         .formFieldAvatar{
           vertical-align: middle;
-          width: 100px;
-          height: 80px; 
+          width: 50px;
+          height: 40px; 
           border-radius: 50%;
         }
         .formFieldBoolean{

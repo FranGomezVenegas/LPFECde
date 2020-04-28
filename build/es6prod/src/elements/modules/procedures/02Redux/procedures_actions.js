@@ -1,0 +1,2 @@
+define(["exports"],function(_exports){"use strict";Object.defineProperty(_exports,"__esModule",{value:!0});_exports.getProcedureDefinition=getProcedureDefinition;_exports.GET_PROCEDURE_DEFINITION=void 0;const GET_PROCEDURE_DEFINITION="GET_PROCEDURE_DEFINITION";_exports.GET_PROCEDURE_DEFINITION=GET_PROCEDURE_DEFINITION;function getProcedureDefinition(data){//console.log('em-demo-a_actions.getPrograms', data);
+return{type:GET_PROCEDURE_DEFINITION,DATA:data}}});

@@ -6,6 +6,7 @@ import { connect } from 'pwa-helpers/connect-mixin';
 import { store } from '../store';
 import { navigate, doLogin, doLogout } from '../elements/app/Redux/actions/app_actions.js';
 import {default_language} from '../config/app-config';
+import './internalComponents/others/lp-loading';
 
 // componentes de terceros
   import '@polymer/paper-styles/shadow';
@@ -99,11 +100,19 @@ class LabplanetMain extends connect(store)(PolymerElement) {
       }  
 
       .login {
-        padding: 15px;
-        left: 40px;        
+        //padding: 15px;
+        //left: 40px;        
         @apply --shadow-elevation-2dp;
-        width: 320px;
-        text-align: center;
+        //width: 320px;
+        //text-align: center;
+        position:fixed;
+        width:100vw;
+        height:100vh;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999999999;
+
       }       
 
       .container {
@@ -138,7 +147,7 @@ class LabplanetMain extends connect(store)(PolymerElement) {
           </div>
         </div>         
       </template> 
-      
+      <lp-loading></lp-loading>
       <paper-toast id="toast"></paper-toast>
       <paper-toast id="toasterror"></paper-toast>      
       
@@ -163,6 +172,7 @@ class LabplanetMain extends connect(store)(PolymerElement) {
   }
 
   toastError(e) {
+    //console.log('toastError');
     this.$.toasterror.show({text: e.detail, duration: 3000});
   }
 

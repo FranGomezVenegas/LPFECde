@@ -58,7 +58,7 @@ class NewIncident extends ApiIncidents(FrontendIncidents(connect(store)(PolymerE
                 </template>       
             </div>
             <div style="width: 622px; display: block;">
-                <frontend-incidents-elements id="myElements" call-back-function-incident-elem="{{callBackRefreshWindow}}" selected-incident="{{selectedObject}}"></frontend-incidents-elements>
+                <frontend-incidents-elements id="myElements" call-back-function-incident-elem="{{onFinalTokenFilled}}" selected-incident="{{selectedObject}}"></frontend-incidents-elements>
                 <vaadin-button on-click="callBackRefreshWindow"><iron-icon icon="refresh"></iron-icon></vaadin-button> 
                 <div name="batches-list" class="buttonGroup" style="width: 222px; display: inline-flex;">
                     <template is="dom-repeat" items="{{userOpenIncidentsuttons}}" as="currentfield">       
@@ -87,10 +87,14 @@ class NewIncident extends ApiIncidents(FrontendIncidents(connect(store)(PolymerE
     }
     keyPressed(){}
     incidentSelected(e) {
-        if (!e.detail.value) return;                
-        //this.selectedItem=this.$.mygridid.selectedObject;
-        //console.log('incidentSelected', 'this.$.mygridid.selectedObject', this.$.mygridid.selectedObject);
-        this.getSelectedUserIncidentDetail({finalToken: this.finalToken, incidentId: e.detail.value.id});
+        console.log('incidentSelected', 'this.selectedItem', this.selectedItem);
+        //if (!this.selectedItem) return;                        
+        if ( (!e) || (!e.detail) || (!e.detail.value) ) { this.getSelectedUserIncidentDetail({finalToken: this.finalToken, incidentId: ''}); return;}
+        //if (!e.detail) { this.getSelectedUserIncidentDetail({finalToken: this.finalToken, incidentId: ''}); return;}
+        //if (!e.detail.value) { this.getSelectedUserIncidentDetail({finalToken: this.finalToken, incidentId: ''}); return;}
+         this.selectedItem=e.detail.value;
+        //this.getSelectedUserIncidentDetail({finalToken: this.finalToken, incidentId: e.detail.value.id});
+        this.getSelectedUserIncidentDetail({finalToken: this.finalToken, incidentId: this.selectedItem.id});
         return;
     }    
     callBackRefreshWindow(){
@@ -98,27 +102,35 @@ class NewIncident extends ApiIncidents(FrontendIncidents(connect(store)(PolymerE
 
     }
     onFinalTokenFilled(){
-        //console.log(this.thisTabName, 'onFinalTokenFilled');
+        console.log('onFinalTokenFilled', this.thisTabName);
+        if (!this.thisTabName){return;}
         if (isTabOpn(this.appOpenTabs, this.thisTabName)){
             this.getUserOpenIncidents({finalToken:this.finalToken});               
         }
-        var curTab={
-            lp_frontend_page_name: 'incidents/new-incident.js',        
-            tabName: 'new-incident',
-            tabLabel_en: 'New Issue',
-            tabLabel_es: 'Nueva Incidencia',
-            procedure:'incident',
-            tabEsignRequired: false, tabConfirmUserRequired: false
-          }
-        store.dispatch(setCurrentTab(curTab)); 
-        if (this.selectedItem){
-console.log('onFinalTokenFilled', this.selectedItem);
-this.selectedObject=this.selectedItem;
-            //this.$.mygridid.selectedItems=[];
-            //this.$.mygridid.itemSelected=this.selectedItem;
-            //this.$.mygridid.selectedObject=this.selectedItem;
-            //this.$.mygridid.selectedItems = [this.selectedItem];
-            this.getSelectedUserIncidentDetail({finalToken: this.finalToken, incidentId: this.selectedItem.id});
+        // var curTab={
+        //     lp_frontend_page_name: 'incidents/new-incident.js',        
+        //     tabName: 'new-incident',
+        //     tabLabel_en: 'New Issue',
+        //     tabLabel_es: 'Nueva Incidencia',
+        //     procedure:'incident',
+        //     tabEsignRequired: false, tabConfirmUserRequired: false
+        //   }
+        //store.dispatch(setCurrentTab(curTab)); 
+         if (this.selectedItem){
+        //     //console.log('onFinalTokenFilled', 'item', this.selectedItem, 'object'this.selectedObject);
+        //     //this.selectedObject=this.selectedItem;
+        //     //this.$.mygridid.selectedItems=[];
+        //     //this.$.mygridid.itemSelected=this.selectedItem;
+        //     var mye={detail:{value:this.selectedItem}};            
+        //     this.$.mygridid.changeItemSelected(this.selectedItem.value.id);
+            
+        //     //this.$.mygridid.changeItemSelected(this.selectedItem);
+            
+            
+        //     //this.$.mygridid.selectedObject=this.selectedItem;
+        //     //this.$.mygridid.selectedItems = [this.selectedItem];
+        //    this.getSelectedUserIncidentDetail({finalToken: this.finalToken, incidentId: this.selectedItem.id});
+        this.incidentSelected();
         }
     }  
 }

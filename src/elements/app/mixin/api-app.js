@@ -92,8 +92,10 @@ appBackEndCallAPI(data) {
                 }));                   
         }
         if(response.status == 200) {
-            this.finalToken=response.data.finalToken;
-            store.dispatch(updateFinalToken(this.finalToken));
+            if (data.actionName.toUpperCase()=='USER_CHANGE_PSWD' || data.actionName.toUpperCase()=='USER_CHANGE_ESIGN'){
+                this.finalToken=response.data.finalToken;
+                store.dispatch(updateFinalToken(this.finalToken));
+            }
             if (this.callBackFunctionEnvMonitElem){this.callBackFunctionEnvMonitElem();} 
             if (data.callBackFunction){data.callBackFunction();}
             return;

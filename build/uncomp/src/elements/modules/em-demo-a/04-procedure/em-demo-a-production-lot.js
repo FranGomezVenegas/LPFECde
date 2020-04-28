@@ -16,7 +16,7 @@ this.currTabEsignRequired=state.tabs.currTabEsignRequired;this.currTabConfirmUse
             }
             </style>      
             <env-monit-elements id="myElements" call-back-function-env-monit-elem="{{callBackRefreshWindow}}"></env-monit-elements>
-            <vaadin-button on-click="refreshWindow"><iron-icon icon="refresh"></iron-icon></vaadin-button> 
+            <!-- <vaadin-button on-click="refreshWindow"><iron-icon icon="refresh"></iron-icon></vaadin-button> -->
 
             <div name="Buttons1" class="buttonGroup">
                 <template is="dom-repeat" items="{{buttons}}" as="currentfield">       

@@ -9,7 +9,7 @@ import '@polymer/paper-icon-button/paper-icon-button';
 
 import {setCurrentTab, closeTab } from '../Redux/actions/tabs_actions';
 import {FieldsMethods} from '../app-functions/fields-methods';  
-import './../01-main-views/sop/procedure-sops';
+//import './../01-main-views/sop/procedure-sops';
 import './../../../config/styles/paper-tab-style.js';  
 import './../../modules/em-demo-a/04-procedure/em-demo-a-programs';
 import {Appapi} from '../mixin/api-app.js';
@@ -47,12 +47,13 @@ class AppCenterTabs extends Appapi(FieldsMethods(connect(store)(PolymerElement))
                 </paper-tab>                
             </template>            
         </paper-tabs>
-        <procedure-sops></procedure-sops>            
+<!--        <procedure-sops></procedure-sops>            -->
         <iron-pages selected="[[currentTab]]" attr-for-selected="name" hide-immediately>
             <my-sops tab-index="{{tabIndex}}" name="sop-allMySops"> </my-sops>
             <my-pending-sops tab-index="{{tabIndex}}" name="sop-myPendingSops"> </my-pending-sops>
             <user-profile tab-index="{{tabIndex}}" name="user-profile"> </user-profile>
             <new-incident tab-index="{{tabIndex}}" name="new-incident"> </new-incident>
+            <procedure-management tab-index="{{tabIndex}}" name="procedure-management"> </procedure-management>
 
             <process-us-home tab-index="{{tabIndex}}" name="process-us-home"></process-us-home>            
             <process-us-sample-login tab-index="{{tabIndex}}" name="process-us-sample-login"></process-us-sample-login>
@@ -114,7 +115,7 @@ class AppCenterTabs extends Appapi(FieldsMethods(connect(store)(PolymerElement))
             tabsString=tabsString+'tabConfirmUserRequired:'+this.tabs[i].tabConfirmUserRequired;
             if (i+1<this.tabs.length){tabsString=tabsString+'|'}
         }
-        console.log('saveOpenTabs', tabsString);        
+        //console.log('saveOpenTabs', tabsString);        
 
         var selectedRow=[];
         selectedRow.tabsString=tabsString;

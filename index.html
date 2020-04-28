@@ -1,6 +1,21 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <style>
+      #cargando{
+        position:fixed;
+        width:100vw;
+        height:100vh;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999999999;        
+      }
+       #cargando span{
+         background-color: blue;
+         color: white;
+       }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
@@ -53,7 +68,14 @@
   
   </head>
   <body> 
+
        <!-- <platform-login></platform-login> -->
-      <labplanet-main></labplanet-main> 
+      <labplanet-main>
+        <div id="cargando">
+          <!-- <span>Cargando ...</span> -->
+          <img class="formFieldLogoCircle" src="./images/app-login/labplanet.png" float="{{field.float}}" aligned="center" alt="LabPLANET" > 
+        </div>
+      </labplanet-main> 
+      
   </body>
 </html>

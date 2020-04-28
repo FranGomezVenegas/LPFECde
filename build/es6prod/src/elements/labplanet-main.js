@@ -1,4 +1,4 @@
-define(["../../node_modules/@polymer/polymer/polymer-element.js","../../node_modules/@polymer/polymer/lib/elements/dom-if.js","../../node_modules/pwa-helpers/connect-mixin.js","../store.js","./app/Redux/actions/app_actions.js","../config/app-config.js","../../node_modules/@polymer/paper-styles/shadow.js","../../node_modules/@vaadin/vaadin-icons/vaadin-icons.js","../../node_modules/@vaadin/vaadin-button/vaadin-button.js","../../node_modules/@polymer/paper-toast/paper-toast.js","../../node_modules/@polymer/polymer/lib/elements/dom-repeat.js","../../node_modules/@polymer/paper-styles/typography.js","../../node_modules/@polymer/paper-icon-button/paper-icon-button.js","../../node_modules/@polymer/iron-pages/iron-pages.js","../../node_modules/@polymer/iron-icons/iron-icons.js","../../node_modules/@polymer/iron-selector/iron-selector.js","../../node_modules/@vaadin/vaadin-grid/vaadin-grid.js","../../node_modules/@vaadin/vaadin-grid/vaadin-grid-column.js","../../node_modules/@vaadin/vaadin-grid/vaadin-grid-selection-column.js","../../node_modules/@vaadin/vaadin-grid/vaadin-grid-sort-column.js","../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter.js","../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter-column.js","../../node_modules/@polymer/paper-dialog/paper-dialog.js","../../node_modules/@vaadin/vaadin-checkbox/vaadin-checkbox.js","../../node_modules/@google-web-components/google-chart/google-chart.js","./app/01-main-views/app-login.js","./app/01-main-views/app-header.js","./app/01-main-views/app-left-pane.js","./app/01-main-views/app-center-tabs.js"],function(_polymerElement,_domIf,_connectMixin,_store,_app_actions,_appConfig,_shadow,_vaadinIcons,_vaadinButton,_paperToast,_domRepeat,_typography,_paperIconButton,_ironPages,_ironIcons,_ironSelector,_vaadinGrid,_vaadinGridColumn,_vaadinGridSelectionColumn,_vaadinGridSortColumn,_vaadinGridFilter,_vaadinGridFilterColumn,_paperDialog,_vaadinCheckbox,_googleChart,_appLogin,_appHeader,_appLeftPane,_appCenterTabs){"use strict";//import { installRouter } from 'pwa-helpers/router';
+define(["../../node_modules/@polymer/polymer/polymer-element.js","../../node_modules/@polymer/polymer/lib/elements/dom-if.js","../../node_modules/pwa-helpers/connect-mixin.js","../store.js","./app/Redux/actions/app_actions.js","../config/app-config.js","./internalComponents/others/lp-loading.js","../../node_modules/@polymer/paper-styles/shadow.js","../../node_modules/@vaadin/vaadin-icons/vaadin-icons.js","../../node_modules/@vaadin/vaadin-button/vaadin-button.js","../../node_modules/@polymer/paper-toast/paper-toast.js","../../node_modules/@polymer/polymer/lib/elements/dom-repeat.js","../../node_modules/@polymer/paper-styles/typography.js","../../node_modules/@polymer/paper-icon-button/paper-icon-button.js","../../node_modules/@polymer/iron-pages/iron-pages.js","../../node_modules/@polymer/iron-icons/iron-icons.js","../../node_modules/@polymer/iron-selector/iron-selector.js","../../node_modules/@vaadin/vaadin-grid/vaadin-grid.js","../../node_modules/@vaadin/vaadin-grid/vaadin-grid-column.js","../../node_modules/@vaadin/vaadin-grid/vaadin-grid-selection-column.js","../../node_modules/@vaadin/vaadin-grid/vaadin-grid-sort-column.js","../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter.js","../../node_modules/@vaadin/vaadin-grid/vaadin-grid-filter-column.js","../../node_modules/@polymer/paper-dialog/paper-dialog.js","../../node_modules/@vaadin/vaadin-checkbox/vaadin-checkbox.js","../../node_modules/@google-web-components/google-chart/google-chart.js","./app/01-main-views/app-login.js","./app/01-main-views/app-header.js","./app/01-main-views/app-left-pane.js","./app/01-main-views/app-center-tabs.js"],function(_polymerElement,_domIf,_connectMixin,_store,_app_actions,_appConfig,_lpLoading,_shadow,_vaadinIcons,_vaadinButton,_paperToast,_domRepeat,_typography,_paperIconButton,_ironPages,_ironIcons,_ironSelector,_vaadinGrid,_vaadinGridColumn,_vaadinGridSelectionColumn,_vaadinGridSortColumn,_vaadinGridFilter,_vaadinGridFilterColumn,_paperDialog,_vaadinCheckbox,_googleChart,_appLogin,_appHeader,_appLeftPane,_appCenterTabs){"use strict";//import { installRouter } from 'pwa-helpers/router';
 // componentes de terceros
 // mis componentes de App
 class LabplanetMain extends(0,_connectMixin.connect)(_store.store)(_polymerElement.PolymerElement){static get template(){return _polymerElement.html`
@@ -39,7 +39,7 @@ class LabplanetMain extends(0,_connectMixin.connect)(_store.store)(_polymerEleme
       .right {
         top: 14%;
         left: 18%; 
-        width: 88%;
+        width: 82%;
         height: 80%;
         float: right;
       }      
@@ -62,11 +62,19 @@ class LabplanetMain extends(0,_connectMixin.connect)(_store.store)(_polymerEleme
       }  
 
       .login {
-        padding: 15px;
-        left: 40px;        
+        //padding: 15px;
+        //left: 40px;        
         @apply --shadow-elevation-2dp;
-        width: 320px;
-        text-align: center;
+        //width: 320px;
+        //text-align: center;
+        position:fixed;
+        width:100vw;
+        height:100vh;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999999999;
+
       }       
 
       .container {
@@ -101,8 +109,9 @@ class LabplanetMain extends(0,_connectMixin.connect)(_store.store)(_polymerEleme
           </div>
         </div>         
       </template> 
-      
+      <lp-loading></lp-loading>
       <paper-toast id="toast"></paper-toast>
       <paper-toast id="toasterror"></paper-toast>      
       
-    `}static get properties(){return{selectedLanguage:{type:String,value:_appConfig.default_language,notify:!0},finalToken:{type:String,notify:!0},userName:String}}ready(){super.ready();this.addEventListener("toast-error",e=>this.toastError(e));this.addEventListener("toast-message",e=>this.toastMessage(e))}toastMessage(e){this.$.toast.show({text:e.detail,duration:3e3})}toastError(e){this.$.toasterror.show({text:e.detail,duration:3e3})}_locationChanged(location){_store.store.dispatch((0,_app_actions.navigate)(location.pathname))}stateChanged(state){this.loggedIn=state.app.user.loggedIn;this.userName=state.app.user.userDB}doLogin(finalToken){_store.store.dispatch(addUserToken("finalToken"));_store.store.dispatch((0,_app_actions.doLogin)())}}window.customElements.define("labplanet-main",LabplanetMain)});
+    `}static get properties(){return{selectedLanguage:{type:String,value:_appConfig.default_language,notify:!0},finalToken:{type:String,notify:!0},userName:String}}ready(){super.ready();this.addEventListener("toast-error",e=>this.toastError(e));this.addEventListener("toast-message",e=>this.toastMessage(e))}toastMessage(e){this.$.toast.show({text:e.detail,duration:3e3})}toastError(e){//console.log('toastError');
+this.$.toasterror.show({text:e.detail,duration:3e3})}_locationChanged(location){_store.store.dispatch((0,_app_actions.navigate)(location.pathname))}stateChanged(state){this.loggedIn=state.app.user.loggedIn;this.userName=state.app.user.userDB}doLogin(finalToken){_store.store.dispatch(addUserToken("finalToken"));_store.store.dispatch((0,_app_actions.doLogin)())}}window.customElements.define("labplanet-main",LabplanetMain)});

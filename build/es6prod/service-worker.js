@@ -37,7 +37,7 @@
 /* eslint-disable indent, no-unused-vars, no-multiple-empty-lines, max-nested-callbacks, space-before-function-paren, quotes, comma-spacing */
 'use strict';
 
-var precacheConfig = [["index.html","2dc2c5c600abe8d97a74f13a530f1a04"],["src/elements/labplanet-main.js","18d81bf37a494b72f35b4c6781bf2810"]];
+var precacheConfig = [["index.html","3e12c715dc09145da31da56307830254"],["src/elements/labplanet-main.js","3b018b25d02335cac68abc68d29cf7f5"]];
 var cacheName = 'sw-precache-v3--' + (self.registration ? self.registration.scope : '');
 
 

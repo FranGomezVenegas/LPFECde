@@ -7,9 +7,10 @@ import {schema_name, programHome_sampleSummaryGaugeOptions, programHome_sampleSu
 //    , sampleReception_sampleFieldToRetrieve, sampleReception_sampleFieldToDisplay
 } from '../../03config/config-process.js';
 import {tabsMethods} from '../../../../app/app-functions/tabs-methods';
-
-class EmDemoAProgHome extends tabsMethods(connect(store)(PolymerElement)) {
+import {FieldsMethods} from '../../../../app/app-functions/fields-methods';
+class EmDemoAProgHome extends FieldsMethods(tabsMethods(connect(store)(PolymerElement))) {
     stateChanged(state) {
+        this.selectedLanguage = state.app.user.appLanguage; 
         this.schemaPrefix=schema_name;
         this.finalToken = state.app.user.finalToken; 
         if (state.emDemoA!=null){
@@ -50,28 +51,42 @@ class EmDemoAProgHome extends tabsMethods(connect(store)(PolymerElement)) {
     }        
     static get properties() {
         return {
+            selectedLanguage: {type:String},
             sampleSummaryChartType: {type: String, value: 'gauge'},    
             selectedProgram:{type: Object},
             sampleSummaryChartData:{type: Array}, sampleSummaryChartOptions:{type: Array, value: ''},
             openTabs: {type: Array},
             tabOne: {type: String, value: 'xxx'}, tabOneIsOpen: {type: Boolean},
             tabTwo: {type: String, value: 'em-demo-a-sample-sampling'}, tabTwoIsOpen: {type: Boolean},
-          data: {type: Array,
+            data: {type: Array,
                 value: [["A", "B"],
-                 [20, 45],
-                 [31, 66],
-                 [50, 80],
-                 [77, 50],
-                 [68, 15]]
-            }
+                [20, 45],
+                [31, 66],
+                [50, 80],
+                [77, 50],
+                [68, 15]]
+            },
+            tableTitle:{type: Object, value:{label_en:'Home page for the program', label_es:'Página de inicio para el programa'}},
         }
     }
     static get template() {
         return html`
-        <h1>Home</h1>
+        <style>
+            p.tableTitle{
+                margin-top: 0px;
+                margin-bottom: 3px;
+                color: #4285f4;
+                font-size:30px;
+            }        
+        </style>    
+        <div>
+            <p class="tableTitle">{{labelValue(selectedLanguage, tableTitle)}}  {{selectedProgram.name}}</p>
+        </div>
+
+<!--        <h1>Home</h1>
         <p>Tabs Opened: {{openTabs.length}}</p>
         <p>Tab {{tabOne}} is open? {{tabOneIsOpen}}</p>
-        <p>Tab {{tabTwo}} is open? {{tabTwoIsOpen}}</p>
+        <p>Tab {{tabTwo}} is open? {{tabTwoIsOpen}}</p> -->
         <google-chart title="Hola gauge" type="pie" data="{{gaugeSampleSummary}}" options="{{sampleSummaryChartOptions}}">
         </google-chart>
         <div class="card">

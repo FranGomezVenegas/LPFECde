@@ -45,6 +45,12 @@ import confirmUserReducer from './elements/app/Redux/reducers/confirmuser-reduce
   confirmUserDialog: confirmUserReducer
 }); 
 
+import procedureManagementReducer from './elements/modules/procedures/02Redux/procedures_reducers';
+    store.addReducers({
+      sateliteProcedures: procedureManagementReducer
+  });
+
+
 import processUsReducer from './elements/modules/process-us/02Redux/process-us_reducers.js';
   store.addReducers({
   processUs: processUsReducer

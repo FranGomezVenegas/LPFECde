@@ -19,11 +19,16 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
         var selectedObjectLevel = 'SAMPLE';        
         if ((selectedSample==null) && (actionName!='LOGSAMPLE') 
          && (actionName!='EM_BATCH_INCUB_START') && (actionName!='EM_BATCH_INCUB_END')) {
-            dispatchEvent(new CustomEvent('toasterror', {
+            var message=''; 
+            switch(this.selectedLanguage){
+                case 'es': message='Por favor selecciona un objeto primero'; break; //message=response.data.message_es; break;            
+                default: message='Please select one object first.'; break; //message=response.data.message_en; break;
+            }                    
+            this.dispatchEvent(new CustomEvent('toast-error', {
                 bubbles: true,
                 composed: true,
-                detail: 'Please select one object first '
-                }));    
+                detail: message
+                }));        
             return;
         }    
         actionName=actionName.toUpperCase();
@@ -117,17 +122,35 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
             break;  
         case 'EM_BATCH_INCUB_ADD_SMP':
         case 'EM_BATCH_INCUB_REMOVE_SMP': 
+//console.log('EM_BATCH_INCUB_REMOVE_SMP ', 'selectedRow.selectedBatch', selectedRow.selectedBatch);
+            if (selectedRow.selectedBatch.length==0 || selectedRow.selectedBatch.name==''){
+                var errorMessageBatchNotSelected={message_en:'Select Batch', message_es:'Seleccione tanda',diagnostic:'LABPLANET_FALSE', is_error: true, reñatedObjects:[], category:'API-ENV-MONIT'};
+                var notifObj=diagnosticToNotification(errorMessageBatchNotSelected, undefined); //response.data, data);
+                console.log('process-us>api-sample>sampleBackEndCallAPI.addNotification', 'notifObj', notifObj);
+                store.dispatch(addNotification(notifObj));        
+                dispatchEvent(new CustomEvent('toastmessage', {
+                    bubbles: true,
+                    composed: true,
+                    detail: 'Seleccione tanda.'
+                }));         
+                return;
+            }
             paramsUrl=paramsUrl+"&sampleId="+selectedSample;    
             paramsUrl=paramsUrl+"&batchName="+selectedRow.selectedBatch.name;    
             paramsUrl=paramsUrl+"&batchTemplateId="+selectedRow.selectedBatch.incub_batch_config_id;    
             paramsUrl=paramsUrl+"&batchTemplateVersion="+selectedRow.selectedBatch.incub_batch_config_version;    
             break;
         default:    
-            console.log('Action '+actionName+' not declared.')            
+            //console.log('Action '+actionName+' not declared.')            
+            var message=''; 
+            switch(this.selectedLanguage){
+                case 'es': message='Acción '+actionName+' no declarada en esta ventana.'; break; //message=response.data.message_es; break;            
+                default: message='Action '+actionName+' not declared on this window.'; break; //message=response.data.message_en; break;
+            }                    
             dispatchEvent(new CustomEvent('toast-error', {
                 bubbles: true,
                 composed: true,
-                detail: 'action '+actionName+' not declared on this window.'
+                detail: message
             }));         
             return;            
         }                    
@@ -140,7 +163,7 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
         datas.schemaPrefix=schemaPrefix; datas.actionName=actionName; datas.paramsUrl=paramsUrl;
         if (callBackFunction2){
             datas.callBackFunction=callBackFunction2.bind(this);}
-        console.log('api-env-monit.js >> SampleAPIControllerAPI >> Before calling sampleBackEndCallAPI the datas contains: ', datas);            
+        //console.log('api-env-monit.js >> SampleAPIControllerAPI >> Before calling sampleBackEndCallAPI the datas contains: ', datas);            
         this.sampleBackEndCallAPI(datas);            
     }
     sampleBackEndCallAPI(data) {
@@ -200,11 +223,16 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
         var selectedProgram = selectedRow.program_name;      
         var selectedObjectLevel = 'PROGRAM';        
         if ((selectedProgram==null)) {
-            dispatchEvent(new CustomEvent('toasterror', {
+            var message=''; 
+            switch(this.selectedLanguage){
+                case 'es': message='Por favor selecciona un objeto primero'; break; //message=response.data.message_es; break;            
+                default: message='Please select one object first.'; break; //message=response.data.message_en; break;
+            }                    
+            this.dispatchEvent(new CustomEvent('toast-error', {
                 bubbles: true,
                 composed: true,
-                detail: 'Please select one '+selectedObjectLevel+' object first '
-                }));    
+                detail: message
+                }));        
             return;
         }    
         actionName=actionName.toUpperCase();
@@ -216,8 +244,13 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
             paramsUrl=paramsUrl+"&programCorrectiveActionId="+programCorrectiveActionId;     
             break;    
         default:       
-            var errorMsg='action '+actionName+' not declared on api-env-monit >> programActionControllerAPI.';
-            console.log(errorMsg);         
+            var errorMsg=''; 
+            switch(this.selectedLanguage){
+                case 'es': errorMsg='Acción '+actionName+' no declarada en esta ventana.'; break; //message=response.data.message_es; break;            
+                default: errorMsg='Action '+actionName+' not declared on this window.'; break; //message=response.data.message_en; break;
+            }                    
+            //var errorMsg='action '+actionName+' not declared on api-env-monit >> programActionControllerAPI.';
+//            console.log(errorMsg);         
             dispatchEvent(new CustomEvent('toast-error', {
                 bubbles: true,
                 composed: true,
@@ -295,11 +328,16 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
         var selectedbatch = selectedRow.selectedBatch.name;      
         var selectedObjectLevel = 'batch';        
         if ((selectedbatch==null)) {
-            dispatchEvent(new CustomEvent('toasterror', {
+            var message=''; 
+            switch(this.selectedLanguage){
+                case 'es': message='Por favor selecciona un objeto primero'; break; //message=response.data.message_es; break;            
+                default: message='Please select one object first.'; break; //message=response.data.message_en; break;
+            }                    
+            this.dispatchEvent(new CustomEvent('toast-error', {
                 bubbles: true,
                 composed: true,
-                detail: 'Please select one '+selectedObjectLevel+' object first '
-                }));    
+                detail: message
+                }));        
             return;
         }    
         actionName=actionName.toUpperCase();
@@ -321,9 +359,12 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
             paramsUrl=paramsUrl+"&batchTemplateVersion="+selectedRow.selectedBatch.incub_batch_config_version;    
             break;            
         default:       
-            var errorMsg='action '+actionName+' not declared on api-env-monit >> batchActionControllerAPI.';
-            console.log(errorMsg);         
-            dispatchEvent(new CustomEvent('toast-error', {
+        var errorMsg=''; 
+        switch(this.selectedLanguage){
+            case 'es': errorMsg='Acción '+actionName+' no declarada en esta ventana.'; break; //message=response.data.message_es; break;            
+            default: errorMsg='Action '+actionName+' not declared on this window.'; break; //message=response.data.message_en; break;
+        }                    
+        dispatchEvent(new CustomEvent('toast-error', {
                 bubbles: true,
                 composed: true,
                 detail: errorMsg
@@ -399,11 +440,16 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
         var selectedprodLot = selectedRow.selectedProdLot;
         var selectedObjectLevel = 'prodLot';        
         if ((selectedprodLot==null)) {
-            dispatchEvent(new CustomEvent('toasterror', {
+            var message=''; 
+            switch(this.selectedLanguage){
+                case 'es': message='Por favor selecciona un objeto primero'; break; //message=response.data.message_es; break;            
+                default: message='Please select one object first.'; break; //message=response.data.message_en; break;
+            }                    
+            this.dispatchEvent(new CustomEvent('toast-error', {
                 bubbles: true,
                 composed: true,
-                detail: 'Please select one '+selectedObjectLevel+' object first '
-                }));    
+                detail: message
+                }));        
             return;
         }    
         actionName=actionName.toUpperCase();
@@ -417,14 +463,17 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
             paramsUrl=paramsUrl+"&fieldValue="+"true*Boolean";    
             break;
         default:       
-            var errorMsg='action '+actionName+' not declared on api-env-monit >> prodLotActionControllerAPI.';
-            console.log(errorMsg);         
+            var errorMsg=''; 
+            switch(this.selectedLanguage){
+                case 'es': errorMsg='Acción '+actionName+' no declarada en esta ventana.'; break; //message=response.data.message_es; break;            
+                default: errorMsg='Action '+actionName+' not declared on this window.'; break; //message=response.data.message_en; break;
+            }                    
             dispatchEvent(new CustomEvent('toast-error', {
-                bubbles: true,
-                composed: true,
-                detail: errorMsg
-            }));         
-            return;  
+                    bubbles: true,
+                    composed: true,
+                    detail: errorMsg
+                }));         
+                return;  
         }                    
         if (selectedRow.eSignToVerify){paramsUrl=paramsUrl+"&eSignToCheck="+selectedRow.eSignToVerify;}
         
@@ -497,11 +546,16 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
         var selectedIncubator = selectedRow.selectedIncubator;      
         var selectedObjectLevel = 'batch';        
         if ((selectedIncubator==null)) {
-            dispatchEvent(new CustomEvent('toasterror', {
+            var message=''; 
+            switch(this.selectedLanguage){
+                case 'es': message='Por favor selecciona un objeto primero'; break; //message=response.data.message_es; break;            
+                default: message='Please select one object first.'; break; //message=response.data.message_en; break;
+            }                    
+            this.dispatchEvent(new CustomEvent('toast-error', {
                 bubbles: true,
                 composed: true,
-                detail: 'Please select one '+selectedObjectLevel+' object first '
-                }));    
+                detail: message
+                }));        
             return;
         }    
         actionName=actionName.toUpperCase();
@@ -516,9 +570,12 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
             paramsUrl=paramsUrl+"&incubatorName="+selectedRow.incubName;    
             break;
         default:       
-            var errorMsg='action '+actionName+' not declared on api-env-monit >> incubationControllerAPI.';
-            console.log(errorMsg);         
-            dispatchEvent(new CustomEvent('toast-error', {
+        var errorMsg=''; 
+        switch(this.selectedLanguage){
+            case 'es': errorMsg='Acción '+actionName+' no declarada en esta ventana.'; break; //message=response.data.message_es; break;            
+            default: errorMsg='Action '+actionName+' not declared on this window.'; break; //message=response.data.message_en; break;
+        }                    
+        dispatchEvent(new CustomEvent('toast-error', {
                 bubbles: true,
                 composed: true,
                 detail: errorMsg
@@ -564,7 +621,8 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
                     }));                   
             }
             if(response.status == 200) {
-                if (this.callBackFunctionEnvMonitElem){this.callBackFunctionEnvMonitElem();} 
+//console.log('api-env-monit >> response 200');
+                if (data.callBackFunctionEnvMonitElem){data.callBackFunctionEnvMonitElem();} 
                 if (data.callBackFunction){data.callBackFunction();}
                 return;
             }

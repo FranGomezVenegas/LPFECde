@@ -140,7 +140,7 @@ export const EmDemoAapiEnvMonit = (superClass) => class extends superClass {
         datas.schemaPrefix=schemaPrefix; datas.actionName=actionName; datas.paramsUrl=paramsUrl;
         if (callBackFunction2){
             datas.callBackFunction=callBackFunction2.bind(this);}
-        console.log('api-env-monit.js >> SampleAPIControllerAPI >> Before calling sampleBackEndCallAPI the datas contains: ', datas);            
+        //console.log('api-env-monit.js >> SampleAPIControllerAPI >> Before calling sampleBackEndCallAPI the datas contains: ', datas);            
         this.sampleBackEndCallAPI(datas);            
     }
     sampleBackEndCallAPI(data) {

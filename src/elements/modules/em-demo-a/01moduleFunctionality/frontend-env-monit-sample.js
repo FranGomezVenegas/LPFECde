@@ -5,6 +5,9 @@ getAllProgramsUnreceivedSamples as allProgramsUnreceivedSamples_em_demo_a
 , getAllSamplesStageIncubation2 as getAllSamplesStageIncubation2_em_demo_a   
 , getAllSamplesStagePlateReading as getAllSamplesStagePlateReading_em_demo_a   
 , getAllSamplesStageMicroorganism as getAllSamplesStageMicroorganism_em_demo_a   
+, getAllPersonSamplesStageSampling as getAllPersonSamplesStageSampling_em_demo_a   
+, getAllPersonSamplesStagePlateReading as getAllPersonSamplesStagePlateReading_em_demo_a   
+, getAllPersonSamplesStageMicroorganism as getAllPersonSamplesStageMicroorganism_em_demo_a   
 , getMicroorganismList as getMicroorganismList_em_demo_a
 , getBrowserSampleData as getBrowserSampleData_em_demo_a, getBrowserIncubatorData as getBrowserIncubatorData_em_demo_a, getBrowserBatchData as getBrowserBatchData_em_demo_a
 
@@ -268,8 +271,16 @@ fieldButtonClicked(e) {
 //    console.log('frontend-env-monit-sample >> fieldButtonClicked ', 
 //        'e.detail.buttonName', e.detail.buttonName, 'this.selectedObject', this.selectedObject, 'e.detail.buttonDefinition', e.detail.buttonDefinition);
     if (this.selectedObject==null){
-        this.dispatchEvent(new CustomEvent('toast-error', {bubbles: true, composed: true,
-            detail: 'Please select one sample first '}));    
+        var message=''; 
+        switch(this.selectedLanguage){
+            case 'es': message='Por favor selecciona un objeto primero'; break; //message=response.data.message_es; break;            
+            default: message='Please select one object first.'; break; //message=response.data.message_en; break;
+        }                    
+        this.dispatchEvent(new CustomEvent('toast-error', {
+            bubbles: true,
+            composed: true,
+            detail: message
+            }));        
         return;
     }    
     var datas = [];
@@ -286,10 +297,18 @@ incubatorFieldButtonClicked(e) {
 //    console.log('frontend-env-monit-sample >> fieldButtonClicked ', 
 //        'e.detail.buttonName', e.detail.buttonName, 'this.selectedObject', this.selectedObject, 'e.detail.buttonDefinition', e.detail.buttonDefinition);
     if (this.selectedObject==null){
-        this.dispatchEvent(new CustomEvent('toast-error', {bubbles: true, composed: true,
-            detail: 'Please select one sample first '}));    
+        var message=''; 
+        switch(this.selectedLanguage){
+            case 'es': message='Por favor selecciona una incubadora primero'; break; //message=response.data.message_es; break;            
+            default: message='Please select one incubator first.'; break; //message=response.data.message_en; break;
+        }                    
+        this.dispatchEvent(new CustomEvent('toast-error', {
+            bubbles: true,
+            composed: true,
+            detail: message
+            }));        
         return;
-    }    
+}    
     var datas = [];
     datas.actionName=e.detail.buttonName;
     datas.selectedObject=this.selectedObject;
@@ -902,6 +921,118 @@ getAllSamplesStageMicroorganism(data) {
     .then(function () {
         });
 }
+getAllPersonSamplesStageSampling(data) {
+    var apiUrl=backendUrl+frontEndEnvMonitSampleUrl; 
+//    console.log('getSamplesInProgress', apiUrl, data);
+    if (!data.finalToken){return;}
+    if (!data.schemaPrefix){return;}
+    axios.get(apiUrl, {        
+        params: {
+            'schemaPrefix':data.schemaPrefix, 'actionName':data.actionName, 
+            'finalToken':data.finalToken, 'sampleFieldToRetrieve':data.sampleFieldToRetrieve,
+            'whereFieldsName': data.samplesWhereFieldsName, 
+            'whereFieldsValue': data.samplesWhereFieldsValue, 'sortFieldsName':data.samplesTabSortFields
+        }
+    })
+    .then( response => {
+        if(response.status == 200) {
+//            console.log(response.data);
+            store.dispatch(getAllPersonSamplesStageSampling_em_demo_a(response.data));
+            if (data.callBackFunction){data.callBackFunction();}
+            return;
+        }
+        if (data.callBackFunctionError){data.callBackFunctionError();}
+        this.dispatchEvent(new CustomEvent('toast-error', {
+            bubbles: true,        composed: true,
+            detail: 'Error on '+apiUrl+' although the connectivity with the API ended with success! Status: '+response.status
+          }));         
+        })
+    .catch(function (error) {
+        if (data.callBackFunctionError){data.callBackFunctionError();}
+        console.log(error.message);
+        this.dispatchEvent(new CustomEvent('toast-error', {
+            bubbles: true,        composed: true,
+            detail: 'Error on authentication'+error.message
+          }));           
+        })
+    .then(function () {
+        });
+}
+getAllPersonSamplesStagePlateReading(data) {
+    var apiUrl=backendUrl+frontEndEnvMonitSampleUrl; 
+//    console.log('getSamplesInProgress', apiUrl, data);
+    if (!data.finalToken){return;}
+    if (!data.schemaPrefix){return;}
+    axios.get(apiUrl, {        
+        params: {
+            'schemaPrefix':data.schemaPrefix, 'actionName':data.actionName, 
+            'finalToken':data.finalToken, 'sampleFieldToRetrieve':data.sampleFieldToRetrieve,
+            'whereFieldsName': data.samplesWhereFieldsName, 
+            'whereFieldsValue': data.samplesWhereFieldsValue, 'sortFieldsName':data.samplesTabSortFields
+        }
+    })
+    .then( response => {
+        if(response.status == 200) {
+//            console.log(response.data);
+            store.dispatch(getAllPersonSamplesStagePlateReading_em_demo_a(response.data));
+            if (data.callBackFunction){data.callBackFunction();}
+            return;
+        }
+        if (data.callBackFunctionError){data.callBackFunctionError();}
+        this.dispatchEvent(new CustomEvent('toast-error', {
+            bubbles: true,        composed: true,
+            detail: 'Error on '+apiUrl+' although the connectivity with the API ended with success! Status: '+response.status
+          }));         
+        })
+    .catch(function (error) {
+        if (data.callBackFunctionError){data.callBackFunctionError();}
+        //console.log(error.message);
+        this.dispatchEvent(new CustomEvent('toast-error', {
+            bubbles: true,        composed: true,
+            detail: 'Error on authentication'+error.message
+          }));           
+        })
+    .then(function () {
+        });
+}
+getAllPersonSamplesStageMicroorganism(data) {
+    var apiUrl=backendUrl+frontEndEnvMonitSampleUrl; 
+//    console.log('getSamplesInProgress', apiUrl, data);
+    if (!data.finalToken){return;}
+    if (!data.schemaPrefix){return;}
+    axios.get(apiUrl, {        
+        params: {
+            'schemaPrefix':data.schemaPrefix, 'actionName':data.actionName, 
+            'finalToken':data.finalToken, 'sampleFieldToRetrieve':data.sampleFieldToRetrieve,
+            'whereFieldsName': data.samplesWhereFieldsName, 
+            'whereFieldsValue': data.samplesWhereFieldsValue, 'sortFieldsName':data.samplesTabSortFields
+        }
+    })
+    .then( response => {
+        if(response.status == 200) {
+//            console.log(response.data);
+            store.dispatch(getAllPersonSamplesStageMicroorganism_em_demo_a(response.data));
+            if (data.callBackFunction){data.callBackFunction();}
+            return;
+        }
+        if (data.callBackFunctionError){data.callBackFunctionError();}
+        this.dispatchEvent(new CustomEvent('toast-error', {
+            bubbles: true,        composed: true,
+            detail: 'Error on '+apiUrl+' although the connectivity with the API ended with success! Status: '+response.status
+          }));         
+        })
+    .catch(function (error) {
+        if (data.callBackFunctionError){data.callBackFunctionError();}
+        //console.log(error.message);
+        this.dispatchEvent(new CustomEvent('toast-error', {
+            bubbles: true,        composed: true,
+            detail: 'Error on authentication'+error.message
+          }));           
+        })
+    .then(function () {
+        });
+}
+
 getMicroorganismList(data) {
     var apiUrl=backendUrl+frontEndEnvMonitSampleUrl; 
     //console.log('getAnalysisList', apiUrl, data);

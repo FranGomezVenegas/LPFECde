@@ -40,21 +40,20 @@ class emDemoAPersonPlateReading extends EmDemoAapiEnvMonit(FrontendEnvMonitSampl
     onFinalTokenFilled(){
         this.callBackRefreshWindow = this.refreshWindow.bind(this);
         if ( (!this.finalToken) || (!this.schemaPrefix) ) {return;}
-        //console.log('getAllSamplesStagePlateReading', 'samplesWhereFieldsName', this.samplesWhereFieldsName, 'samplesWhereFieldsValue', this.samplesWhereFieldsValue);
-        this.getAllSamplesStagePlateReading({
+        //console.log('getAllPersonSamplesStagePlateReading', 'samplesWhereFieldsName', this.samplesWhereFieldsName, 'samplesWhereFieldsValue', this.samplesWhereFieldsValue);
+        this.getAllPersonSamplesStagePlateReading({
             finalToken:this.finalToken, schemaPrefix:this.schemaPrefix, actionName:'SAMPLES_BY_STAGE'
-            , personFieldToRetrieve:personPlateReading_sampleFieldToRetrieve//this.sampleFieldToRetrieve
+            , sampleFieldToRetrieve:personPlateReading_sampleFieldToRetrieve//this.sampleFieldToRetrieve
             , samplesTabSortFields:personPlateReading_sampleFieldToSort//this.samplesTabSortFields,
             , samplesWhereFieldsName: this.samplesWhereFieldsName, samplesWhereFieldsValue: this.samplesWhereFieldsValue,
             addSampleAnalysis: this.addSampleAnalysis, addSampleAnalysisFieldToRetrieve: this.addSampleAnalysisFieldToRetrieve,
             addSampleAnalysisResult: this.addSampleAnalysisResult, addSampleAnalysisResultFieldToRetrieve: this.addSampleAnalysisResultFieldToRetrieve,
-        }); 
-                
+        });
     }         
     stateChanged(state) {
         this.finalToken = state.app.user.finalToken;         
         if (state.emDemoA!=null){
-            this.allSamplesStagePlateReading= state.emDemoA.allSamplesStagePlateReading;
+            this.allPersonSamplesStagePlateReading= state.emDemoA.allPersonSamplesStagePlateReading;
         }          
         if (this.tabIndex!=0){
             //this.schemaPrefix = state.tabs.tabs[this.tabIndex-1].procedure.schemaPrefix;
@@ -88,7 +87,7 @@ class emDemoAPersonPlateReading extends EmDemoAapiEnvMonit(FrontendEnvMonitSampl
                     </field-controller>
                 </template>  
             </div>            
-            <vaadingrid-singleselect class="vaadin-grid" id="mygridid" headerfields="{{sampleFieldToDisplay}}" rowcontainer="{{allSamplesStagePlateReading}}"            
+            <vaadingrid-singleselect class="vaadin-grid" id="mygridid" headerfields="{{sampleFieldToDisplay}}" rowcontainer="{{allPersonSamplesStagePlateReading}}"            
             selected-object="{{selectedObject}}">
             </vaadingrid-singleselect>
         `;

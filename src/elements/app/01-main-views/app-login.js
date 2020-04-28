@@ -3,8 +3,6 @@ import { connect } from 'pwa-helpers/connect-mixin';
 import {store} from '../../../store';
 
 import '@polymer/paper-spinner/paper-spinner-lite';
-//import {AppStorageBehavior} from '@polymer/app-storage/app-storage-behavior';
-//import '@polymer/app-storage/app-localstorage.js';
 
 import '../../internalComponents/form-fields/field-text';
 import '../../internalComponents/form-fields/field-controller';
@@ -13,18 +11,19 @@ import '../../internalComponents/others/language-selector';
 import '../../internalComponents/others/ribbon-element';
 
 import {AuthenticationApi} from '../mixin/authentication-api';
-import {appLogin_formFields, appLogin_ribbonField, userProfileHome, appLogin_authenticationMessage} from '../../../config/app-config';
+import {appLogin_formFields, appLogin_ribbonField, userProfileHome, appLogin_authenticationMessage, sopUserPendingSop_fieldToRetrieve, sopUserAllSop_fieldToRetrieve} from '../../../config/app-config';
 
-import { doLogin } from '../Redux/actions/app_actions';
+import { doLogin , startLoading} from '../Redux/actions/app_actions';
 
 import {addSession} from '../Redux/actions/session_actions';
 import {UserSession} from  '../mixin/api-usersession';
 import {ProcedureList} from '../mixin/app-procedurelist-api';
+import {FrontendSopUser} from '../mixin/frontend-sopuser';
 
 import {addTab, setCurrentTab, addSystemTab} from '../Redux/actions/tabs_actions';
 import './../../../config/styles/div-style.js';
 import './../../../config/styles/img-style.js'; 
-class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store)(PolymerElement)))) {
+class AppLogin extends FrontendSopUser(ProcedureList(UserSession(AuthenticationApi(connect(store)(PolymerElement))))) {
   static get properties() {
     return {
       axiosMessage: {type: String, value:appLogin_authenticationMessage},
@@ -51,10 +50,6 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
       selectedLanguage: String,
     }
   }
-  stateChanged(state) {
-    this.selectedLanguage = state.app.user.appLanguage;
-    this.loggedIn = state.app.user.loggedIn;   
-  }   
   static get template() {
     return html`
       <style include="div-style"></style>
@@ -81,15 +76,9 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
   keyPressed(e){
     //console.log('key pressed');
     if(e.key=="Enter") {
-      if (e.target.field.name=="User"){
-        this.shatowDOM
-        const form = document.getElementById('form');//.getElementById('Password');
-        const field=this.shadowRoot.getElementById('password');
-        field.shadowRoot.focus;
-        //field.focus;
-        //var x=document.getElementById("Password");        
-        console.log(form, field);
-
+      if (e.target.field.name.toUpperCase()=="USER"){        
+        const field=this.shadowRoot.getElementById('password').focus();
+        //field.focus();
         return;
       }
       this.login();
@@ -122,17 +111,7 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
     this.set('login.disabled', true);
   }  
   authSuccess(){
-    //console.log('authSuccess');
-    var message=''; 
-    switch(this.selectedLanguage){
-        case 'es': message=this.axiosMessage.connectedSuccess.message_es; break; //message=response.data.message_es; break;            
-        default: message=this.axiosMessage.connectedSuccess.message_en; break; //message=response.data.message_en; break;
-    }        
-    this.authenticated=true;
-    this.dispatchEvent(new CustomEvent('toast-message', {
-      bubbles: true,        composed: true,
-      detail: message//'User valid, please select your role to proceed'
-    }));    
+    this.authenticated=true; 
     this.loading=false;
   }
   authError(e) {
@@ -155,7 +134,24 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
     }
 
     fillUserRoleList() {
-      
+      //console.log('fillUserRoleList');
+      if (this.userRoles.length==1){
+        var message=''; 
+        switch(this.selectedLanguage){
+            case 'es': message=this.axiosMessage.connectedSuccess_singleRole.message_es; break; //message=response.data.message_es; break;            
+            default: message=this.axiosMessage.connectedSuccess_singleRole.message_en; break; //message=response.data.message_en; break;
+        }        
+      }else{
+        var message=''; 
+        switch(this.selectedLanguage){
+            case 'es': message=this.axiosMessage.connectedSuccess.message_es; break; //message=response.data.message_es; break;            
+            default: message=this.axiosMessage.connectedSuccess.message_en; break; //message=response.data.message_en; break;
+        }        
+      }
+      this.dispatchEvent(new CustomEvent('toast-message', {
+        bubbles: true,        composed: true,
+        detail: message//'User valid, please select your role to proceed'
+      }));   
       this.set('formFields.1.read_only', true); // userName
       this.set('formFields.2.read_only', true); // password
       this.set('formFields.4.read_only', false); // roleList          
@@ -177,14 +173,16 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
       this.set('formFields.4.items', this.rolesList);
     }
     initAppSession() {      
+//console.log('app-login >> initAppSession >> addSession', 'this.finalToken', this.finalToken, 'data', data, 'this.userRole', this.userRole);
+      var tabsLogin='';
+      if (this.userTabsOnLogin){tabsLogin=this.userTabsOnLogin;}
       var data={
         sessionId: this.appSessionId,
         userRole: this.userRole,
         startDate: this.appSessionStartDate,    
-        userTabsOnLogin : this.userTabsOnLogin     
+        userTabsOnLogin : tabsLogin    
       };
-//console.log('app-login >> initAppSession >> addSession', 'data', data, 'this.userRole', this.userRole);
-      this.getProcedureList({finalToken:this.finalToken});            
+      this.getProcedureList({finalToken:this.finalToken, callBackFunction:this.getAllMySops.bind(this), callBackFunction2:this.getMyPendingSops.bind(this)});            
       store.dispatch(addSession(data));   
       var actionName='getAppHeader';
       var paramsUrl='actionName='+actionName+'&finalToken='+this.finalToken+'&personFieldsName='+this.userInfoId;
@@ -199,6 +197,21 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
       if (e.detail.buttonName=="buttonAccess"){                      
         this.login();}
     }
+    getMyPendingSops(){
+      var actionName='MY_PENDING_SOPS';
+      var paramsUrl='actionName='+actionName+'&finalToken='+this.finalToken+'&sopFieldsToRetrieve='+sopUserPendingSop_fieldToRetrieve;
+      var datas = [];
+      datas.finalToken=this.finalToken; datas.actionName=actionName; datas.paramsUrl=paramsUrl;
+      this.frontEndSopUserAPI(datas);
+    }
+
+    getAllMySops(){
+      var actionName='ALL_MY_SOPS';
+      var paramsUrl='actionName='+actionName+'&finalToken='+this.finalToken+'&sopFieldsToRetrieve='+sopUserAllSop_fieldToRetrieve;
+      var datas = [];
+      datas.finalToken=this.finalToken; datas.actionName=actionName; datas.paramsUrl=paramsUrl;
+      this.frontEndSopUserAPI(datas);      
+    }
 
     onListChange(e) {    
       if (e.detail.name=="userRole"){ 
@@ -206,12 +219,14 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
     }
     doLogin(userRole) {
       this.userRole=userRole;
+      store.dispatch(startLoading());
       this.ajaxFinalToken({
         actionName: 'finaltoken'  , partialToken:  this.partialToken  , userRole: userRole
       });      
     }  
 
     openTabsOnLogin(tabsInfo){
+      if (!tabsInfo) {return;}
       var i;
       for (i = 0; i < tabsInfo.length; i++) { 
         //if (tabsInfo[i].tabName!='user-profile'){
@@ -237,9 +252,27 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
       }
       store.dispatch(setCurrentTab(curTab));  
     }
+    stateChanged(state) {
+      this.selectedLanguage = state.app.user.appLanguage;
+      this.loggedIn = state.app.user.loggedIn;   
+      // this.focus(); Intento de poner el foco en el primer campo de formulario
+    }   
+  
+/* Intento por poner el foco en el campo user, lo hace pero lo quita, creo que falta un stop propagatedown pero no sé usarlo
+    focus(e){
+      console.log(this.formFields);
+      var elem=this.shadowRoot.getElementById(this.formFields[1].name);
+      //var elem=this.shadowRoot.querySelector("field-text");      
+      if (elem){elem.focus();}
+    }  
+    ready() {
+      super.ready();
+      this.focus();
+    }
+*/    
     constructor() {
       super();
-      //return;
+      return;
       var curTab = [];            
       this.userName="labplanet"; 
       this.userInfoId="1"; 
@@ -258,6 +291,7 @@ class AppLogin extends ProcedureList(UserSession(AuthenticationApi(connect(store
       this.ajaxFinalToken({
         actionName: 'finaltoken'  , partialToken:  this.partialToken  , userRole: this.userRole, dbUserPassword: 'laslechugas'
       });  
+      return;      
       var incidentsHome={
         lp_frontend_page_name: 'incidents/new-incident.js',        
         tabName: 'new-incident',

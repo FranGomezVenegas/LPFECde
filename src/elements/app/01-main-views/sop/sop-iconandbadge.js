@@ -29,23 +29,28 @@ class SopIconandbadge extends (connect(store)(PolymerElement)) {
     }
     static get template() {
         return html`
-        <style include="paper-badge-style"></style> <style include="div-style"></style>
-        <style include="img-style"></style><style include="paper-button-style"></style>
-        <div>
-            <div class="sopIconAndBadge">                
+        <style include="paper-badge-style"></style> <!-- <style include="div-style"></style> -->
+        <style include="img-style"></style> <style include="paper-button-style"></style> 
+        <style>
+            :host{
+                display: flex;
+                position: relative;
+            }
+            #sopIconAndBadgeDIV{ 
+                display:flex; 
+            }
+            
+        </style>
+            <div class="sopIconAndBadgeDIV">                
                 <img class="sopIconAndBadge" src="{{iconName}}">
-                <template is="dom-if" if="[[showPendingSOP]]">
-                    <paper-button id="btn" class="sopIconAndBadgePendingSop"></paper-button>
-                        <paper-badge for="btn" class="sopIconAndBadgePendingSop" on-click="pendingSOPClicked" label="{{contPendingUserSOPs}}">                            
-                        </paper-badge>
+                <template is="dom-if" if="{{showPendingSOP}}">
+                    <paper-badge for="btn" class="pendingSop" on-click="pendingSOPClicked" label="{{contPendingUserSOPs}}"></paper-badge>
                 </template>
-                <paper-button id="btn2" class="sopIconAndBadgePendingSop"></paper-button>
-                    <paper-badge for="btn2" class="sopIconAndBadgeAllUserSop" on-click="AllUserSOPClicked" label="{{contAllUserSOPs}}">                        
-                    </paper-badge>
+                <paper-badge for="btn2" class="allUserSop"  on-click="AllUserSOPClicked" label="{{contAllUserSOPs}}"></paper-badge>
             </div>
-        </div>
         `;
     }
+  
     stateChanged(state) {    
         if (!state.SOPS.userAllSop){this.contAllUserSOPs=0;}         
         else{
@@ -54,10 +59,20 @@ class SopIconandbadge extends (connect(store)(PolymerElement)) {
                 if (!state.SOPS.userAllSop[0].my_sops){this.contAllUserSOPs=0;}
                 else{this.contAllUserSOPs = state.SOPS.userAllSop[0].my_sops.length;}
             }
-        }            
-        if (state.SOPS.userPendingSop==undefined){this.contPendingUserSOPs=0; this.showPendingSOP=false; this.iconName=this.iconNameGreen;}
+        }
+        if (state.SOPS.userPendingSop==undefined){this.contPendingUserSOPs=0; this.showPendingSOP=false; this.iconName=this.iconNameGreen; return;}
         if (state.SOPS.userPendingSop.length==0){this.contPendingUserSOPs=0; this.showPendingSOP=false; this.iconName=this.iconNameGreen;}
-        else{this.contPendingUserSOPs = state.SOPS.userPendingSop.length; this.showPendingSOP=true; this.iconName=this.iconNameRed;}
+        else{
+            var pendingUserSOPs = 0;
+            var i;
+            for (i = 0; i < state.SOPS.userPendingSop.length; i++) { 
+                var pendingProcedureSOPs=pendingUserSOPs+state.SOPS.userPendingSop[i].pending_sops.length;                
+                pendingUserSOPs=pendingUserSOPs+pendingProcedureSOPs;
+                //console.log('sop-iconandbadge >> stateChanged', 'pendingProcedureSOPs', pendingProcedureSOPs, 'pendingUserSOPs', pendingUserSOPs);
+            }
+            this.contPendingUserSOPs = pendingUserSOPs; //state.SOPS.userPendingSop[0].pending_sops.length; 
+            this.showPendingSOP=true; 
+            this.iconName=this.iconNameRed;}
     }   
     pendingSOPClicked(){
         store.dispatch(addSystemTab(pendingSOPTab));

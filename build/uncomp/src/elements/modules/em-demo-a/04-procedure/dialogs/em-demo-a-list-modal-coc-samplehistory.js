@@ -37,7 +37,9 @@ import"../../../../internalComponents/form-fields/field-icon-button.js";import{d
             
         </div>        
         `}fieldButtonClicked(e){console.log("optionPressed",e.detail.buttonName,"selectedSampleAnalysis",this.selectedObject);//console.log('optionPressed', e.detail.buttonName, 'selectedSample', this.selectedObject);                
-if(null==this.selectedObject){this.dispatchEvent(new CustomEvent("toast-error",{bubbles:!0,composed:!0,detail:"Please select one sample analysis first"}));return}var datas=[];datas.schemaPrefix=this.schemaPrefix;datas.actionName=e.detail.buttonName;datas.selectedObject=this.selectedObject;var tabInfo={currTabEsignRequired:this.currTabEsignRequired,currTabConfirmUserRequired:this.currTabConfirmUserRequired};datas.tabInfo=tabInfo;//        datas.sampleResults_analysisListFieldsToRetrieve=sampleResults_analysisListFieldsToRetrieve;
+if(null==this.selectedObject){var message="";switch(this.selectedLanguage){case"es":message="Por favor selecciona un objeto primero";break;//message=response.data.message_es; break;            
+default:message="Please select one object first.";break;//message=response.data.message_en; break;
+}this.dispatchEvent(new CustomEvent("toast-error",{bubbles:!0,composed:!0,detail:message}));return}var datas=[];datas.schemaPrefix=this.schemaPrefix;datas.actionName=e.detail.buttonName;datas.selectedObject=this.selectedObject;var tabInfo={currTabEsignRequired:this.currTabEsignRequired,currTabConfirmUserRequired:this.currTabConfirmUserRequired};datas.tabInfo=tabInfo;//        datas.sampleResults_analysisListFieldsToRetrieve=sampleResults_analysisListFieldsToRetrieve;
 switch(e.detail.buttonName){case"testAssignment":var actionName="TESTASSIGNMENT";this.$.myElementsSample.sampleActionTrigger(actionName,datas);break;/*            var paramsUrl="actionName="+actionName+"&finalToken="+this.finalToken+"&schemaPrefix="+this.schemaPrefix
             +"&testId="+"141"+"&newAnalyst="+"2";
             var datas = [];

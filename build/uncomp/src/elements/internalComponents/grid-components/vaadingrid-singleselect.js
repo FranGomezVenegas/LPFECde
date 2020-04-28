@@ -12,7 +12,7 @@ import"../../../../node_modules/@vaadin/vaadin-checkbox/vaadin-checkbox.js";impo
                 }
         </style>
 
-        <vaadin-grid id="gridLevel1" items="{{rowcontainer}}" on-active-item-changed="itemSelected"
+        <vaadin-grid id="gridLevel1" items="{{rowcontainer}}" on-active-item-changed="itemSelected" 
         selected-object="{{selectedObject}}"  column-reordering-allowed multi-sort>  
             <!-- <template is="dom-if" if="{{addSelectionColumn}}"> -->
                 <vaadin-grid-selection-column  auto-select></vaadin-grid-selection-column>
@@ -73,13 +73,13 @@ import"../../../../node_modules/@vaadin/vaadin-checkbox/vaadin-checkbox.js";impo
                 </template>                    
                 <template is="dom-if" if="{{!isStatus(fld.name)}}">
                     <template is="dom-if" if="{{isFilter(fld)}}"> 
-                        <vaadin-grid-filter-column width="{{fld.width}}" resizable style="color: blue;" path="{{fld.name}}" header="{{labelValue(selectedLanguage, fld)}}"></vaadin-grid-filter-column>
+                        <vaadin-grid-filter-column min-width="{{fld.min_width}}" width="{{fld.width}}" resizable style="color: blue;" path="{{fld.name}}" header="{{labelValue(selectedLanguage, fld)}}"></vaadin-grid-filter-column>
                     </template>
                     <template is="dom-if" if="{{isSort(fld)}}"> 
-                        <vaadin-grid-sort-column path="{{fld.name}}" width="{{fld.width}}" resizable  header="{{labelValue(selectedLanguage, fld)}}"></vaadin-grid-sort-column>
+                        <vaadin-grid-sort-column path="{{fld.name}}" min-width="{{fld.min_width}}" width="{{fld.width}}" resizable  header="{{labelValue(selectedLanguage, fld)}}"></vaadin-grid-sort-column>
                     </template>
                     <template is="dom-if" if="{{isNormal(fld)}}"> 
-                        <vaadin-grid-column path="{{fld.name}}" width="{{fld.width}}" resizable  header="{{labelValue(selectedLanguage, fld)}}"></vaadin-grid-column>
+                        <vaadin-grid-column path="{{fld.name}}" min-width="{{fld.min_width}}" width="{{fld.width}}" resizable  header="{{labelValue(selectedLanguage, fld)}}"></vaadin-grid-column>
                     </template>
                 </template>                   
             </template>
@@ -95,5 +95,9 @@ import"../../../../node_modules/@vaadin/vaadin-checkbox/vaadin-checkbox.js";impo
         </template>
         </vaadin-grid>       
 -->        
-        `}isStatus(fldName){//console.log('isStatus', 'fldName', fldName);
-return"status"==fldName}itemSelected(e){console.log("itemSelected",e.detail.value);this.selectedObject=e.detail.value;if(null==this.selectedObject){return}this.$.gridLevel1.selectedObject=this.selectedObject;this.$.gridLevel1.selectedItems=[]}isSort(item){if(item.sort)return!0;else return!1}isFilter(item){if(item.filter)return!0;else return!1}isNormal(item){if(item.sort)return!1;if(item.filter)return!1;return!0}}customElements.define("vaadingrid-singleselect",VaadingridSingleselect);
+        `}changeItemSelected(itemToSelect){console.log("changeItemSelected");////this.selectedObject=itemToSelect;
+////this.$.gridLevel1.selectedItems=[];
+this.$.gridLevel1.selectItem(itemToSelect);//this.$.gridLevel1.selectedItems = itemToSelect ? [itemToSelect] : [];
+}isStatus(fldName){//console.log('isStatus', 'fldName', fldName);
+return"status"==fldName}itemSelected(e){//console.log('itemSelected', e.detail.value);
+this.selectedObject=e.detail.value;if(null==this.selectedObject){return}this.$.gridLevel1.selectedObject=this.selectedObject;this.$.gridLevel1.selectedItems=[]}isSort(item){if(item.sort)return!0;else return!1}isFilter(item){if(item.filter)return!0;else return!1}isNormal(item){if(item.sort)return!1;if(item.filter)return!1;return!0}}customElements.define("vaadingrid-singleselect",VaadingridSingleselect);

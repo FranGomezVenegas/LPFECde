@@ -125,7 +125,7 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
         </paper-dialog>  
 
         <paper-dialog id="microorganismList">
-          <em-demo-a-list-modal-microorganism list-header="{{microorganismListToDisplay}} call-back-function-env-monit-elem="{{callBackFunctionEnvMonitElem}}" 
+          <em-demo-a-list-modal-microorganism id="microorganismList_modal" list-header="{{microorganismListToDisplay}}" call-back-function-env-monit-elem="{{callBackFunctionEnvMonitElem}}" 
               list-rows="{{microorganismList}}" selected-object="[[backEndData.selectedObject]]" final-token="[[finalToken]]" 
               on-dialog-button-clicked="dialogClosedMicroorganismList"> 
           </em-demo-a-list-modal-microorganism>
@@ -159,7 +159,7 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
             if (state.emDemoA.selectedBatch!=null){
                 this.selectedBatch=state.emDemoA.selectedBatch;}
 
-            console.log(this.callBackFunctionEnvMonitElem);
+            //console.log(this.callBackFunctionEnvMonitElem);
         }     
         this.currTabEsignRequired=state.tabs.currTabEsignRequired;
         this.currTabConfirmUserRequired=state.tabs.currTabConfirmUserRequired;        
@@ -168,7 +168,7 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
     sampleActionTrigger(buttonName, backEndData, buttonDefinition){
         this.buttonName=buttonName;
         this.backEndData=backEndData;        
-    console.log('env-monit-elements-sample >> actionTrigger >> backEndData', backEndData, 'this.backEndData', this.backEndData, 'buttonDefinition', buttonDefinition);  
+//    console.log('env-monit-elements-sample >> actionTrigger >> backEndData', backEndData, 'this.backEndData', this.backEndData, 'buttonDefinition', buttonDefinition);  
         //if (this.currTabEsignRequired){
         if (buttonDefinition && buttonDefinition.esign_required){    
             store.dispatch(openEsignDialog(
@@ -188,15 +188,6 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
         this.sampleActionTriggerNext();
     }    
     sampleActionTriggerAbort(){
-        var message=''; 
-        switch(this.selectedLanguage){
-            case 'es': message=this.validationNotCorrectMessage.message_es; break; //message=response.data.message_es; break;            
-            default: message=this.validationNotCorrectMessage.message_en; break; //message=response.data.message_en; break;
-        }     
-        this.dispatchEvent(new CustomEvent('toast-error', {
-            bubbles: true,        composed: true,
-            detail: message
-        }));    
         this.loading=false;  
     }
     sampleActionTriggerNext(){
@@ -335,7 +326,7 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
             break; 
         case 'ADDMICROORGANISM': 
             import('../04-procedure/dialogs/em-demo-a-list-modal-microorganism.js');
-            this.microorganismListToDisplay=microorganismList_fieldsToDisplay;
+            this.microorganismListToDisplay=this.microorganismListToDisplay;
             var actionName='GET_MICROORGANISM_LIST';
             var paramsUrl='actionName='+actionName+'&finalToken='+this.finalToken+'&schemaPrefix='+this.schemaPrefix
             +'&fieldToRetrieve='+this.microorganismListToDisplay;
@@ -344,6 +335,8 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
             //datas.callBackFunction=this.openAddSampleAnalysisDialog.bind(this);
             this.getMicroorganismList(datas);            
             this.$.microorganismList.open();
+            // const field=this.shadowRoot.getElementById('microorganismList_modal');
+            // if (field){field.openDialog();}
             break; 
         case 'SAMPLE_AUDIT': 
             import('../04-procedure/dialogs/em-demo-a-list-modal-sample-audit.js');
@@ -453,8 +446,7 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
         this.$.addSampleAnalysis.close();
     } 
     dialogClosedMicroorganismList(e){
-        this.$.microorganismList.close();
-        return;
+        this.$.microorganismList.close();        
         if (e.detail.dialogState=='confirmed'){
             var microorganismName=""; 
             var i, len;            
@@ -463,7 +455,7 @@ class EnvMonitElementsSample extends EmDemoAapiEnvMonit(AuthenticationApi(Fronte
                 if (microorganismName.length>0){microorganismName=microorganismName+"|"}
                 microorganismName = microorganismName+selectedItems[i].name;
             }
-            console.log('selectedItems',e.detail.selectedItems,'microorganismName', microorganismName); 
+//            console.log('selectedItems',e.detail.selectedItems,'microorganismName', microorganismName); 
                 var actionName='ADD_SAMPLE_MICROORGANISM';
                 var datas = [];                
                 datas.schemaPrefix=this.schemaPrefix; datas.actionName=actionName;// datas.paramsUrl=paramsUrl;   

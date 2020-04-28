@@ -20,7 +20,9 @@ import './field-icon-button';
 class FieldController extends PolymerElement {
   static get properties() {
     return {
+      id: {type: String},
       field: {type: Object,observer: 'fieldChange', notify: true},
+      title: {type: Object},
       selectedLanguage: {type: String,notify: true},        
       iAm: {type: Object,
         value: function() {
@@ -32,7 +34,15 @@ class FieldController extends PolymerElement {
         }
       }
     }
-
+  }
+  resetValue(){
+    this.shadowRoot.getElementById(this.field.name).resetValue();
+  }
+  focus(){
+    //console.log(this.field);
+    var elem=this.shadowRoot.getElementById(this.field.name);
+    //var elem=this.shadowRoot.querySelector("field-text");
+    if (elem){elem.focus();}
   }
   resetIAms(){
     this.set('iAm.boolean', false);   this.set('iAm.date', false);        this.set('iAm.list', false);        this.set('iAm.text', false); this.set('iAm.textArea', false);
@@ -43,52 +53,52 @@ class FieldController extends PolymerElement {
     return html`
       <div class="card">      
       <template is="dom-if" if="{{iAm.boolean}}" >
-        <field-boolean field="[[field]]" value="{{field.value}}" ></field-boolean>
+        <field-boolean id="{{field.name}}" field="[[field]]" value="{{field.value}}" ></field-boolean>
       </template>
       <template is="dom-if" if="{{iAm.date}}">
-      <field-date field="[[field]]" value="{{field.value}}" ></field-date>
+      <field-date id="{{field.name}}" field="[[field]]" value="{{field.value}}" ></field-date>
       </template>
-      <template is="dom-if" if="{{iAm.list}}">
+      <template is="dom-if" if="{{iAm.list}}">   
         <field-list id="fieldlist" field="[[field]]" value="{{field.value}}" ></field-list>
       </template>
       <template is="dom-if" if="{{iAm.text}}">
-        <field-text type="{{field.type}}" field="{{field}}" value="{{field.value}}" ></field-text>
+        <field-text id="{{field.name}}" "type="{{field.type}}" field="{{field}}" value="{{field.value}}" ></field-text>
       </template>
       <template is="dom-if" if="{{iAm.textArea}}">
-        <field-text-area type="{{field.type}}" field="{{field}}" value="{{field.value}}" ></field-text-area>
+        <field-text-area id="{{field.name}}" type="{{field.type}}" field="{{field}}" value="{{field.value}}" ></field-text-area>
       </template>
       <template is="dom-if" if="{{iAm.logoCircle}}">
-        <field-logo-circle field="[[field]]" value="{{field.value}}" ></field-logo-circle>
+        <field-logo-circle id="{{field.name}}" field="[[field]]" value="{{field.value}}" ></field-logo-circle>
       </template>  
       <template is="dom-if" if="{{iAm.avatar}}">
-        <field-avatar field="[[field]]" value="{{field.value}}" ></field-avatar>
+        <field-avatar id="{{field.name}}" field="[[field]]" value="{{field.value}}" ></field-avatar>
       </template>      
       <template is="dom-if" if="{{iAm.googleFonts}}">
-        <field-google-fonts field="[[field]]" value="{{field.value}}"></field-google-fonts>
+        <field-google-fonts id="{{field.name}}" field="[[field]]" value="{{field.value}}"></field-google-fonts>
       </template>      
       <template is="dom-if" if="{{iAm.treeList}}">
-        <field-tree-list procedure="[[procedure]]" field="[[field]]" value="{{field.value}}"></field-tree-list>
+        <field-tree-list title="[[title]]" procedure="[[procedure]]" id="{{field.name}}" field="[[field]]" value="{{field.value}}"></field-tree-list>
       </template>         
       <template is="dom-if" if="{{iAm.button}}">
-        <field-button field="{{field}}" value="{{field.value}}"></field-button>
+        <field-button id="{{field.name}}" field="{{field}}" value="{{field.value}}"></field-button>
       </template>        
       <template is="dom-if" if="{{iAm.title}}">
-        <field-title field="{{field}}" value="{{field.value}}"></field-title>
+        <field-title id="{{field.name}}" field="{{field}}" value="{{field.value}}"></field-title>
       </template>        
       <template is="dom-if" if="{{iAm.buttonGroup}}">
-        <field-button-group field="{{field}}" value="{{field.value}}"></field-button-group>
+        <field-button-group id="{{field.name}}" field="{{field}}" value="{{field.value}}"></field-button-group>
       </template>  
       <template is="dom-if" if="{{iAm.integer}}">      
-        <field-integer field="{{field}}" value="{{field.value}}"></field-integer>
+        <field-integer id="{{field.name}}" field="{{field}}" value="{{field.value}}"></field-integer>
       </template>                    
       <template is="dom-if" if="{{iAm.badge}}">      
-        <field-badge field="{{field}}" value="{{field.value}}"></field-badge>
+        <field-badge id="{{field.name}}" field="{{field}}" value="{{field.value}}"></field-badge>
       </template>    
       <template is="dom-if" if="{{iAm.textconfirmuser}}">
-        <field-textconfirmuser type="{{field.type}}" field="{{field}}" value="{{field.value}}" ></field-textconfirmuser>
+        <field-textconfirmuser type="{{field.type}}" id="{{field.name}}" field="{{field}}" value="{{field.value}}" ></field-textconfirmuser>
       </template>
       <template is="dom-if" if="{{iAm.iconButton}}">
-        <field-icon-button procedure="[[procedure]]" type="{{field.type}}" field="{{field}}" value="{{field.value}}" ></field-icon-button>
+        <field-icon-button procedure="[[procedure]]" type="{{field.type}}" id="{{field.name}}" field="{{field}}" value="{{field.value}}" ></field-icon-button>
       </template>
       </div>
     `;
@@ -98,6 +108,8 @@ class FieldController extends PolymerElement {
   }
   fieldChange(newField) {
     this.resetIAms();
+//if (this.id=='proceduresList'){    
+//  console.log('field-controller', newField.name, this.id);}
     switch(newField.type) {
       case 'boolean':
         this.set('iAm.boolean', true);

@@ -16,10 +16,12 @@ import {schema_name, progProintsMapCardFormButtons, programProgPoints_samplePoin
     } from '../../03config/config-process.js'; 
 //import {selectedProgram} from '../00jsonFake/selectedProgram.js';
 import {setSelectedSamplingPoint} from '../../02Redux/em-demo-a_actions.js';
+import {FieldsMethods} from '../../../../app/app-functions/fields-methods';
 
-class EmDemoAProgPointsMap extends EmDemoAapiEnvMonit(FrontendEnvMonit(connect(store)(PolymerElement))) {
+class EmDemoAProgPointsMap extends FieldsMethods(EmDemoAapiEnvMonit(FrontendEnvMonit(connect(store)(PolymerElement)))) {
     static get properties() {
         return {
+            selectedLanguage: {type:String},
             schemaPrefix: {type:String, value:schema_name},
             selectedPointCardForm: {type: Object}, //, value:appLogin_formFields},
             selectedProgram:{type: Object},
@@ -32,6 +34,7 @@ class EmDemoAProgPointsMap extends EmDemoAapiEnvMonit(FrontendEnvMonit(connect(s
             //cleanRoomExample:{type:String, value:selectedProgram.map_image //'../images/clean-room-example.png'},
             editMode:{type: Boolean, value:false},
             callBackRefreshWindow: Object,
+            tableTitle:{type: Object, value:{label_en:'Defined program locations', label_es:'Tabla de ubicaciones definidas para el programa'}},
         }
     }
 
@@ -97,13 +100,23 @@ class EmDemoAProgPointsMap extends EmDemoAapiEnvMonit(FrontendEnvMonit(connect(s
                     border-radius: 5px;
                     background-color: #fff;
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-                }                             
+                }  
+                p.tableTitle{
+                    margin-top: 0px;
+                    margin-bottom: 3px;
+                    color: #4285f4;
+                    font-size:30px;
+                }            
             </style>
             <env-monit-elements id="myElements" call-back-function-env-monit-elem="{{callBackRefreshWindow}}"></env-monit-elements>
              <!-- {{selectedProgram.name}}
              <vaadin-button on-click="editModeToggle"  class="button" value="{{editMode}}">
                 Edit
             </vaadin-button>  -->
+            <div>
+                <p class="tableTitle">{{labelValue(selectedLanguage, tableTitle)}} {{selectedProgram.name}}</p>
+            </div>
+
              <div style="display:flex">
                 <vaadingrid-multiselect style="width:450px;" id="mygridid" headerfields="{{samplePointsTableHeaderFields}}" 
                     rowcontainer="{{selectedProgram.sample_points}}"            
@@ -200,6 +213,7 @@ class EmDemoAProgPointsMap extends EmDemoAapiEnvMonit(FrontendEnvMonit(connect(s
     constructor() {        super();    }
     ready() {        super.ready();    }
     stateChanged(state) {
+        this.selectedLanguage = state.app.user.appLanguage; 
         this.finalToken = state.app.user.finalToken; 
         if (state.emDemoA!=null){
             this.selectedSamplingPoint = state.emDemoA.selectedSamplingPoint;

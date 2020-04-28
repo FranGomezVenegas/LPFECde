@@ -19,7 +19,7 @@ class FieldAvatar extends PolymerElement {
               }
             </style>
             <!-- <vaadin-button on-click="clicked"  class="button" value="{{field.name}}"> -->
-              <img class="formFieldAvatar"  on-click="clicked" src="{{field.source}}" aligned="center"  height="80" width="80"> 
+              <img class="formFieldAvatar"  on-click="clicked" src="{{field.source}}" aligned="center"  height="50" width="50"> 
               <!-- </vaadin-button> -->
         `;
     }

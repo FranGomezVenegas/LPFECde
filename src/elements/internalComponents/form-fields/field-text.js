@@ -23,6 +23,7 @@ class FieldText extends FieldsMethods(connect(store)(PolymerElement)) {
       }      
     }
   }
+
   stateChanged(state) {
     this.selectedLanguage = state.app.user.appLanguage;        
   }   
@@ -96,5 +97,8 @@ class FieldText extends FieldsMethods(connect(store)(PolymerElement)) {
     </template>    
     `;
   } 
+  focus(){
+    this.shadowRoot.getElementById(this.field.name).focus();
+  }
 }
 customElements.define('field-text', FieldText);

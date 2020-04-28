@@ -1,9 +1,9 @@
 import{PolymerElement,html}from"../../../../../../node_modules/@polymer/polymer/polymer-element.js";import{connect}from"../../../../../../node_modules/pwa-helpers/connect-mixin.js";import{store}from"../../../../../store.js";import"../../../../internalComponents/cards/card-form.js";import"../../../../../../node_modules/@polymer/paper-dialog/paper-dialog.js";import"../../../../internalComponents/grid-components/vaadingrid-singleselect.js";//import {PolymerElement} from '@polymer/polymer/polymer-element.js';
 //import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 //import {appLogin_formFields, appLogin_ribbonField} from '../../../../config/app-config.js';
-import{EmDemoAapiEnvMonit}from"../../01moduleFunctionality/api-env-monit.js";import"../../01moduleFunctionality/env-monit-elements.js";import{FrontendEnvMonit}from"../../01moduleFunctionality/frontend-env-monit.js";import{FrontendEnvMonitSample}from"../../01moduleFunctionality/frontend-env-monit-sample.js";import{schema_name,progProintsCardFormButtons,programProgPoints_samplePointsTableHeaderFields,shifts}from"../../03config/config-process.js";//import {selectedProgram} from '../00jsonFake/selectedProgram.js';
-import{setSelectedSamplingPoint}from"../../02Redux/em-demo-a_actions.js";class EmDemoAProgPoints extends FrontendEnvMonitSample(EmDemoAapiEnvMonit(FrontendEnvMonit(connect(store)(PolymerElement)))){static get properties(){return{schemaPrefix:{type:String,value:schema_name},selectedPointCardForm:{type:Object},//, value:appLogin_formFields},
-selectedProgram:{type:Object,value:[]},selectedSamplingPoint:{type:Array},cardFormButtons:{type:Object,value:progProintsCardFormButtons},systemShifts:{type:Object,value:shifts},productionLotsList:{type:Array,value:[{keyName:"rutina",keyValue_en:"routine",keyValue_es:"rutina"}]},selectedObject:{type:Object,notify:!0},activeProductionLots:{type:Array,value:[]},samplePointsTableHeaderFields:{type:Array,value:programProgPoints_samplePointsTableHeaderFields},callBackRefreshWindow:Object}}static get template(){return html`
+import{EmDemoAapiEnvMonit}from"../../01moduleFunctionality/api-env-monit.js";import"../../01moduleFunctionality/env-monit-elements.js";import{FrontendEnvMonit}from"../../01moduleFunctionality/frontend-env-monit.js";import{FrontendEnvMonitSample}from"../../01moduleFunctionality/frontend-env-monit-sample.js";import{schema_name,progProintsFormButtons,progProintsCardFormButtons,programProgPoints_samplePointsTableHeaderFields,shifts}from"../../03config/config-process.js";//import {selectedProgram} from '../00jsonFake/selectedProgram.js';
+import{setSelectedSamplingPoint}from"../../02Redux/em-demo-a_actions.js";import{FieldsMethods}from"../../../../app/app-functions/fields-methods.js";class EmDemoAProgPoints extends FieldsMethods(FrontendEnvMonitSample(EmDemoAapiEnvMonit(FrontendEnvMonit(connect(store)(PolymerElement))))){static get properties(){return{selectedLanguage:{type:String},schemaPrefix:{type:String,value:schema_name},selectedPointCardForm:{type:Object},//, value:appLogin_formFields},
+selectedProgram:{type:Object,value:[]},selectedSamplingPoint:{type:Array},cardFormButtons:{type:Object,value:progProintsCardFormButtons},formButtons:{type:Object,value:progProintsFormButtons},systemShifts:{type:Object,value:shifts},productionLotsList:{type:Array,value:[{keyName:"rutina",keyValue_en:"routine",keyValue_es:"rutina"}]},selectedObject:{type:Object,notify:!0},activeProductionLots:{type:Array,value:[]},samplePointsTableHeaderFields:{type:Array,value:programProgPoints_samplePointsTableHeaderFields},callBackRefreshWindow:Object,tableTitle:{type:Object,value:{label_en:"Defined program locations",label_es:"Tabla de ubicaciones definidas para el programa"}}}}static get template(){return html`
             <style>
             vaadin-button {
                 top: 0;
@@ -64,11 +64,20 @@ selectedProgram:{type:Object,value:[]},selectedSamplingPoint:{type:Array},cardFo
                     border-radius: 5px;
                     background-color: #fff;
                     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-                }                             
+                }        
+                p.tableTitle{
+                    margin-top: 0px;
+                    margin-bottom: 3px;
+                    color: #4285f4;
+                    font-size:30px;
+                }            
             </style>
             <env-monit-elements id="myElements" call-back-function-env-monit-elem="{{callBackRefreshWindow}}"></env-monit-elements>
+            <div>
+                <p class="tableTitle">{{labelValue(selectedLanguage, tableTitle)}} {{selectedProgram.name}}</p>
+            </div>
             <div name="Buttons1" class="buttonGroup">
-                <template is="dom-repeat" items="{{cardFormButtons}}" as="currentfield">       
+                <template is="dom-repeat" items="{{formButtons}}" as="currentfield">       
                     <field-controller id="{{currentfield.name}}"  field="{{currentfield}}"
                     on-field-button-clicked="pointClicked" on-field-list-value-changed="onListChange"> 
                     </field-controller>
@@ -99,7 +108,7 @@ selectedProgram:{type:Object,value:[]},selectedSamplingPoint:{type:Array},cardFo
 }itemSelected(){console.log("itemSelected xssss")}onListChange(){this.pointClicked()}pointClicked(e){if(!e.detail.value){return}//console.log(this.selectedSamplingPoint, 'init');
 //console.log('em-demo-a-prog-points >> pointClicked', 'this.selectedObject', this.selectedObject, 'this.selectedSamplingPoint', this.selectedSamplingPoint );        
 store.dispatch(setSelectedSamplingPoint(e.detail.value.card_info));//console.log(this.selectedSamplingPoint, 'before');        
-var selectedSamplingPointLen=this.selectedSamplingPoint.length;selectedSamplingPointLen=selectedSamplingPointLen++;var newElement=[{name:"shift",label_en:"Shift",label_es:"Turno",type:"list",dbType:"String",value:"",read_only:!1,items:this.systemShifts},{name:"production_lot",label_en:"Lot",label_es:"Lote",type:"list",dbType:"String",value:"",read_only:!1,items:this.productionLotsList}],i;for(i=0;i<this.selectedSamplingPoint.length;i++){newElement[i+2]=this.selectedSamplingPoint[i]}this.selectedSamplingPoint=newElement;this.$.pointCard.open()}stateChanged(state){this.finalToken=state.app.user.finalToken;if(null!=state.emDemoA){this.selectedSamplingPoint=state.emDemoA.selectedSamplingPoint;this.selectedProgram=state.emDemoA.selectedProgram;this.activeProductionLots=state.emDemoA.activeProductionLots;if(null==this.selectedProgram)return;//console.log('this.activeProductionLots', this.activeProductionLots);
+var selectedSamplingPointLen=this.selectedSamplingPoint.length;selectedSamplingPointLen=selectedSamplingPointLen++;var newElement=[{name:"shift",label_en:"Shift",label_es:"Turno",type:"list",dbType:"String",value:"",read_only:!1,items:this.systemShifts},{name:"production_lot",label_en:"Lot",label_es:"Lote",type:"list",dbType:"String",value:"",read_only:!1,items:this.productionLotsList}],i;for(i=0;i<this.selectedSamplingPoint.length;i++){newElement[i+2]=this.selectedSamplingPoint[i]}this.selectedSamplingPoint=newElement;this.$.pointCard.open()}stateChanged(state){this.selectedLanguage=state.app.user.appLanguage;this.finalToken=state.app.user.finalToken;if(null!=state.emDemoA){this.selectedSamplingPoint=state.emDemoA.selectedSamplingPoint;this.selectedProgram=state.emDemoA.selectedProgram;this.activeProductionLots=state.emDemoA.activeProductionLots;if(null==this.selectedProgram)return;//console.log('this.activeProductionLots', this.activeProductionLots);
 if(null!=this.activeProductionLots){this.createProductionLotsList()}//this.unReceivedSamples= state.processUs.unReceivedSamples;
 }this.schemaPrefix=schema_name}createProductionLotsList(){var i;for(i=0;i<this.activeProductionLots.length;i++){//console.log('createProductionLotsList', 'this.productionLotsList', this.productionLotsList);
 var newElement=[{keyName:"",keyValue_en:"",keyValue_es:""}];newElement.keyName=this.activeProductionLots[i].lot_name;newElement.keyValue_en=this.activeProductionLots[i].lot_name;newElement.keyValue_es=this.activeProductionLots[i].lot_name;this.productionLotsList[i+1]=newElement;//{keyName:"M1", :"M1", keyValue_es:"M1"},

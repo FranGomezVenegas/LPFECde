@@ -24,7 +24,7 @@ class emDemoAPersonSampling extends FieldsMethods(EmDemoAapiEnvMonit(FrontendEnv
             finalToken: String,
             schemaPrefix: {type: String, observer:'onFinalTokenFilled'}, 
             selectedSample: Number,
-            allSamplesStageSampling: {type: Array, notify:true},
+            allPersonSamplesStageSampling: {type: Array, notify:true},
             sampleSamplingSampleFieldToDisplay: {
                 type: Array, value: personSampling_sampleFieldToDisplay
             },
@@ -37,7 +37,7 @@ class emDemoAPersonSampling extends FieldsMethods(EmDemoAapiEnvMonit(FrontendEnv
     stateChanged(state) {
         this.finalToken = state.app.user.finalToken; 
         if (state.emDemoA!=null){
-            this.allSamplesStageSampling= state.emDemoA.allSamplesStageSampling;}
+            this.allPersonSamplesStageSampling= state.emDemoA.allPersonSamplesStageSampling;}
 //        if (this.tabIndex!=0){
 //            this.schemaPrefix = state.tabs.tabs[this.tabIndex-1].procedure.schemaPrefix;}  
         this.schemaPrefix=schema_name;
@@ -69,17 +69,17 @@ class emDemoAPersonSampling extends FieldsMethods(EmDemoAapiEnvMonit(FrontendEnv
             </div>            
 
             <vaadingrid-singleselectrunaction id="mygridid" headerfields="{{sampleSamplingSampleFieldToDisplay}}" 
-                rowcontainer="{{allSamplesStageSampling}}" selected-object="{{selectedObject}}">
+                rowcontainer="{{allPersonSamplesStageSampling}}" selected-object="{{selectedObject}}">
             </vaadingrid-singleselectrunaction>
 
 <!--            <vaadingrid-singleselect id="mygridid" headerfields="{{sampleSamplingSampleFieldToDisplay}}" 
-                rowcontainer="{{allSamplesStageSampling}}"            
+                rowcontainer="{{allPersonSamplesStageSampling}}"            
                 >
             </vaadingrid-singleselect>
 
 
 
-            <vaadin-grid id="mygridid" items="{{allSamplesStageSampling}}" on-selected-items-changed="itemSelected">  
+            <vaadin-grid id="mygridid" items="{{allPersonSamplesStageSampling}}" on-selected-items-changed="itemSelected">  
                 <vaadin-grid-selection-column  auto-select></vaadin-grid-selection-column>
                 <template is="dom-repeat" items="{{sampleSamplingSampleFieldToDisplay}}" as="fld">
                     <vaadin-grid-sort-column path="{{fld}}" header="{{fld}}"></vaadin-grid-sort-column>
@@ -112,7 +112,7 @@ class emDemoAPersonSampling extends FieldsMethods(EmDemoAapiEnvMonit(FrontendEnv
         this.callBackRefreshWindow = this.refreshWindow.bind(this);
         if ( (!this.finalToken) || (!this.schemaPrefix) ) {return;}
         //console.log('em-demo-a-person-sampling >> onFinalTokenFilled', this.finalToken, 'this.schemaPrefix', this.schemaPrefix);
-        this.getAllSamplesStageSampling({
+        this.getAllPersonSamplesStageSampling({
              finalToken:this.finalToken, schemaPrefix:this.schemaPrefix, actionName:'SAMPLES_BY_STAGE'
             ,sampleFieldToRetrieve:personSampling_sampleFieldToRetrieve
             , samplesWhereFieldsName: personSampling_samplesWhereFieldsName, samplesWhereFieldsValue: personSampling_samplesWhereFieldsValue

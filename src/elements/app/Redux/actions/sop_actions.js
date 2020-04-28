@@ -4,14 +4,14 @@ export const PROCEDURE_SOPS = 'PROCEDURE_SOPS';
 
 
 export function userAllSop(data) {
-  //  console.log('process-us_actions.sampleTemplates', data);
+//  console.log('userAllSop', data);
     return {
       type: USER_ALL_SOP,
       DATA: data
     }
 }
 export function userPendingSop(data) {
-  //  console.log('process-us_actions.sampleTemplates', data);
+//    console.log('userPendingSop', data);
     return {
       type: USER_PENDING_SOP,
       DATA: data

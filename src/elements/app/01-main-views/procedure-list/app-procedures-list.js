@@ -23,6 +23,7 @@ class AppProceduresList extends FieldsMethods(ProcedureList(connect(store)(Polym
             selectedLanguage: {type: String},    
             paneTitle: { type: Object, value: proceduresListPaneTitle}, 
             titleValue: String, titleIcon: String,
+            fieldTitlePendingSOP:{type: Object, value:{label_en:'You have pending SOPs', label_es:'Tienes PNTs pendientes'}}
         }
     }
     stateChanged(state) {
@@ -87,7 +88,7 @@ class AppProceduresList extends FieldsMethods(ProcedureList(connect(store)(Polym
                 </div>         
 
                 <template is="dom-repeat"  items="{{currprocedure.definition}}" as="currentfield">                    
-                    <field-controller style="padding-top: 0px; padding-bottom: 0px;" id="{{currentfield.name}}" on-field-tree-list-clicked="crearTab" tab-index="{{index}}" field="{{currentfield}}" procedure="{{currprocedure}}"></field-controller>            
+                    <field-controller title="{{fieldTitlePendingSOP}}" style="padding-top: 0px; padding-bottom: 0px;" id="{{currentfield.name}}" on-field-tree-list-clicked="crearTab" tab-index="{{index}}" field="{{currentfield}}" procedure="{{currprocedure}}"></field-controller>            
                 </template>            
 
                 <div class="title">
